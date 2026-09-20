@@ -42,12 +42,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <Image
-              src="/logo.jpeg"
+              src="/logo.png"
               alt="Compare Degree"
-              width={180}
-              height={40}
-              className="h-9 w-auto"
-              style={{ width: "auto", height: "auto" }}
+              width={140}
+              height={32}
+              className="h-7 lg:h-8 w-auto object-contain"
               priority
             />
           </Link>
@@ -92,12 +91,11 @@ export default function Navbar() {
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between p-4 border-b border-slate-100">
                   <Image
-                    src="/logo.jpeg"
+                    src="/logo.png"
                     alt="Compare Degree"
-                    width={140}
-                    height={32}
-                    className="h-8 w-auto"
-                    style={{ width: "auto", height: "auto" }}
+                    width={120}
+                    height={28}
+                    className="h-7 w-auto object-contain"
                   />
                 </div>
 
