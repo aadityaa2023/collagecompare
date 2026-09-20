@@ -43,11 +43,11 @@ export default function HowItWorksSection({ steps = defaultSteps }) {
           {steps.map((step, i) => (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
-              className="text-center"
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ delay: i * 0.06, duration: 0.35, ease: "easeOut" }}
+              className="text-center transform-gpu"
             >
               <div className="relative inline-flex mb-5">
                 <div className="h-14 w-14 rounded-2xl bg-crimson/10 flex items-center justify-center">

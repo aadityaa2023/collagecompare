@@ -2,11 +2,11 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import {
   HeroSection,
-  FeaturesSection,
   PopularComparisonsSection,
+  FeaturesSection,
   ExploreCoursesSection,
-  HowItWorksSection,
   RankingsPreviewSection,
+  HowItWorksSection,
   TestimonialsSection,
 } from "@/components/home";
 
@@ -16,11 +16,11 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-1">
         <HeroSection />
-        <FeaturesSection />
         <PopularComparisonsSection />
+        <FeaturesSection />
         <ExploreCoursesSection />
-        <HowItWorksSection />
         <RankingsPreviewSection />
+        <HowItWorksSection />
         <TestimonialsSection />
       </main>
       <Footer />

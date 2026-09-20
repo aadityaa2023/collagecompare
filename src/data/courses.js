@@ -6,6 +6,7 @@ export const courses = [
     duration: "4 Years",
     level: "UG",
     avgFees: 1200000,
+    image: "/courses/course-cse.jpg",
     description:
       "Computer Science & Engineering covers software development, algorithms, data structures, AI/ML, cybersecurity, and more. One of the most sought-after engineering branches in India.",
     topColleges: [
@@ -41,6 +42,7 @@ export const courses = [
     duration: "4 Years",
     level: "UG",
     avgFees: 1100000,
+    image: "/courses/course-ece.jpg",
     description:
       "ECE combines electronics, communication systems, signal processing, VLSI design, and embedded systems. Strong demand in semiconductor and telecom industries.",
     topColleges: [
@@ -75,6 +77,7 @@ export const courses = [
     duration: "4 Years",
     level: "UG",
     avgFees: 1000000,
+    image: "/courses/course-me.jpg",
     description:
       "Mechanical Engineering is one of the oldest and broadest engineering disciplines covering thermodynamics, manufacturing, robotics, and design engineering.",
     topColleges: [
@@ -109,6 +112,7 @@ export const courses = [
     duration: "4 Years",
     level: "UG",
     avgFees: 900000,
+    image: "/courses/course-civil.jpg",
     description:
       "Civil Engineering focuses on designing, constructing, and maintaining infrastructure including buildings, roads, bridges, and water systems.",
     topColleges: [
@@ -142,6 +146,7 @@ export const courses = [
     duration: "2 Years",
     level: "PG",
     avgFees: 1500000,
+    image: "/courses/course-mba.jpg",
     description:
       "MBA is a postgraduate management degree that develops leadership, strategy, finance, marketing, and operations skills for business professionals.",
     topColleges: [
@@ -175,6 +180,7 @@ export const courses = [
     duration: "3 Years",
     level: "UG",
     avgFees: 600000,
+    image: "/courses/course-bba.jpg",
     description:
       "BBA provides foundational knowledge in business management, covering marketing, finance, HR, and entrepreneurship for aspiring business professionals.",
     topColleges: [
@@ -206,6 +212,7 @@ export const courses = [
     duration: "3 Years",
     level: "UG",
     avgFees: 300000,
+    image: "/courses/course-bsccs.jpg",
     description:
       "B.Sc in Computer Science provides a theoretical foundation in computing, programming, and mathematics, preparing students for tech careers or higher studies.",
     topColleges: [
@@ -238,6 +245,7 @@ export const courses = [
     duration: "2 Years",
     level: "PG",
     avgFees: 500000,
+    image: "/courses/course-mtech.jpg",
     description:
       "M.Tech in CSE is a postgraduate program for advanced study in computer science, covering AI, cybersecurity, distributed systems, and specialized research.",
     topColleges: [
@@ -271,6 +279,7 @@ export const courses = [
     duration: "2 Years",
     level: "PG",
     avgFees: 400000,
+    image: "/courses/course-mca.jpg",
     description:
       "MCA is a professional postgraduate degree focused on application development, software engineering, and IT management skills.",
     topColleges: [
@@ -303,6 +312,7 @@ export const courses = [
     duration: "5 Years",
     level: "UG",
     avgFees: 1200000,
+    image: "/courses/course-barch.jpg",
     description:
       "B.Arch is a professional degree in architecture covering design, construction technology, urban planning, and sustainable architecture.",
     topColleges: [
@@ -334,6 +344,7 @@ export const courses = [
     duration: "4 Years",
     level: "UG",
     avgFees: 500000,
+    image: "/courses/course-bpharm.jpg",
     description:
       "B.Pharm covers pharmaceutical sciences, drug formulation, pharmacology, and clinical research, preparing students for careers in the pharma industry.",
     topColleges: [
@@ -365,6 +376,7 @@ export const courses = [
     duration: "3 Years",
     level: "UG",
     avgFees: 400000,
+    image: "/courses/course-law.jpg",
     description:
       "LLB is a professional law degree covering constitutional law, criminal law, corporate law, and legal practice for aspiring advocates and legal professionals.",
     topColleges: [

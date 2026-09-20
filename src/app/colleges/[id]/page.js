@@ -2,6 +2,7 @@
 
 import { use } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   MapPin,
@@ -45,80 +46,92 @@ export default function CollegeDetailPage({ params }) {
     <>
       <Navbar />
       <main className="flex-1 bg-slate-50">
-        {/* Breadcrumb */}
-        <div className="bg-white border-b border-slate-200">
-          <div className="container-main py-3">
-            <div className="flex items-center gap-1.5 text-xs text-slate-500">
-              <Link href="/" className="hover:text-crimson transition-colors">
+        {/* Campus Cover Banner */}
+        <div className="relative min-h-[260px] sm:min-h-[300px] w-full bg-slate-900 overflow-hidden flex flex-col justify-between">
+          <Image
+            src={college.campus || "/campus-placeholder.jpg"}
+            alt={college.name}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-black/30" />
+
+          {/* Breadcrumb over banner */}
+          <div className="container-main pt-4 relative z-10">
+            <div className="flex items-center gap-1.5 text-xs text-white/70">
+              <Link href="/" className="hover:text-white transition-colors">
                 Home
               </Link>
               <ChevronRight className="h-3 w-3" />
               <Link
                 href="/colleges"
-                className="hover:text-crimson transition-colors"
+                className="hover:text-white transition-colors"
               >
                 Colleges
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-navy font-medium">{college.shortName}</span>
+              <span className="text-white font-medium">{college.shortName}</span>
             </div>
           </div>
-        </div>
 
-        {/* Hero Header */}
-        <div className="bg-white border-b border-slate-200">
-          <div className="container-main py-8">
-            <div className="flex flex-col md:flex-row md:items-start gap-6">
-              <div className="h-16 w-16 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
-                <GraduationCap className="h-8 w-8 text-slate-400" />
-              </div>
+          {/* Hero Header Content */}
+          <div className="container-main pb-6 pt-10 relative z-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="flex-1">
-                <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <h1 className="text-xl sm:text-2xl font-bold text-navy">
-                    {college.name}
-                  </h1>
+                <div className="flex flex-wrap items-center gap-2 mb-2.5">
                   <span
-                    className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-md border ${
-                      typeColors[college.type]
+                    className={`inline-flex px-2.5 py-0.5 text-xs font-bold rounded-md border shadow-xs ${
+                      typeColors[college.type] || "bg-white/90 text-navy"
                     }`}
                   >
                     {college.type}
                   </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-white text-xs font-semibold">
+                    <Award className="h-3.5 w-3.5 text-amber-300" />
+                    NIRF #{college.nirfRanking}
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-white text-xs font-semibold">
+                    NAAC {college.naacGrade}
+                  </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-4">
+
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight drop-shadow-sm">
+                  {college.name}
+                </h1>
+
+                <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200 mt-3">
                   <span className="flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5" />
+                    <MapPin className="h-3.5 w-3.5 text-crimson" />
                     {college.location.city}, {college.location.state}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5" />
+                    <Calendar className="h-3.5 w-3.5 text-slate-300" />
                     Est. {college.established}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Award className="h-3.5 w-3.5" />
-                    NAAC {college.naacGrade}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Star className="h-3.5 w-3.5 text-amber-500" />
+                    <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
                     {college.rating}/5 ({college.reviewCount} reviews)
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <Button
-                    asChild
-                    className="bg-crimson hover:bg-crimson-dark text-white font-medium px-5 h-9 text-sm rounded-lg shadow-none"
-                  >
-                    <Link href={`/compare?c1=${college.id}`}>
-                      Compare This College
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="font-medium px-5 h-9 text-sm rounded-lg border-slate-300"
-                  >
-                    Save College
-                  </Button>
-                </div>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <Button
+                  asChild
+                  className="bg-crimson hover:bg-crimson-dark text-white font-semibold px-5 h-10 text-sm rounded-xl shadow-md transition-all"
+                >
+                  <Link href={`/compare?c1=${college.id}`}>
+                    Compare This College
+                  </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="font-medium px-4 h-10 text-sm rounded-xl bg-white/90 backdrop-blur-md text-navy hover:bg-white border-0"
+                >
+                  Save College
+                </Button>
               </div>
             </div>
           </div>
@@ -392,21 +405,48 @@ export default function CollegeDetailPage({ params }) {
             </TabsContent>
 
             {/* Campus Tab */}
-            <TabsContent value="campus">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h2 className="text-base font-semibold text-navy mb-4">
-                  Campus Facilities
-                </h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {college.facilities.map((facility) => (
-                    <div
-                      key={facility}
-                      className="flex items-center gap-2 py-2"
-                    >
-                      <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                      <span className="text-sm text-slate-600">{facility}</span>
-                    </div>
-                  ))}
+            <TabsContent value="campus" className="space-y-6">
+              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+                <div className="h-64 sm:h-80 relative overflow-hidden bg-slate-900">
+                  <Image
+                    src={college.campus || "/campus-placeholder.jpg"}
+                    alt={`${college.name} Campus`}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1200px"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent" />
+                  <div className="absolute bottom-5 left-5 right-5 text-white">
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-white/20 backdrop-blur-md mb-2 inline-block">
+                      Campus Infrastructure & Life
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-bold">
+                      {college.shortName} Campus
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-200 mt-1 flex items-center gap-1.5">
+                      <MapPin className="h-3.5 w-3.5 text-crimson" />
+                      {college.location.city}, {college.location.state} &middot; Est. {college.established}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-base font-bold text-navy mb-4">
+                    Campus Facilities & Amenities
+                  </h3>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {college.facilities.map((facility) => (
+                      <div
+                        key={facility}
+                        className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/70"
+                      >
+                        <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+                        <span className="text-sm text-slate-700 font-semibold">
+                          {facility}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </TabsContent>

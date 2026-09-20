@@ -144,4 +144,95 @@
   .text-body-sm {
     @apply text-sm text-slate-500 leading-relaxed;
   }
+
+  /* Performance & GPU-Accelerated Accents */
+  .transform-gpu {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  .bg-dot-pattern {
+    background-image: radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .bg-dot-pattern-light {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .radial-glow-hero {
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(185, 28, 28, 0.08), transparent 80%),
+                radial-gradient(ellipse 50% 40% at 90% 10%, rgba(37, 99, 235, 0.04), transparent 70%);
+  }
+  .radial-glow-crimson {
+    background: radial-gradient(circle at 50% 0%, rgba(185, 28, 28, 0.06) 0%, transparent 70%);
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    transform: translateZ(0);
+  }
+  .glass-card-hover {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    will-change: transform;
+  }
+  .glass-card-hover:hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.07), 0 4px 8px -2px rgba(185, 28, 28, 0.03);
+    border-color: rgba(203, 213, 225, 0.95);
+  }
+  .gradient-text-crimson {
+    background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #E11D48 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Hardware-accelerated smooth page entrance */
+  @keyframes pageEnter {
+    from {
+      opacity: 0;
+      transform: translateY(6px) translateZ(0);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+    }
+  }
+
+  .animate-page-enter {
+    animation: pageEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: opacity, transform;
+  }
+}
+
+/* Custom Crimson Red Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b91c1c;
+  border-radius: 9999px;
+  border: 2px solid #f8fafc;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #991b1b;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #7f1d1d;
+}
+
+/* Standards-compliant scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #b91c1c #f8fafc;
 }

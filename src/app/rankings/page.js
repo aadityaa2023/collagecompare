@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Trophy, ChevronRight, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { rankings, rankingCategories } from "@/data/rankings";
+import { getCollegeById } from "@/data/colleges";
 
 const typeColors = {
   IIT: "bg-amber-50 text-amber-700 border-amber-200",
@@ -97,12 +99,23 @@ export default function RankingsPage() {
                         </span>
                       </td>
                       <td className="px-5 py-4">
-                        <Link
-                          href={`/colleges/${row.collegeId}`}
-                          className="font-medium text-navy hover:text-crimson transition-colors"
-                        >
-                          {row.name}
-                        </Link>
+                        <div className="flex items-center gap-3">
+                          <div className="h-9 w-9 relative rounded-lg overflow-hidden shrink-0 bg-slate-100 border border-slate-200 shadow-2xs">
+                            <Image
+                              src={getCollegeById(row.collegeId)?.campus || "/campus-placeholder.jpg"}
+                              alt={row.name}
+                              fill
+                              sizes="36px"
+                              className="object-cover"
+                            />
+                          </div>
+                          <Link
+                            href={`/colleges/${row.collegeId}`}
+                            className="font-medium text-navy hover:text-crimson transition-colors"
+                          >
+                            {row.name}
+                          </Link>
+                        </div>
                       </td>
                       <td className="px-5 py-4 text-slate-500 hidden sm:table-cell">
                         <span className="flex items-center gap-1">

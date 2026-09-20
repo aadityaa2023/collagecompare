@@ -1,65 +1,80 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { IndianRupee, TrendingUp, Trophy, MessageSquare } from "lucide-react";
+import { IndianRupee, TrendingUp, Trophy, MessageSquare, ShieldCheck } from "lucide-react";
 import SectionWrapper from "@/components/shared/SectionWrapper";
 
 const defaultFeatures = [
   {
     icon: IndianRupee,
-    title: "Compare Fees",
+    title: "Side-by-Side Fees",
     description:
-      "Side-by-side fee comparison across colleges. Know the exact cost of your degree before applying.",
+      "True 4-year tuition breakdown, hostel charges, and hidden costs before you fill out an application.",
+    color: "text-emerald-600",
+    bgColor: "bg-emerald-50",
+    borderColor: "border-emerald-100",
   },
   {
     icon: TrendingUp,
-    title: "Placement Data",
+    title: "Verified Placements",
     description:
-      "Real placement statistics — average packages, highest offers, placement percentages, and top recruiters.",
+      "Official average packages, median salary stats, highest packages, and actual top recruiters.",
+    color: "text-blue-600",
+    bgColor: "bg-blue-50",
+    borderColor: "border-blue-100",
   },
   {
     icon: Trophy,
-    title: "Rankings",
+    title: "Consolidated Rankings",
     description:
-      "NIRF, NAAC, and institution-specific rankings consolidated in one comprehensive view.",
+      "NIRF, NAAC accreditation, and verified institutional standing unified in one clear view.",
+    color: "text-amber-600",
+    bgColor: "bg-amber-50",
+    borderColor: "border-amber-100",
   },
   {
     icon: MessageSquare,
-    title: "Campus & Reviews",
+    title: "Unfiltered Reviews",
     description:
-      "Student reviews, campus facility details, and real experiences to help you decide.",
+      "Real perspectives on campus life, labs, hostels, and culture from enrolled students and recent alumni.",
+    color: "text-purple-600",
+    bgColor: "bg-purple-50",
+    borderColor: "border-purple-100",
   },
 ];
 
 export default function FeaturesSection({ features = defaultFeatures }) {
   return (
-    <SectionWrapper className="section-padding bg-white">
+    <SectionWrapper className="section-padding bg-white relative">
       <div className="container-main">
         <div className="text-center mb-12">
-          <h2 className="heading-2 mb-3">Why Compare Degree?</h2>
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-crimson-light text-crimson text-xs font-semibold mb-3 border border-crimson/10">
+            <ShieldCheck className="h-4 w-4" />
+            <span>Built for Confident Decisions</span>
+          </div>
+          <h2 className="heading-2 mb-3">Why Thousands Trust Compare Degree</h2>
           <p className="text-body max-w-2xl mx-auto">
-            Everything you need to make an informed decision about your
-            higher education, all in one place.
+            Everything you need to evaluate, compare, and shortlist institutions without marketing hype.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.4 }}
-              className="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md hover:border-slate-300 transition-all duration-200"
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ delay: i * 0.05, duration: 0.3, ease: "easeOut" }}
+              className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all duration-200 hover:-translate-y-1 transform-gpu"
             >
-              <div className="h-10 w-10 rounded-lg bg-crimson-light flex items-center justify-center mb-4">
-                <feature.icon className="h-5 w-5 text-crimson" />
+              <div className={`h-12 w-12 rounded-xl ${feature.bgColor} ${feature.borderColor} border flex items-center justify-center mb-5 shadow-2xs`}>
+                <feature.icon className={`h-6 w-6 ${feature.color}`} />
               </div>
-              <h3 className="text-sm font-semibold text-navy mb-1.5">
+              <h3 className="text-base font-bold text-navy mb-2">
                 {feature.title}
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 {feature.description}
               </p>
             </motion.div>

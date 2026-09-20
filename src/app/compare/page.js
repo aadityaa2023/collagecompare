@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import {
   Search,
@@ -54,15 +55,21 @@ function CollegeSelector({ selectedId, onSelect, excludeIds = [] }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger className="w-full text-left p-0 border-0 bg-transparent outline-none">
         {selected ? (
-          <button className="w-full bg-white border border-slate-200 rounded-xl p-4 text-left hover:border-slate-300 transition-colors group">
+          <div className="w-full bg-white border border-slate-200 rounded-xl p-3 hover:border-slate-300 transition-colors group cursor-pointer">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-crimson-light flex items-center justify-center shrink-0">
-                <GraduationCap className="h-5 w-5 text-crimson" />
+              <div className="h-12 w-14 rounded-lg overflow-hidden relative shrink-0 bg-slate-100 border border-slate-200/80">
+                <Image
+                  src={selected.campus || "/campus-placeholder.jpg"}
+                  alt={selected.shortName}
+                  fill
+                  sizes="56px"
+                  className="object-cover"
+                />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-navy truncate">
+                <p className="text-sm font-bold text-navy truncate">
                   {selected.shortName}
                 </p>
                 <p className="text-xs text-slate-500">
@@ -71,16 +78,16 @@ function CollegeSelector({ selectedId, onSelect, excludeIds = [] }) {
               </div>
               <ChevronDown className="h-4 w-4 text-slate-400 group-hover:text-slate-600" />
             </div>
-          </button>
+          </div>
         ) : (
-          <button className="w-full border-2 border-dashed border-slate-300 rounded-xl p-6 hover:border-crimson/50 hover:bg-crimson-50 transition-colors flex flex-col items-center gap-2">
+          <div className="w-full border-2 border-dashed border-slate-300 rounded-xl p-6 hover:border-crimson/50 hover:bg-crimson-50 transition-colors flex flex-col items-center gap-2 cursor-pointer">
             <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
               <Plus className="h-5 w-5 text-slate-400" />
             </div>
             <p className="text-sm font-medium text-slate-500">
               Select College
             </p>
-          </button>
+          </div>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
@@ -115,7 +122,15 @@ function CollegeSelector({ selectedId, onSelect, excludeIds = [] }) {
                   : "hover:bg-slate-50"
               }`}
             >
-              <GraduationCap className="h-4 w-4 text-slate-400 shrink-0" />
+              <div className="h-9 w-10 relative rounded-md overflow-hidden shrink-0 bg-slate-100 border border-slate-200">
+                <Image
+                  src={college.campus || "/campus-placeholder.jpg"}
+                  alt={college.shortName}
+                  fill
+                  sizes="40px"
+                  className="object-cover"
+                />
+              </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-navy truncate">
                   {college.shortName}
@@ -273,16 +288,26 @@ function CompareContent() {
                       Parameter
                     </th>
                     {selectedColleges.map((c) => (
-                      <th key={c.id} className="px-5 py-4 text-center">
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="h-8 w-8 rounded-lg bg-crimson-light flex items-center justify-center">
-                            <GraduationCap className="h-4 w-4 text-crimson" />
+                      <th key={c.id} className="px-5 py-4 text-center min-w-[160px]">
+                        <div className="flex flex-col items-center gap-1.5">
+                          <div className="h-16 w-24 relative rounded-lg overflow-hidden border border-slate-200 shadow-2xs">
+                            <Image
+                              src={c.campus || "/campus-placeholder.jpg"}
+                              alt={c.shortName}
+                              fill
+                              sizes="96px"
+                              className="object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                            <div className="absolute bottom-1 left-1.5 right-1.5 flex justify-between items-center text-[9px] text-white font-bold">
+                              <span>#{c.nirfRanking} NIRF</span>
+                            </div>
                           </div>
-                          <span className="text-sm font-semibold text-navy">
+                          <span className="text-sm font-bold text-navy">
                             {c.shortName}
                           </span>
-                          <span className="text-[10px] text-slate-400">
-                            {c.location.city}
+                          <span className="text-[11px] text-slate-400">
+                            {c.location.city} &middot; {c.type}
                           </span>
                         </div>
                       </th>

@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { Outfit } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
+import NavigationProgressBar from "@/components/layout/NavigationProgressBar";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -37,7 +39,12 @@ export default function RootLayout({ children }) {
       className={`${outfit.variable} ${geistMono.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <Suspense fallback={null}>
+          <NavigationProgressBar />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

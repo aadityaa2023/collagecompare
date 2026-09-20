@@ -95,6 +95,7 @@ export default function Footer() {
                   alt="Compare Degree"
                   width={210}
                   height={50}
+                  style={{ width: "auto" }}
                   className="h-10 w-auto"
                   priority
                 />

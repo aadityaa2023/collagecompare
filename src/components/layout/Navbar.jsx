@@ -21,19 +21,26 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 10;
+          setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className={`sticky top-0 z-50 w-full transition-all duration-200 ${
+    <header
+      className={`sticky top-0 z-50 w-full transition-colors duration-200 transform-gpu ${
         scrolled
-          ? "bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm"
+          ? "bg-white/95 backdrop-blur-sm border-b border-slate-200/80 shadow-xs"
           : "bg-white border-b border-transparent"
       }`}
     >
@@ -46,6 +53,7 @@ export default function Navbar() {
               alt="Compare Degree"
               width={140}
               height={32}
+              style={{ width: "auto" }}
               className="h-7 lg:h-8 w-auto object-contain"
               priority
             />
@@ -95,6 +103,7 @@ export default function Navbar() {
                     alt="Compare Degree"
                     width={120}
                     height={28}
+                    style={{ width: "auto" }}
                     className="h-7 w-auto object-contain"
                   />
                 </div>
@@ -138,6 +147,6 @@ export default function Navbar() {
           </Sheet>
         </nav>
       </div>
-    </motion.header>
+    </header>
   );
 }

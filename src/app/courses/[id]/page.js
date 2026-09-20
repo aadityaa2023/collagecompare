@@ -2,6 +2,7 @@
 
 import { use } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   Clock,
@@ -37,55 +38,65 @@ export default function CourseDetailPage({ params }) {
     <>
       <Navbar />
       <main className="flex-1 bg-slate-50">
-        {/* Breadcrumb */}
-        <div className="bg-white border-b border-slate-200">
-          <div className="container-main py-3">
-            <div className="flex items-center gap-1.5 text-xs text-slate-500">
-              <Link href="/" className="hover:text-crimson transition-colors">
+        {/* Course Banner Hero */}
+        <div className="relative min-h-[220px] sm:min-h-[260px] w-full bg-slate-950 overflow-hidden flex flex-col justify-between">
+          <Image
+            src={course.image || "/courses/course-cse.jpg"}
+            alt={course.name}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-50"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-black/40" />
+
+          {/* Breadcrumb */}
+          <div className="container-main pt-4 relative z-10">
+            <div className="flex items-center gap-1.5 text-xs text-white/70">
+              <Link href="/" className="hover:text-white transition-colors">
                 Home
               </Link>
               <ChevronRight className="h-3 w-3" />
               <Link
                 href="/courses"
-                className="hover:text-crimson transition-colors"
+                className="hover:text-white transition-colors"
               >
                 Courses
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-navy font-medium">{course.shortName}</span>
+              <span className="text-white font-medium">{course.shortName}</span>
             </div>
           </div>
-        </div>
 
-        {/* Hero */}
-        <div className="bg-white border-b border-slate-200">
-          <div className="container-main py-8">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="h-12 w-12 rounded-xl bg-crimson-light flex items-center justify-center shrink-0">
-                <GraduationCap className="h-6 w-6 text-crimson" />
-              </div>
+          {/* Hero Content */}
+          <div className="container-main pb-6 pt-6 relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-navy mb-2">
-                  {course.name}
-                </h1>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Badge
-                    variant="outline"
-                    className={`text-xs ${
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <span
+                    className={`text-xs font-bold px-2.5 py-0.5 rounded-md ${
                       course.level === "UG"
-                        ? "border-blue-200 text-blue-600 bg-blue-50"
-                        : "border-purple-200 text-purple-600 bg-purple-50"
+                        ? "bg-blue-600 text-white"
+                        : "bg-purple-600 text-white"
                     }`}
                   >
-                    {course.level === "UG" ? "Undergraduate" : "Postgraduate"}
-                  </Badge>
-                  <span className="flex items-center gap-1 text-sm text-slate-500">
-                    <Clock className="h-3.5 w-3.5" />
+                    {course.level === "UG" ? "Undergraduate Degree" : "Postgraduate Degree"}
+                  </span>
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-white">
                     {course.duration}
                   </span>
-                  <span className="flex items-center gap-1 text-sm text-slate-500">
-                    <IndianRupee className="h-3.5 w-3.5" />
-                    {(course.avgFees / 100000).toFixed(1)}L avg fees
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight drop-shadow-sm">
+                  {course.name}
+                </h1>
+                <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200 mt-2">
+                  <span className="flex items-center gap-1">
+                    <IndianRupee className="h-3.5 w-3.5 text-emerald-400" />
+                    {(course.avgFees / 100000).toFixed(1)} Lakhs avg fees
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <BookOpen className="h-3.5 w-3.5 text-slate-300" />
+                    {course.subjects?.length || 0} Core Subjects
                   </span>
                 </div>
               </div>

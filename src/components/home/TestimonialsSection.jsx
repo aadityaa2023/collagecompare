@@ -23,10 +23,11 @@ export default function TestimonialsSection({
           {testimonialList.slice(0, 3).map((t, i) => (
             <motion.div
               key={t.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ delay: i * 0.06, duration: 0.35, ease: "easeOut" }}
+              className="transform-gpu"
             >
               <TestimonialCard testimonial={t} />
             </motion.div>

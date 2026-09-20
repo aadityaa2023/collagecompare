@@ -170,19 +170,14 @@ export default function CollegesPage() {
 
               {/* Mobile filter trigger */}
               <Sheet>
-                <SheetTrigger asChild className="lg:hidden">
-                  <Button
-                    variant="outline"
-                    className="gap-2 border-slate-200"
-                  >
-                    <SlidersHorizontal className="h-4 w-4" />
-                    Filters
-                    {activeFilters.length > 0 && (
-                      <span className="h-5 w-5 rounded-full bg-crimson text-white text-[10px] font-bold flex items-center justify-center">
-                        {activeFilters.length}
-                      </span>
-                    )}
-                  </Button>
+                <SheetTrigger className="lg:hidden inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-2xs hover:bg-slate-50 transition-colors">
+                  <SlidersHorizontal className="h-4 w-4" />
+                  <span>Filters</span>
+                  {activeFilters.length > 0 && (
+                    <span className="h-5 w-5 rounded-full bg-crimson text-white text-[10px] font-bold flex items-center justify-center">
+                      {activeFilters.length}
+                    </span>
+                  )}
                 </SheetTrigger>
                 <SheetContent side="left" className="w-[300px] p-6">
                   <SheetTitle className="text-base font-semibold text-navy mb-6">
