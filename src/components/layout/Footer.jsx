@@ -4,31 +4,20 @@ import { Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   company: [
-    { label: "About Us", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Contact Us", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Press", href: "#" },
+    { label: "About Us", href: "/about" },
+    { label: "Contact Us", href: "/contact" },
   ],
   explore: [
     { label: "Colleges", href: "/colleges" },
     { label: "Courses", href: "/courses" },
-    { label: "Rankings", href: "/rankings" },
     { label: "Compare", href: "/compare" },
-    { label: "Exams", href: "#" },
   ],
   resources: [
-    { label: "College Guides", href: "#" },
-    { label: "FAQ", href: "#" },
-    { label: "News", href: "#" },
-    { label: "Webinars", href: "#" },
-    { label: "Counselling", href: "#" },
+    { label: "Counselling", href: "/course-finder" },
   ],
   legal: [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Cookie Policy", href: "#" },
-    { label: "Disclaimer", href: "#" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms of Service", href: "/terms-of-service" },
   ],
 };
 

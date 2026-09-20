@@ -40,8 +40,8 @@ export default function CtaSection() {
               asChild
               className="bg-white text-crimson hover:bg-slate-100 font-bold px-7 h-12 text-sm sm:text-base rounded-xl shadow-lg shadow-black/15 transition-all hover:shadow-xl hover:scale-102"
             >
-              <Link href="/compare">
-                Start Comparing Free
+              <Link href="/course-finder">
+                Try Course Finder Free
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

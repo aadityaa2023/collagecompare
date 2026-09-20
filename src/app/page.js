@@ -5,7 +5,6 @@ import {
   PopularComparisonsSection,
   FeaturesSection,
   ExploreCoursesSection,
-  RankingsPreviewSection,
   HowItWorksSection,
   TestimonialsSection,
 } from "@/components/home";
@@ -14,12 +13,11 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 w-full">
         <HeroSection />
         <PopularComparisonsSection />
         <FeaturesSection />
         <ExploreCoursesSection />
-        <RankingsPreviewSection />
         <HowItWorksSection />
         <TestimonialsSection />
       </main>

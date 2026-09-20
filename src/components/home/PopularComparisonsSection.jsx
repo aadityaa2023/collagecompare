@@ -10,19 +10,19 @@ import { colleges } from "@/data/colleges";
 
 const defaultComparisons = [
   {
-    tag: "Top IITs Battle",
-    college1: colleges.find((c) => c.id === "iit-bombay"),
-    college2: colleges.find((c) => c.id === "iit-delhi"),
+    tag: "Top Online Battle",
+    college1: colleges[0],
+    college2: colleges[1],
   },
   {
-    tag: "Premier Private Engineering",
-    college1: colleges.find((c) => c.id === "vit-vellore"),
-    college2: colleges.find((c) => c.id === "srm-chennai"),
+    tag: "Premier Private",
+    college1: colleges[2],
+    college2: colleges[3],
   },
   {
-    tag: "NIT vs Top Private",
-    college1: colleges.find((c) => c.id === "nit-trichy"),
-    college2: colleges.find((c) => c.id === "bits-pilani"),
+    tag: "Trending Universities",
+    college1: colleges[4],
+    college2: colleges[5],
   },
 ];
 
@@ -57,7 +57,7 @@ export default function PopularComparisonsSection({
         </div>
 
         {/* Comparison Cards Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {comparisons.map(({ tag, college1, college2 }, i) => {
             if (!college1 || !college2) return null;
 
@@ -78,10 +78,10 @@ export default function PopularComparisonsSection({
                   href={`/compare?c1=${college1.id}&c2=${college2.id}`}
                   className="group block h-full"
                 >
-                  <div className="h-full bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs hover:shadow-xl hover:border-slate-300 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
+                  <div className="h-full bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-6 shadow-xs hover:shadow-xl hover:border-slate-300 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
                     <div>
                       {/* Category Tag */}
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center justify-between mb-3 sm:mb-4">
                         <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 text-[11px] font-semibold text-slate-600 border border-slate-200/60">
                           {tag}
                         </span>
@@ -91,9 +91,9 @@ export default function PopularComparisonsSection({
                       </div>
 
                       {/* Colleges Head-to-Head */}
-                      <div className="flex items-center justify-between gap-3 mb-5 p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+                      <div className="flex items-center justify-between gap-2 sm:gap-3 mb-4 sm:mb-5 p-2.5 sm:p-3 rounded-xl bg-slate-50/70 border border-slate-100">
                         {/* College 1 */}
-                        <div className="flex-1 text-center">
+                        <div className="flex-1 text-center min-w-0">
                           <div className="relative h-11 w-11 mx-auto rounded-xl overflow-hidden border border-slate-200 mb-1.5 shadow-2xs">
                             <Image
                               src={college1.campus || "/campus-placeholder.jpg"}
@@ -112,14 +112,14 @@ export default function PopularComparisonsSection({
                         </div>
 
                         {/* VS Bubble */}
-                        <div className="h-8 w-8 rounded-full bg-crimson/10 border border-crimson/20 flex items-center justify-center shrink-0">
-                          <span className="text-[11px] font-extrabold text-crimson">
+                        <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-crimson/10 border border-crimson/20 flex items-center justify-center shrink-0">
+                          <span className="text-[10px] sm:text-[11px] font-extrabold text-crimson">
                             VS
                           </span>
                         </div>
 
                         {/* College 2 */}
-                        <div className="flex-1 text-center">
+                        <div className="flex-1 text-center min-w-0">
                           <div className="relative h-11 w-11 mx-auto rounded-xl overflow-hidden border border-slate-200 mb-1.5 shadow-2xs">
                             <Image
                               src={college2.campus || "/campus-placeholder.jpg"}

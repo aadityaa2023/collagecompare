@@ -1,17 +1,11 @@
 "use client";
 
-import { Search, ArrowRight, TrendingUp, Building2, BookOpen, Command, X } from "lucide-react";
+import { Search, ArrowRight, Building2, BookOpen, Command, X } from "lucide-react";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { searchColleges } from "@/data/colleges";
 import { searchCourses } from "@/data/courses";
 import Link from "next/link";
-
-const trendingTags = [
-  { label: "IIT Bombay vs IIT Delhi", type: "compare", href: "/compare?c1=iit-bombay&c2=iit-delhi" },
-  { label: "B.Tech CSE", type: "course", query: "Computer Science" },
-  { label: "BITS Pilani", type: "college", query: "BITS Pilani" },
-  { label: "MBA / IIM", type: "course", query: "MBA" },
-];
+import { useRouter } from "next/navigation";
 
 export default function SearchBar({ className = "", variant = "hero" }) {
   const [query, setQuery] = useState("");
@@ -19,6 +13,7 @@ export default function SearchBar({ className = "", variant = "hero" }) {
   const [showResults, setShowResults] = useState(false);
   const inputRef = useRef(null);
   const containerRef = useRef(null);
+  const router = useRouter();
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
@@ -54,23 +49,6 @@ export default function SearchBar({ className = "", variant = "hero" }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const handleTagClick = (tag) => {
-    if (tag.href) {
-      window.location.href = tag.href;
-      return;
-    }
-    if (tag.type === "course") {
-      setActiveTab("courses");
-      setQuery(tag.query);
-      setShowResults(true);
-    } else if (tag.type === "college") {
-      setActiveTab("colleges");
-      setQuery(tag.query);
-      setShowResults(true);
-    }
-    inputRef.current?.focus();
-  };
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
@@ -118,8 +96,8 @@ export default function SearchBar({ className = "", variant = "hero" }) {
           </div>
 
           {/* Search Icon & Input */}
-          <div className="relative flex-1 flex items-center">
-            <Search className="h-4 w-4 text-slate-400 shrink-0 ml-1 mr-2.5" />
+          <div className="relative flex-1 flex items-center min-w-0">
+            <Search className="h-4 w-4 text-slate-400 shrink-0 ml-1 mr-2" />
             <input
               ref={inputRef}
               type="text"
@@ -131,10 +109,10 @@ export default function SearchBar({ className = "", variant = "hero" }) {
               onFocus={() => setShowResults(true)}
               placeholder={
                 activeTab === "colleges"
-                  ? "Search 500+ colleges (e.g. IIT Bombay, VIT, BITS...)"
-                  : "Search courses (e.g. B.Tech CSE, MBA, Data Science...)"
+                  ? "Search colleges (e.g. Amity, LPU...)"
+                  : "Search courses (e.g. MBA, B.Tech...)"
               }
-              className="w-full bg-transparent outline-none text-navy text-sm placeholder:text-slate-400 py-1.5 pr-2 font-medium"
+              className="w-full min-w-0 bg-transparent outline-none text-navy text-sm placeholder:text-slate-400 py-1.5 pr-1 font-medium"
             />
             {query && (
               <button
@@ -156,24 +134,6 @@ export default function SearchBar({ className = "", variant = "hero" }) {
         </div>
       </div>
 
-      {/* Quick Trending Suggestions */}
-      {isHero && (
-        <div className="mt-3 flex items-center flex-wrap gap-2 text-xs">
-          <span className="inline-flex items-center gap-1 text-slate-400 font-medium shrink-0">
-            <TrendingUp className="h-3.5 w-3.5 text-slate-500" /> Popular:
-          </span>
-          {trendingTags.map((tag) => (
-            <button
-              key={tag.label}
-              type="button"
-              onClick={() => handleTagClick(tag)}
-              className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-600 hover:text-navy transition-all duration-150 font-medium text-[11px] border border-slate-200/50 hover:border-slate-300"
-            >
-              {tag.label}
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* Rich Dropdown Results */}
       {showResults && query.trim() && (

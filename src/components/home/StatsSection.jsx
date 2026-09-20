@@ -42,8 +42,8 @@ const defaultStats = [
 export default function StatsSection({ stats = defaultStats }) {
   return (
     <SectionWrapper className="bg-slate-50/80 border-b border-slate-200/80 relative">
-      <div className="container-main py-10 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="container-main py-8 sm:py-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -51,19 +51,19 @@ export default function StatsSection({ stats = defaultStats }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: i * 0.05, duration: 0.3, ease: "easeOut" }}
-              className="glass-card rounded-2xl p-5 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-200 flex items-center gap-4 transform-gpu"
+              className="glass-card rounded-2xl p-3.5 sm:p-5 border border-slate-200/80 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all duration-200 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4 transform-gpu"
             >
-              <div className={`h-12 w-12 rounded-xl ${stat.bgColor} flex items-center justify-center shrink-0 border border-slate-100`}>
-                <stat.icon className={`h-6 w-6 ${stat.iconColor}`} />
+              <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl ${stat.bgColor} flex items-center justify-center shrink-0 border border-slate-100`}>
+                <stat.icon className={`h-5 w-5 sm:h-6 sm:w-6 ${stat.iconColor}`} />
               </div>
               <div>
-                <p className="text-2xl sm:text-3xl font-extrabold text-navy tracking-tight leading-tight">
+                <p className="text-xl sm:text-3xl font-extrabold text-navy tracking-tight leading-tight">
                   {stat.value}
                 </p>
-                <p className="text-sm font-semibold text-slate-700">
+                <p className="text-xs sm:text-sm font-semibold text-slate-700">
                   {stat.label}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                <p className="hidden sm:block text-[11px] text-slate-400 mt-0.5 leading-snug">
                   {stat.subtext}
                 </p>
               </div>

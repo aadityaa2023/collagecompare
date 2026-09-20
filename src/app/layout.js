@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Outfit } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 import NavigationProgressBar from "@/components/layout/NavigationProgressBar";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -14,6 +15,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+  themeColor: "#ffffff",
+};
 
 export const metadata = {
   title: "Compare Degree — Smart Decisions, Brighter Futures",
@@ -30,20 +39,29 @@ export const metadata = {
     "NIT",
     "BITS",
   ],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Compare Degree",
+  },
+  formatDetection: {
+    telephone: true,
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${outfit.variable} ${geistMono.variable} antialiased`}
       data-scroll-behavior="smooth"
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-screen flex flex-col font-sans pb-mobile-dock lg:pb-0">
         <Suspense fallback={null}>
           <NavigationProgressBar />
         </Suspense>
         {children}
+        <MobileBottomNav />
       </body>
     </html>
   );

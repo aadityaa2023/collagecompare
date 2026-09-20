@@ -39,7 +39,7 @@ export default function HowItWorksSection({ steps = defaultSteps }) {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto">
           {steps.map((step, i) => (
             <motion.div
               key={step.number}

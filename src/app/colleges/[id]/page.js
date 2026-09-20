@@ -117,20 +117,23 @@ export default function CollegeDetailPage({ params }) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto mt-4 md:mt-0">
                 <Button
                   asChild
-                  className="bg-crimson hover:bg-crimson-dark text-white font-semibold px-5 h-10 text-sm rounded-xl shadow-md transition-all"
+                  className="bg-crimson hover:bg-crimson-dark text-white font-bold px-5 h-10 sm:h-10 text-xs sm:text-sm rounded-xl shadow-md transition-all active:scale-98"
                 >
                   <Link href={`/compare?c1=${college.id}`}>
                     Compare This College
                   </Link>
                 </Button>
                 <Button
+                  asChild
                   variant="outline"
-                  className="font-medium px-4 h-10 text-sm rounded-xl bg-white/90 backdrop-blur-md text-navy hover:bg-white border-0"
+                  className="font-semibold px-4 h-10 sm:h-10 text-xs sm:text-sm rounded-xl bg-white/90 backdrop-blur-md text-navy hover:bg-white border-0 shadow-sm active:scale-98"
                 >
-                  Save College
+                  <Link href="/course-finder">
+                    Get Free Counselling
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -197,24 +200,26 @@ export default function CollegeDetailPage({ params }) {
         {/* Content Tabs */}
         <div className="container-main py-8">
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="bg-white border border-slate-200 rounded-lg p-1 h-auto flex-wrap">
-              {[
-                "Overview",
-                "Courses & Fees",
-                "Placements",
-                "Rankings",
-                "Campus",
-                "Reviews",
-              ].map((tab) => (
-                <TabsTrigger
-                  key={tab}
-                  value={tab.toLowerCase().replace(/ & /g, "-")}
-                  className="text-xs sm:text-sm data-[state=active]:bg-crimson data-[state=active]:text-white rounded-md px-3 sm:px-4 py-1.5"
-                >
-                  {tab}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+              <TabsList className="bg-white border border-slate-200 rounded-xl p-1.5 h-auto flex flex-nowrap gap-1 w-max min-w-full justify-start">
+                {[
+                  "Overview",
+                  "Courses & Fees",
+                  "Placements",
+                  "Rankings",
+                  "Campus",
+                  "Reviews",
+                ].map((tab) => (
+                  <TabsTrigger
+                    key={tab}
+                    value={tab.toLowerCase().replace(/ & /g, "-")}
+                    className="text-xs sm:text-sm font-semibold whitespace-nowrap data-[state=active]:bg-crimson data-[state=active]:text-white rounded-lg px-3.5 sm:px-4 py-2 shrink-0 transition-all"
+                  >
+                    {tab}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
 
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
@@ -483,6 +488,27 @@ export default function CollegeDetailPage({ params }) {
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+
+        {/* Mobile Sticky Action Bar */}
+        <div className="fixed bottom-[calc(3.75rem+env(safe-area-inset-bottom,0px))] left-0 right-0 z-40 lg:hidden px-3 py-2 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-2px_12px_rgba(0,0,0,0.06)] flex items-center gap-2">
+          <Button
+            asChild
+            variant="outline"
+            className="flex-1 h-9.5 text-xs font-bold border-slate-300 text-slate-700 bg-white shadow-2xs rounded-xl active:scale-95"
+          >
+            <Link href={`/compare?c1=${college.id}`}>
+              Compare
+            </Link>
+          </Button>
+          <Button
+            asChild
+            className="flex-1 h-9.5 text-xs font-bold bg-crimson hover:bg-crimson-dark text-white shadow-md shadow-crimson/20 rounded-xl active:scale-95"
+          >
+            <Link href="/course-finder">
+              Free Counselling
+            </Link>
+          </Button>
         </div>
       </main>
       <Footer />

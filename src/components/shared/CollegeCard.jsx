@@ -21,14 +21,16 @@ export default function CollegeCard({ college, compact = false }) {
         {/* Compact Mode: Horizontal with thumbnail */}
         {compact ? (
           <div className="p-3.5 flex items-center gap-3 h-full">
-            <div className="h-16 w-16 relative rounded-lg overflow-hidden shrink-0 bg-slate-100 border border-slate-200/80">
-              <Image
-                src={college.campus || "/campus-placeholder.jpg"}
-                alt={college.shortName}
-                fill
-                sizes="64px"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
+            <div className="h-16 w-16 relative rounded-lg overflow-hidden shrink-0 bg-white border border-slate-200 shadow-sm flex items-center justify-center p-1.5">
+              <div className="relative w-full h-full">
+                <Image
+                  src={college.logo || "/colleges/default-logo.png"}
+                  alt={college.shortName}
+                  fill
+                  sizes="64px"
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 mb-1">
@@ -65,7 +67,20 @@ export default function CollegeCard({ college, compact = false }) {
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              
+              {/* College Logo */}
+              <div className="absolute bottom-3 left-4 h-14 w-14 bg-white rounded-lg shadow-sm border border-slate-100 p-1.5 flex items-center justify-center">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={college.logo || "/colleges/default-logo.png"}
+                    alt={`${college.shortName} Logo`}
+                    fill
+                    sizes="56px"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
               <div className="absolute top-3 left-3">
                 <span
                   className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-md border shadow-xs ${
@@ -124,6 +139,16 @@ export default function CollegeCard({ college, compact = false }) {
                     {formatPackage(college.avgPackage)}
                   </p>
                 </div>
+              </div>
+
+              {/* Mobile App Action Bar */}
+              <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
+                <span className="text-crimson flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                  View Programs &rsaquo;
+                </span>
+                <span className="text-[11px] font-bold text-slate-600 bg-slate-100 hover:bg-crimson/10 hover:text-crimson px-2.5 py-1 rounded-lg transition-colors">
+                  Compare &rarr;
+                </span>
               </div>
             </div>
           </>

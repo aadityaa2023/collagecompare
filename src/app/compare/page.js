@@ -179,17 +179,17 @@ function CompareRow({ label, values, type = "text", highlightBetter = null }) {
   const betterIdx = getBetterIdx ? getBetterIdx() : -1;
 
   return (
-    <tr className="border-b border-slate-100 last:border-0">
-      <td className="px-5 py-3 text-sm text-slate-600 font-medium bg-slate-50/50 w-48 whitespace-nowrap">
+    <tr className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
+      <td className="px-3 sm:px-5 py-3 text-xs sm:text-sm text-slate-700 font-semibold bg-white sticky left-0 z-10 border-r border-slate-200 shadow-[2px_0_6px_-2px_rgba(0,0,0,0.06)] whitespace-nowrap w-36 sm:w-48">
         {label}
       </td>
       {values.map((val, i) => (
         <td
           key={i}
-          className={`px-5 py-3 text-sm text-center ${
+          className={`px-3 sm:px-5 py-3 text-xs sm:text-sm text-center min-w-[140px] sm:min-w-[180px] ${
             betterIdx === i && values.length > 1
-              ? "text-emerald-700 font-semibold bg-emerald-50/30"
-              : "text-navy"
+              ? "text-emerald-700 font-bold bg-emerald-50/40"
+              : "text-navy font-medium"
           }`}
         >
           {type === "check" ? (
@@ -278,15 +278,21 @@ function CompareContent() {
 
         {/* Comparison Table */}
         {hasComparison ? (
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm min-w-[640px]">
-                {/* Sticky Header with college names */}
-                <thead>
-                  <tr className="bg-white border-b-2 border-slate-200">
-                    <th className="px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase w-48 bg-slate-50">
-                      Parameter
-                    </th>
+          <div>
+            <div className="flex items-center justify-between text-xs text-slate-500 mb-2 px-1 lg:hidden">
+              <span className="inline-flex items-center gap-1 font-medium bg-white border border-slate-200 shadow-2xs px-2.5 py-1 rounded-lg text-slate-600">
+                👉 Swipe table to compare side-by-side
+              </span>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm min-w-[540px] sm:min-w-[640px]">
+                  {/* Sticky Header with college names */}
+                  <thead>
+                    <tr className="bg-white border-b-2 border-slate-200">
+                      <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-xs font-bold text-slate-600 uppercase w-36 sm:w-48 bg-slate-50 sticky left-0 z-20 border-r border-slate-200 shadow-[2px_0_6px_-2px_rgba(0,0,0,0.06)]">
+                        Parameter
+                      </th>
                     {selectedColleges.map((c) => (
                       <th key={c.id} className="px-5 py-4 text-center min-w-[160px]">
                         <div className="flex flex-col items-center gap-1.5">
@@ -529,6 +535,7 @@ function CompareContent() {
               </table>
             </div>
           </div>
+        </div>
         ) : (
           <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
             <div className="h-16 w-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">

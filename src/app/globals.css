@@ -112,12 +112,25 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: clip;
+    max-width: 100vw;
   }
   html {
     @apply font-sans scroll-smooth;
+    overflow-x: clip;
+    max-width: 100vw;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Prevent automatic iOS Safari zooming on focus for inputs and selects */
+  @media screen and (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
   }
 }
 
@@ -127,13 +140,13 @@
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
   .section-padding {
-    @apply py-16 sm:py-20 lg:py-24;
+    @apply py-10 sm:py-16 lg:py-24;
   }
   .heading-1 {
-    @apply text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-navy;
+    @apply text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-navy;
   }
   .heading-2 {
-    @apply text-2xl sm:text-3xl font-bold tracking-tight text-navy;
+    @apply text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-navy;
   }
   .heading-3 {
     @apply text-xl sm:text-2xl font-semibold text-navy;
@@ -204,35 +217,55 @@
     animation: pageEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     will-change: opacity, transform;
   }
+
+  /* Hide scrollbar while keeping horizontal touch scroll functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Mobile App Shell utilities */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .pb-mobile-dock {
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
-/* Custom Crimson Red Scrollbar */
-::-webkit-scrollbar {
+/* Custom Crimson Red Scrollbar - Scoped to html root only to prevent double scrollbars */
+html::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track {
   background: #f8fafc;
 }
 
-::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
   background: #b91c1c;
   border-radius: 9999px;
   border: 2px solid #f8fafc;
   transition: background-color 0.2s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover {
   background: #991b1b;
 }
 
-::-webkit-scrollbar-thumb:active {
+html::-webkit-scrollbar-thumb:active {
   background: #7f1d1d;
 }
 
-/* Standards-compliant scrollbar for Firefox */
-* {
+/* Standards-compliant scrollbar for Firefox on html root only */
+html {
   scrollbar-width: thin;
   scrollbar-color: #b91c1c #f8fafc;
 }

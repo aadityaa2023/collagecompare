@@ -10,10 +10,10 @@ export const courses = [
     description:
       "Computer Science & Engineering covers software development, algorithms, data structures, AI/ML, cybersecurity, and more. One of the most sought-after engineering branches in India.",
     topColleges: [
-      "iit-bombay",
-      "iit-delhi",
-      "iit-madras",
-      "bits-pilani",
+      "bca-online-in-artificial-intelligence-and-data-science-1104856",
+      "christ-university-online-900022",
+      "bba-hons-online-in-hospitality-management-1104360",
+      "ba-online-1105285",
       "iiit-hyderabad",
     ],
     eligibilityExams: ["JEE Main", "JEE Advanced", "BITSAT", "VITEEE", "MET"],
@@ -46,11 +46,11 @@ export const courses = [
     description:
       "ECE combines electronics, communication systems, signal processing, VLSI design, and embedded systems. Strong demand in semiconductor and telecom industries.",
     topColleges: [
-      "iit-bombay",
-      "iit-delhi",
-      "iit-madras",
-      "nit-trichy",
-      "bits-pilani",
+      "mba-online-in-human-resources-management-1105325",
+      "ba-online-in-tamil-1105608",
+      "mba-online-in-information-technology-and-business-analytics-1104318",
+      "mca-online-in-cyber-security-and-block-chain-1104968",
+      "bcom-online-dgrid-105624",
     ],
     eligibilityExams: ["JEE Main", "JEE Advanced", "BITSAT", "VITEEE"],
     subjects: [
@@ -81,11 +81,11 @@ export const courses = [
     description:
       "Mechanical Engineering is one of the oldest and broadest engineering disciplines covering thermodynamics, manufacturing, robotics, and design engineering.",
     topColleges: [
-      "iit-bombay",
-      "iit-kharagpur",
-      "iit-madras",
-      "nit-trichy",
-      "bits-pilani",
+      "mcom-online-in-accounting-finance-1105052",
+      "bba-online-in-digital-business-1105353",
+      "bba-online-in-family-business-1104056",
+      "bcom-online-in-international-finance-accounting-1104266",
+      "mba-online-in-finance-fintech-investments-1105557",
     ],
     eligibilityExams: ["JEE Main", "JEE Advanced", "BITSAT"],
     subjects: [
@@ -116,11 +116,11 @@ export const courses = [
     description:
       "Civil Engineering focuses on designing, constructing, and maintaining infrastructure including buildings, roads, bridges, and water systems.",
     topColleges: [
-      "iit-bombay",
-      "iit-delhi",
-      "iit-kharagpur",
-      "nit-trichy",
-      "dtu-delhi",
+      "mca-online-in-artificial-intelligence-and-data-science-1105228",
+      "ma-online-in-economics-1103970",
+      "mba-online-in-event-management-1104029",
+      "ma-online-in-political-science-1105031",
+      "mba-online-in-finance-fintech-investments-1105557",
     ],
     eligibilityExams: ["JEE Main", "JEE Advanced"],
     subjects: [
@@ -150,11 +150,11 @@ export const courses = [
     description:
       "MBA is a postgraduate management degree that develops leadership, strategy, finance, marketing, and operations skills for business professionals.",
     topColleges: [
-      "iit-bombay",
-      "iit-delhi",
-      "iit-kharagpur",
-      "iit-madras",
-      "bits-pilani",
+      "mba-online-in-marketing-human-resource-management-1104401",
+      "jamia-hamdard-university-online-900038",
+      "bcom-online-in-accounting-finance-1104416",
+      "bca-online-in-artificial-intelligence-machine-learning-1104959",
+      "bcom-online-1104684",
     ],
     eligibilityExams: ["CAT", "XAT", "GMAT", "MAT", "CMAT"],
     subjects: [
@@ -216,8 +216,8 @@ export const courses = [
     description:
       "B.Sc in Computer Science provides a theoretical foundation in computing, programming, and mathematics, preparing students for tech careers or higher studies.",
     topColleges: [
-      "vit-vellore",
-      "srm-chennai",
+      "mba-online-in-operations-management-1104034",
+      "ba-online-in-geography-1104904",
       "amity-noida",
       "chandigarh-university",
     ],
@@ -249,11 +249,11 @@ export const courses = [
     description:
       "M.Tech in CSE is a postgraduate program for advanced study in computer science, covering AI, cybersecurity, distributed systems, and specialized research.",
     topColleges: [
-      "iit-bombay",
-      "iit-delhi",
-      "iit-madras",
+      "bba-online-in-accounting-finance-1104180",
+      "bcom-online-in-acca-1104961",
+      "bba-online-1104476",
       "iiit-hyderabad",
-      "nit-trichy",
+      "bca-online-in-computer-science-and-information-technology-1104413",
     ],
     eligibilityExams: ["GATE"],
     subjects: [
@@ -283,8 +283,8 @@ export const courses = [
     description:
       "MCA is a professional postgraduate degree focused on application development, software engineering, and IT management skills.",
     topColleges: [
-      "nit-trichy",
-      "vit-vellore",
+      "ma-online-in-english-with-communication-studies-1104595",
+      "mba-online-in-banking-insurance-1104743",
       "thapar-patiala",
       "chandigarh-university",
     ],
@@ -316,9 +316,9 @@ export const courses = [
     description:
       "B.Arch is a professional degree in architecture covering design, construction technology, urban planning, and sustainable architecture.",
     topColleges: [
-      "iit-kharagpur",
+      "mba-online-in-data-science-and-business-analytics-1105508",
       "manipal-it",
-      "srm-chennai",
+      "mcom-online-in-accounting-finance-1105306",
     ],
     eligibilityExams: ["NATA", "JEE Main Paper 2"],
     subjects: [
@@ -348,9 +348,9 @@ export const courses = [
     description:
       "B.Pharm covers pharmaceutical sciences, drug formulation, pharmacology, and clinical research, preparing students for careers in the pharma industry.",
     topColleges: [
-      "bits-pilani",
+      "pg-diploma-online-in-human-resource-management-1105574",
       "lpu-jalandhar",
-      "srm-chennai",
+      "mba-online-in-business-data-analyst-1105554",
     ],
     eligibilityExams: ["GPAT", "State Entrance Exams"],
     subjects: [
@@ -380,7 +380,7 @@ export const courses = [
     description:
       "LLB is a professional law degree covering constitutional law, criminal law, corporate law, and legal practice for aspiring advocates and legal professionals.",
     topColleges: [
-      "iit-kharagpur",
+      "mca-online-in-artificial-intelligence-and-data-science-1104967",
       "amity-noida",
     ],
     eligibilityExams: ["CLAT", "AILET", "LSAT"],

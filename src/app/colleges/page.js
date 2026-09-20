@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, SlidersHorizontal, X, ChevronDown } from "lucide-react";
+import { Search, SlidersHorizontal, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,11 +17,35 @@ import Footer from "@/components/layout/Footer";
 import CollegeCard from "@/components/shared/CollegeCard";
 import { colleges } from "@/data/colleges";
 
-const collegeTypes = ["All", "IIT", "NIT", "Private", "Deemed", "State"];
-const states = [
-  "All",
-  ...new Set(colleges.map((c) => c.location.state)),
-].sort();
+const ALL_COURSES = [
+  "B.Com",
+  "B.Sc",
+  "B.Tech",
+  "BBA",
+  "M.Com",
+  "M.Sc",
+  "M.Tech",
+  "MBA",
+  "MCA",
+  "Ph.D",
+];
+
+const FEE_RANGES = [
+  { label: "Any Fee", value: "All" },
+  { label: "Under 5 Lakhs", value: "<5L" },
+  { label: "5L - 10 Lakhs", value: "5L-10L" },
+  { label: "10L - 15 Lakhs", value: "10L-15L" },
+  { label: "Above 15 Lakhs", value: ">15L" },
+];
+
+const MIN_PACKAGES = [
+  { label: "Any Package", value: "All" },
+  { label: "3+ LPA", value: "3+" },
+  { label: "5+ LPA", value: "5+" },
+  { label: "8+ LPA", value: "8+" },
+  { label: "10+ LPA", value: "10+" },
+];
+
 const sortOptions = [
   { value: "ranking", label: "NIRF Ranking" },
   { value: "fees-low", label: "Fees: Low to High" },
@@ -30,43 +54,106 @@ const sortOptions = [
   { value: "package", label: "Avg Package" },
 ];
 
-function FilterPanel({ type, setType, state, setState }) {
+function FilterPanel({
+  selectedCourses,
+  setSelectedCourses,
+  feeRange,
+  setFeeRange,
+  minPackage,
+  setMinPackage,
+}) {
+  const toggleCourse = (c) => {
+    if (selectedCourses.includes(c)) {
+      setSelectedCourses(selectedCourses.filter((course) => course !== c));
+    } else {
+      setSelectedCourses([...selectedCourses, c]);
+    }
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Course Filter */}
       <div>
-        <h3 className="text-sm font-semibold text-navy mb-3">College Type</h3>
+        <h3 className="text-sm font-semibold text-navy mb-3">Programs Offered</h3>
         <div className="flex flex-wrap gap-2">
-          {collegeTypes.map((t) => (
-            <button
-              key={t}
-              onClick={() => setType(t)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
-                type === t
-                  ? "bg-crimson text-white border-crimson"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
-              }`}
+          {ALL_COURSES.map((c) => {
+            const isSelected = selectedCourses.includes(c);
+            return (
+              <button
+                key={c}
+                onClick={() => toggleCourse(c)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-all flex items-center gap-1.5 ${
+                  isSelected
+                    ? "bg-crimson text-white border-crimson shadow-xs"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-crimson/50 hover:bg-crimson/5"
+                }`}
+              >
+                {isSelected && <Check className="h-3 w-3" />}
+                {c}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Fee Range Filter */}
+      <div>
+        <h3 className="text-sm font-semibold text-navy mb-3">Total Fees (B.Tech)</h3>
+        <div className="flex flex-col gap-2">
+          {FEE_RANGES.map((range) => (
+            <label
+              key={range.value}
+              className="flex items-center gap-2 cursor-pointer group"
             >
-              {t}
-            </button>
+              <input
+                type="radio"
+                name="feeRange"
+                value={range.value}
+                checked={feeRange === range.value}
+                onChange={() => setFeeRange(range.value)}
+                className="w-4 h-4 text-crimson border-slate-300 focus:ring-crimson"
+              />
+              <span
+                className={`text-sm transition-colors ${
+                  feeRange === range.value
+                    ? "text-navy font-medium"
+                    : "text-slate-600 group-hover:text-slate-900"
+                }`}
+              >
+                {range.label}
+              </span>
+            </label>
           ))}
         </div>
       </div>
 
+      {/* Package Filter */}
       <div>
-        <h3 className="text-sm font-semibold text-navy mb-3">State</h3>
-        <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
-          {states.map((s) => (
-            <button
-              key={s}
-              onClick={() => setState(s)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
-                state === s
-                  ? "bg-crimson text-white border-crimson"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
-              }`}
+        <h3 className="text-sm font-semibold text-navy mb-3">Avg Package</h3>
+        <div className="flex flex-col gap-2">
+          {MIN_PACKAGES.map((pkg) => (
+            <label
+              key={pkg.value}
+              className="flex items-center gap-2 cursor-pointer group"
             >
-              {s}
-            </button>
+              <input
+                type="radio"
+                name="minPackage"
+                value={pkg.value}
+                checked={minPackage === pkg.value}
+                onChange={() => setMinPackage(pkg.value)}
+                className="w-4 h-4 text-crimson border-slate-300 focus:ring-crimson"
+              />
+              <span
+                className={`text-sm transition-colors ${
+                  minPackage === pkg.value
+                    ? "text-navy font-medium"
+                    : "text-slate-600 group-hover:text-slate-900"
+                }`}
+              >
+                {pkg.label}
+              </span>
+            </label>
           ))}
         </div>
       </div>
@@ -76,57 +163,102 @@ function FilterPanel({ type, setType, state, setState }) {
 
 export default function CollegesPage() {
   const [query, setQuery] = useState("");
-  const [type, setType] = useState("All");
-  const [state, setState] = useState("All");
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [feeRange, setFeeRange] = useState("All");
+  const [minPackage, setMinPackage] = useState("All");
   const [sort, setSort] = useState("ranking");
 
   const activeFilters = [];
-  if (type !== "All") activeFilters.push({ key: "type", label: type });
-  if (state !== "All") activeFilters.push({ key: "state", label: state });
+  if (selectedCourses.length > 0)
+    activeFilters.push({ key: "courses", label: `${selectedCourses.length} Programs` });
+  if (feeRange !== "All")
+    activeFilters.push({
+      key: "feeRange",
+      label: FEE_RANGES.find((r) => r.value === feeRange)?.label,
+    });
+  if (minPackage !== "All")
+    activeFilters.push({
+      key: "minPackage",
+      label: MIN_PACKAGES.find((p) => p.value === minPackage)?.label,
+    });
 
   const filtered = useMemo(() => {
     let result = [...colleges];
 
+    // Search query
     if (query.trim()) {
       const q = query.toLowerCase();
       result = result.filter(
         (c) =>
           c.name.toLowerCase().includes(q) ||
-          c.shortName.toLowerCase().includes(q) ||
-          c.location.city.toLowerCase().includes(q)
+          c.shortName.toLowerCase().includes(q)
       );
     }
 
-    if (type !== "All") {
-      result = result.filter((c) => c.type === type);
+    // Courses filter
+    if (selectedCourses.length > 0) {
+      result = result.filter((c) =>
+        selectedCourses.some((sc) => c.coursesOffered?.includes(sc))
+      );
     }
 
-    if (state !== "All") {
-      result = result.filter((c) => c.location.state === state);
+    // Fee range filter
+    if (feeRange !== "All") {
+      result = result.filter((c) => {
+        const fee = c.fees?.btech || c.fees?.mba || 0;
+        if (feeRange === "<5L") return fee < 500000;
+        if (feeRange === "5L-10L") return fee >= 500000 && fee <= 1000000;
+        if (feeRange === "10L-15L") return fee > 1000000 && fee <= 1500000;
+        if (feeRange === ">15L") return fee > 1500000;
+        return true;
+      });
     }
 
+    // Minimum Package Filter
+    if (minPackage !== "All") {
+      result = result.filter((c) => {
+        const pkg = c.avgPackage || 0;
+        if (minPackage === "3+") return pkg >= 3;
+        if (minPackage === "5+") return pkg >= 5;
+        if (minPackage === "8+") return pkg >= 8;
+        if (minPackage === "10+") return pkg >= 10;
+        return true;
+      });
+    }
+
+    // Sorting
     switch (sort) {
       case "ranking":
-        result.sort((a, b) => a.nirfRanking - b.nirfRanking);
+        result.sort((a, b) => (a.nirfRanking || 999) - (b.nirfRanking || 999));
         break;
       case "fees-low":
-        result.sort((a, b) => (a.fees.btech || 0) - (b.fees.btech || 0));
+        result.sort((a, b) => (a.fees?.btech || 9999999) - (b.fees?.btech || 9999999));
         break;
       case "fees-high":
-        result.sort((a, b) => (b.fees.btech || 0) - (a.fees.btech || 0));
+        result.sort((a, b) => (b.fees?.btech || 0) - (a.fees?.btech || 0));
         break;
       case "placement":
-        result.sort(
-          (a, b) => b.placementPercentage - a.placementPercentage
-        );
+        result.sort((a, b) => (b.placementPercentage || 0) - (a.placementPercentage || 0));
         break;
       case "package":
-        result.sort((a, b) => b.avgPackage - a.avgPackage);
+        result.sort((a, b) => (b.avgPackage || 0) - (a.avgPackage || 0));
         break;
     }
 
     return result;
-  }, [query, type, state, sort]);
+  }, [query, selectedCourses, feeRange, minPackage, sort]);
+
+  const clearAllFilters = () => {
+    setSelectedCourses([]);
+    setFeeRange("All");
+    setMinPackage("All");
+  };
+
+  const removeFilter = (key) => {
+    if (key === "courses") setSelectedCourses([]);
+    if (key === "feeRange") setFeeRange("All");
+    if (key === "minPackage") setMinPackage("All");
+  };
 
   return (
     <>
@@ -134,61 +266,85 @@ export default function CollegesPage() {
       <main className="flex-1 bg-slate-50">
         {/* Header */}
         <div className="bg-white border-b border-slate-200">
-          <div className="container-main py-6">
-            <h1 className="heading-2 mb-1">Explore Colleges</h1>
-            <p className="text-body-sm">
-              Browse and compare {colleges.length}+ colleges across India
+          <div className="container-main py-4 sm:py-6">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-navy mb-1">
+              Explore Online Universities
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Discover {colleges.length}+ top online colleges, compare fees, and check placements.
             </p>
           </div>
         </div>
 
-        <div className="container-main py-6">
-          {/* Search & Sort Bar */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-5">
+        <div className="container-main py-4 sm:py-6">
+          {/* Search & Sort & Filter Bar */}
+          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 mb-4 sm:mb-5">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search colleges..."
-                className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20 transition-all"
+                placeholder="Search universities by name or city..."
+                className="w-full pl-10 pr-4 py-2 sm:py-2.5 text-sm bg-white border border-slate-200 rounded-xl outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20 transition-all shadow-2xs"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="text-sm bg-white border border-slate-200 rounded-lg px-3 py-2.5 outline-none focus:border-crimson/50 text-slate-600"
+                className="flex-1 sm:flex-none text-xs sm:text-sm bg-white border border-slate-200 rounded-xl px-3 py-2 sm:py-2.5 outline-none focus:border-crimson/50 text-slate-700 shadow-2xs cursor-pointer font-medium"
               >
                 {sortOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {opt.label}
+                    Sort: {opt.label}
                   </option>
                 ))}
               </select>
 
-              {/* Mobile filter trigger */}
+              {/* Mobile filter bottom-sheet trigger */}
               <Sheet>
-                <SheetTrigger className="lg:hidden inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-2xs hover:bg-slate-50 transition-colors">
-                  <SlidersHorizontal className="h-4 w-4" />
+                <SheetTrigger className="lg:hidden flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs active:scale-95 transition-all">
+                  <SlidersHorizontal className="h-3.5 w-3.5 text-crimson" />
                   <span>Filters</span>
                   {activeFilters.length > 0 && (
-                    <span className="h-5 w-5 rounded-full bg-crimson text-white text-[10px] font-bold flex items-center justify-center">
+                    <span className="h-5 min-w-5 px-1 rounded-full bg-crimson text-white text-[10px] font-bold flex items-center justify-center">
                       {activeFilters.length}
                     </span>
                   )}
                 </SheetTrigger>
-                <SheetContent side="left" className="w-[300px] p-6">
-                  <SheetTitle className="text-base font-semibold text-navy mb-6">
-                    Filters
-                  </SheetTitle>
-                  <FilterPanel
-                    type={type}
-                    setType={setType}
-                    state={state}
-                    setState={setState}
-                  />
+                <SheetContent side="bottom" className="max-h-[85vh] rounded-t-3xl p-0 overflow-hidden flex flex-col bg-white">
+                  <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/70">
+                    <SheetTitle className="text-base font-bold text-navy flex items-center gap-2">
+                      <SlidersHorizontal className="h-4 w-4 text-crimson" />
+                      Filter Universities
+                    </SheetTitle>
+                    {activeFilters.length > 0 && (
+                      <button
+                        onClick={clearAllFilters}
+                        className="text-xs font-semibold text-crimson hover:underline"
+                      >
+                        Reset All
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-5">
+                    <FilterPanel
+                      selectedCourses={selectedCourses}
+                      setSelectedCourses={setSelectedCourses}
+                      feeRange={feeRange}
+                      setFeeRange={setFeeRange}
+                      minPackage={minPackage}
+                      setMinPackage={setMinPackage}
+                    />
+                  </div>
+                  <div className="p-4 border-t border-slate-100 bg-white shadow-lg">
+                    <SheetClose asChild>
+                      <Button className="w-full h-11 bg-crimson hover:bg-crimson-dark text-white font-bold rounded-xl shadow-md shadow-crimson/20 active:scale-98">
+                        Show {filtered.length} {filtered.length === 1 ? "University" : "Universities"}
+                      </Button>
+                    </SheetClose>
+                  </div>
                 </SheetContent>
               </Sheet>
             </div>
@@ -196,30 +352,25 @@ export default function CollegesPage() {
 
           {/* Active Filters */}
           {activeFilters.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-6">
               {activeFilters.map((f) => (
                 <Badge
                   key={f.key}
                   variant="secondary"
-                  className="gap-1 pl-2.5 pr-1.5 py-1 text-xs bg-crimson-light text-crimson border-0"
+                  className="gap-1.5 pl-2.5 pr-1.5 py-1 text-xs bg-crimson/10 text-crimson border border-crimson/20 hover:bg-crimson/20"
                 >
                   {f.label}
                   <button
-                    onClick={() =>
-                      f.key === "type" ? setType("All") : setState("All")
-                    }
-                    className="hover:bg-crimson/10 rounded-full p-0.5"
+                    onClick={() => removeFilter(f.key)}
+                    className="hover:bg-crimson/20 rounded-full p-0.5 transition-colors"
                   >
                     <X className="h-3 w-3" />
                   </button>
                 </Badge>
               ))}
               <button
-                onClick={() => {
-                  setType("All");
-                  setState("All");
-                }}
-                className="text-xs text-slate-500 hover:text-crimson transition-colors"
+                onClick={clearAllFilters}
+                className="text-xs text-slate-500 hover:text-crimson transition-colors font-medium ml-2"
               >
                 Clear all
               </button>
@@ -228,41 +379,64 @@ export default function CollegesPage() {
 
           <div className="flex gap-6">
             {/* Desktop Sidebar */}
-            <aside className="hidden lg:block w-60 shrink-0">
-              <div className="bg-white border border-slate-200 rounded-xl p-5 sticky top-20">
-                <h3 className="text-sm font-semibold text-navy mb-4">
-                  Filters
-                </h3>
+            <aside className="hidden lg:block w-64 shrink-0">
+              <div className="bg-white border border-slate-200 rounded-xl p-5 sticky top-24 shadow-xs">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-base font-semibold text-navy flex items-center gap-2">
+                    <SlidersHorizontal className="h-4 w-4 text-slate-400" />
+                    Filters
+                  </h3>
+                  {activeFilters.length > 0 && (
+                    <button
+                      onClick={clearAllFilters}
+                      className="text-xs text-crimson hover:underline"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
                 <FilterPanel
-                  type={type}
-                  setType={setType}
-                  state={state}
-                  setState={setState}
+                  selectedCourses={selectedCourses}
+                  setSelectedCourses={setSelectedCourses}
+                  feeRange={feeRange}
+                  setFeeRange={setFeeRange}
+                  minPackage={minPackage}
+                  setMinPackage={setMinPackage}
                 />
               </div>
             </aside>
 
             {/* Results Grid */}
             <div className="flex-1">
-              <p className="text-xs text-slate-500 mb-4">
-                {filtered.length} college{filtered.length !== 1 ? "s" : ""}{" "}
-                found
+              <p className="text-sm text-slate-500 mb-4 font-medium">
+                Showing {filtered.length} online {filtered.length === 1 ? "university" : "universities"}
               </p>
               {filtered.length > 0 ? (
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                   {filtered.map((college) => (
                     <CollegeCard key={college.id} college={college} />
                   ))}
                 </div>
               ) : (
-                <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
-                  <Search className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-                  <p className="text-sm font-medium text-navy mb-1">
-                    No colleges found
+                <div className="bg-white border border-slate-200 rounded-xl p-16 text-center shadow-xs">
+                  <div className="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                    <Search className="h-8 w-8 text-slate-300" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-navy mb-2">
+                    No universities found
+                  </h3>
+                  <p className="text-sm text-slate-500 max-w-sm mx-auto">
+                    Try adjusting your filters, selecting different courses, or clearing the search query to see more results.
                   </p>
-                  <p className="text-xs text-slate-500">
-                    Try adjusting your filters or search query
-                  </p>
+                  {activeFilters.length > 0 && (
+                    <Button
+                      variant="outline"
+                      onClick={clearAllFilters}
+                      className="mt-6"
+                    >
+                      Clear All Filters
+                    </Button>
+                  )}
                 </div>
               )}
             </div>

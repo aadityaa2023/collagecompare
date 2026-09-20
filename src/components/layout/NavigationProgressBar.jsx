@@ -14,15 +14,23 @@ export default function NavigationProgressBar() {
   // Complete progress when pathname or searchParams change
   useEffect(() => {
     if (loading) {
-      setProgress(100);
-      finishTimerRef.current = setTimeout(() => {
-        setLoading(false);
-        setProgress(0);
-      }, 250);
+      const immediateTimer = setTimeout(() => {
+        setProgress(100);
+        finishTimerRef.current = setTimeout(() => {
+          setLoading(false);
+          setProgress(0);
+        }, 250);
+      }, 0);
+      
+      return () => {
+        clearTimeout(immediateTimer);
+        if (finishTimerRef.current) clearTimeout(finishTimerRef.current);
+      };
     }
     return () => {
       if (finishTimerRef.current) clearTimeout(finishTimerRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, searchParams]);
 
   // Intercept internal link clicks to give instant zero-latency feedback
