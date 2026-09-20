@@ -4,12 +4,28 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { submitCounsellingData } from "@/lib/googleFormConfig";
 
 export default function ContactPage() {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Thank you for contacting us! We will get back to you shortly.");
-    e.target.reset();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get("name"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+      answersSummary: "Source: Contact Us Page"
+    };
+    
+    try {
+      await submitCounsellingData(data);
+      alert("Thank you for contacting us! We will get back to you shortly.");
+      e.target.reset();
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -72,6 +88,7 @@ export default function ContactPage() {
                     <label className="text-sm font-semibold text-slate-700">Full Name</label>
                     <input 
                       required 
+                      name="name"
                       type="text" 
                       placeholder="John Doe" 
                       className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20"
@@ -81,6 +98,7 @@ export default function ContactPage() {
                     <label className="text-sm font-semibold text-slate-700">Phone Number</label>
                     <input 
                       required 
+                      name="phone"
                       type="tel" 
                       placeholder="+91" 
                       className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20"
@@ -91,6 +109,7 @@ export default function ContactPage() {
                   <label className="text-sm font-semibold text-slate-700">Email Address</label>
                   <input 
                     required 
+                    name="email"
                     type="email" 
                     placeholder="john@example.com" 
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20"
@@ -100,6 +119,7 @@ export default function ContactPage() {
                   <label className="text-sm font-semibold text-slate-700">Your Message</label>
                   <textarea 
                     required 
+                    name="message"
                     rows={4} 
                     placeholder="How can we help you?" 
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20 resize-none"

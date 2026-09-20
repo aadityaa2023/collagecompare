@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
       className={`${outfit.variable} ${geistMono.variable} antialiased`}
       data-scroll-behavior="smooth"
     >
-      <body className="min-h-screen flex flex-col font-sans pb-mobile-dock lg:pb-0">
+      <body className="min-h-screen flex flex-col font-sans bg-background text-foreground">
         <Suspense fallback={null}>
           <NavigationProgressBar />
         </Suspense>

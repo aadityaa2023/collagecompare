@@ -234,8 +234,10 @@
   .pt-safe {
     padding-top: env(safe-area-inset-top, 0px);
   }
-  .pb-mobile-dock {
-    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  @media (max-width: 1023px) {
+    .pb-mobile-dock {
+      padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+    }
   }
 }
 

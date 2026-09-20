@@ -14,13 +14,14 @@ export const GOOGLE_FORM_CONFIG = {
     process.env.NEXT_PUBLIC_GOOGLE_FORM_URL ||
     "https://docs.google.com/forms/d/e/1FAIpQLSfQ_CompareDegree_Demo_Counselling/formResponse",
 
-  // Mapping your form's entry.XXXXX IDs to the counselling fields
   fieldEntries: {
     name: process.env.NEXT_PUBLIC_GF_ENTRY_NAME || "entry.1000001",
     phone: process.env.NEXT_PUBLIC_GF_ENTRY_PHONE || "entry.1000002",
     state: process.env.NEXT_PUBLIC_GF_ENTRY_STATE || "entry.1000003",
     preferredCourse: process.env.NEXT_PUBLIC_GF_ENTRY_COURSE || "entry.1000004",
     answersSummary: process.env.NEXT_PUBLIC_GF_ENTRY_SUMMARY || "entry.1000005",
+    email: process.env.NEXT_PUBLIC_GF_ENTRY_EMAIL || "entry.1000006",
+    message: process.env.NEXT_PUBLIC_GF_ENTRY_MESSAGE || "entry.1000007",
   },
 };
 
@@ -82,8 +83,10 @@ export async function submitCounsellingData(data) {
       );
       formData.append(
         GOOGLE_FORM_CONFIG.fieldEntries.answersSummary,
-        JSON.stringify(data.answersSummary || {})
+        typeof data.answersSummary === "object" ? JSON.stringify(data.answersSummary || {}) : (data.answersSummary || "")
       );
+      formData.append(GOOGLE_FORM_CONFIG.fieldEntries.email, data.email || "");
+      formData.append(GOOGLE_FORM_CONFIG.fieldEntries.message, data.message || "");
 
       await fetch(GOOGLE_FORM_CONFIG.formUrl, {
         method: "POST",

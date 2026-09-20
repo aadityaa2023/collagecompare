@@ -2,7 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import {
   HeroSection,
-  PopularComparisonsSection,
+  TrustedUniversitiesSection,
   FeaturesSection,
   ExploreCoursesSection,
   HowItWorksSection,
@@ -15,7 +15,7 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-1 w-full">
         <HeroSection />
-        <PopularComparisonsSection />
+        <TrustedUniversitiesSection />
         <FeaturesSection />
         <ExploreCoursesSection />
         <HowItWorksSection />

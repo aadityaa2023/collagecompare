@@ -1,23 +1,31 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
+import { Mail, Phone, MapPin, ArrowUpRight, ShieldCheck, Heart } from "lucide-react";
 
 const footerLinks = {
   company: [
     { label: "About Us", href: "/about" },
     { label: "Contact Us", href: "/contact" },
+    { label: "Why Compare Degree", href: "/about" },
+    { label: "Student Reviews", href: "/#testimonials" },
   ],
   explore: [
-    { label: "Colleges", href: "/colleges" },
-    { label: "Courses", href: "/courses" },
-    { label: "Compare", href: "/compare" },
+    { label: "Top Universities", href: "/colleges" },
+    { label: "Explore Courses", href: "/courses" },
+    { label: "Compare Colleges", href: "/compare" },
+    { label: "NIRF Rankings", href: "/colleges" },
   ],
   resources: [
-    { label: "Counselling", href: "/course-finder" },
+    { label: "Free Counselling", href: "/contact" },
+    { label: "Course Finder", href: "/course-finder" },
+    { label: "College Predictor", href: "/course-finder" },
+    { label: "Admission Guidance", href: "/contact" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy-policy" },
     { label: "Terms of Service", href: "/terms-of-service" },
+    { label: "Data Integrity", href: "/privacy-policy" },
+    { label: "Security & Trust", href: "/about" },
   ],
 };
 
@@ -71,12 +79,12 @@ const socialIcons = [
 
 export default function Footer() {
   return (
-    <footer className="bg-navy-dark text-slate-300 border-t border-slate-800">
+    <footer className="bg-[#0B132B] text-slate-300 border-t border-slate-800/80 relative z-10 pb-20 lg:pb-0">
       {/* Main Footer Content */}
-      <div className="container-main py-14 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-10">
-          {/* Brand Column (takes 2 columns on lg) */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-2 flex flex-col justify-between">
+      <div className="container-main py-12 sm:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          {/* Brand Column (takes 4 columns on lg) */}
+          <div className="lg:col-span-4 flex flex-col justify-between">
             <div>
               <Link href="/" className="inline-block mb-4 transition-opacity hover:opacity-90">
                 <Image
@@ -89,14 +97,14 @@ export default function Footer() {
                   priority
                 />
               </Link>
-              <p className="text-sm text-slate-400 leading-relaxed mb-6 max-w-sm">
+              <p className="text-sm text-slate-400 leading-relaxed mb-5 max-w-sm">
                 Smart Decisions, Brighter Futures. India&apos;s most comprehensive
                 college and course comparison platform helping students make
                 confident, data-driven decisions.
               </p>
 
               {/* Trust Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs text-slate-300 mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/60 text-xs text-slate-300 mb-6">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -106,12 +114,12 @@ export default function Footer() {
             </div>
 
             {/* Direct Contact Links */}
-            <div className="space-y-2.5 pt-2 border-t border-slate-800/80 text-sm">
+            <div className="space-y-2.5 pt-4 border-t border-slate-800/80 text-sm">
               <a
                 href="mailto:info@comparedegree.com"
                 className="group flex items-center gap-2.5 text-slate-400 hover:text-white transition-colors"
               >
-                <div className="h-7 w-7 rounded-md bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-crimson group-hover:text-white transition-colors">
+                <div className="h-7 w-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-crimson group-hover:text-white transition-colors">
                   <Mail className="h-3.5 w-3.5" />
                 </div>
                 <span>info@comparedegree.com</span>
@@ -120,7 +128,7 @@ export default function Footer() {
                 href="tel:+911234567890"
                 className="group flex items-center gap-2.5 text-slate-400 hover:text-white transition-colors"
               >
-                <div className="h-7 w-7 rounded-md bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-crimson group-hover:text-white transition-colors">
+                <div className="h-7 w-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-crimson group-hover:text-white transition-colors">
                   <Phone className="h-3.5 w-3.5" />
                 </div>
                 <span>+91 12345 67890</span>
@@ -128,87 +136,90 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Company Links */}
-          <div className="col-span-1">
-            <h3 className="text-xs font-semibold text-white tracking-wider uppercase mb-4">
-              Company
-            </h3>
-            <ul className="space-y-2.5">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Links Columns (takes 8 columns on lg) */}
+          <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+            {/* Company Links */}
+            <div>
+              <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">
+                Company
+              </h3>
+              <ul className="space-y-2.5">
+                {footerLinks.company.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Explore Links */}
-          <div className="col-span-1">
-            <h3 className="text-xs font-semibold text-white tracking-wider uppercase mb-4">
-              Explore
-            </h3>
-            <ul className="space-y-2.5">
-              {footerLinks.explore.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            {/* Explore Links */}
+            <div>
+              <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">
+                Explore
+              </h3>
+              <ul className="space-y-2.5">
+                {footerLinks.explore.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Resources Links */}
-          <div className="col-span-1">
-            <h3 className="text-xs font-semibold text-white tracking-wider uppercase mb-4">
-              Resources
-            </h3>
-            <ul className="space-y-2.5">
-              {footerLinks.resources.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            {/* Resources Links */}
+            <div>
+              <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">
+                Resources
+              </h3>
+              <ul className="space-y-2.5">
+                {footerLinks.resources.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Legal Links */}
-          <div className="col-span-1">
-            <h3 className="text-xs font-semibold text-white tracking-wider uppercase mb-4">
-              Legal
-            </h3>
-            <ul className="space-y-2.5">
-              {footerLinks.legal.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Legal Links */}
+            <div>
+              <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">
+                Legal
+              </h3>
+              <ul className="space-y-2.5">
+                {footerLinks.legal.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-slate-400 hover:text-white hover:translate-x-0.5 inline-flex items-center transition-all duration-150"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-slate-800/80 bg-slate-950/40">
-        <div className="container-main py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="border-t border-slate-800/80 bg-slate-950/60">
+        <div className="container-main py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-500 text-center sm:text-left">
             &copy; {new Date().getFullYear()} Compare Degree. All rights reserved.
           </p>
@@ -223,7 +234,7 @@ export default function Footer() {
                 title={social.name}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-8 w-8 rounded-lg bg-slate-800/70 border border-slate-700/60 flex items-center justify-center text-slate-400 hover:text-white hover:bg-crimson hover:border-crimson transition-all duration-200"
+                className="h-8 w-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 hover:text-white hover:bg-crimson hover:border-crimson transition-all duration-200"
               >
                 {social.icon}
               </a>
