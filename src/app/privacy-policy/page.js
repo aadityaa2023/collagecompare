@@ -2,7 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 export const metadata = {
-  title: "Privacy Policy - FindMyCollege",
+  title: "Privacy Policy - Compare Degree",
   description: "Privacy Policy and data protection guidelines.",
 };
 
@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
 
             <div className="prose prose-slate max-w-none text-slate-600 space-y-6">
               <p>
-                At FindMyCollege, accessible from findmycollege.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by FindMyCollege and how we use it.
+                At Compare Degree, accessible from comparedegree, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Compare Degree and how we use it.
               </p>
 
               <h2 className="text-2xl font-bold text-navy mt-10 mb-4">1. Information We Collect</h2>
@@ -41,17 +41,17 @@ export default function PrivacyPolicyPage() {
 
               <h2 className="text-2xl font-bold text-navy mt-10 mb-4">3. Log Files</h2>
               <p>
-                FindMyCollege follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable.
+                Compare Degree follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable.
               </p>
 
               <h2 className="text-2xl font-bold text-navy mt-10 mb-4">4. Third-Party Privacy Policies</h2>
               <p>
-                FindMyCollege's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
+                Compare Degree's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
               </p>
 
               <h2 className="text-2xl font-bold text-navy mt-10 mb-4">5. Contact Us</h2>
               <p>
-                If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at support@findmycollege.com.
+                If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at info@comparedegree.com.
               </p>
             </div>
           </div>

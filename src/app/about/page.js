@@ -3,7 +3,7 @@ import Footer from "@/components/layout/Footer";
 import { CheckCircle2, Target, Award, Users } from "lucide-react";
 
 export const metadata = {
-  title: "About Us - FindMyCollege",
+  title: "About Us - Compare Degree",
   description: "Learn more about our mission to help students find their perfect online university.",
 };
 
@@ -19,7 +19,7 @@ export default function AboutPage() {
                 Empowering Students to Make the Right Choice
               </h1>
               <p className="text-sm sm:text-lg text-slate-300">
-                FindMyCollege is India's leading platform for discovering, comparing, and enrolling in top online universities. We bridge the gap between ambition and opportunity.
+                Compare Degree is India's leading platform for discovering, comparing, and enrolling in top online universities. We bridge the gap between ambition and opportunity.
               </p>
             </div>
           </div>

@@ -17,7 +17,7 @@ export default function ContactPage() {
       message: formData.get("message"),
       answersSummary: "Source: Contact Us Page"
     };
-    
+
     try {
       await submitCounsellingData(data);
       alert("Thank you for contacting us! We will get back to you shortly.");
@@ -45,7 +45,7 @@ export default function ContactPage() {
 
         <div className="container-main pb-16 sm:pb-20 -mt-10 sm:-mt-12">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row">
-            
+
             {/* Contact Info */}
             <div className="bg-crimson text-white p-6 sm:p-10 md:w-1/3 flex flex-col justify-between">
               <div>
@@ -55,14 +55,14 @@ export default function ContactPage() {
                     <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-crimson-light shrink-0" />
                     <div>
                       <p className="font-medium text-sm sm:text-base">Phone</p>
-                      <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">+91 98765 43210</p>
+                      <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">+91 8377059878</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3.5 sm:gap-4">
                     <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-crimson-light shrink-0" />
                     <div>
                       <p className="font-medium text-sm sm:text-base">Email</p>
-                      <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">support@findmycollege.com</p>
+                      <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">info@comparedegree.com</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3.5 sm:gap-4">
@@ -70,8 +70,8 @@ export default function ContactPage() {
                     <div>
                       <p className="font-medium text-sm sm:text-base">Office</p>
                       <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">
-                        123 Education Hub, Knowledge Park<br />
-                        New Delhi, India 110001
+                        Spectrum@Metro , Plot C & D Gardenia Gateway<br />
+                        Sector 75 , Noida -201316
                       </p>
                     </div>
                   </div>
@@ -86,42 +86,42 @@ export default function ContactPage() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Full Name</label>
-                    <input 
-                      required 
+                    <input
+                      required
                       name="name"
-                      type="text" 
-                      placeholder="John Doe" 
+                      type="text"
+                      placeholder="John Doe"
                       className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20"
                     />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-700">Phone Number</label>
-                    <input 
-                      required 
+                    <input
+                      required
                       name="phone"
-                      type="tel" 
-                      placeholder="+91" 
+                      type="tel"
+                      placeholder="+91"
                       className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Email Address</label>
-                  <input 
-                    required 
+                  <input
+                    required
                     name="email"
-                    type="email" 
-                    placeholder="john@example.com" 
+                    type="email"
+                    placeholder="john@example.com"
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Your Message</label>
-                  <textarea 
-                    required 
+                  <textarea
+                    required
                     name="message"
-                    rows={4} 
-                    placeholder="How can we help you?" 
+                    rows={4}
+                    placeholder="How can we help you?"
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-1 focus:ring-crimson/20 resize-none"
                   ></textarea>
                 </div>

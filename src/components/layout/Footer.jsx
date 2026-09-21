@@ -131,7 +131,7 @@ export default function Footer() {
                 <div className="h-7 w-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-crimson group-hover:text-white transition-colors">
                   <Phone className="h-3.5 w-3.5" />
                 </div>
-                <span>+91 12345 67890</span>
+                <span>+91 8377059878</span>
               </a>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function Footer() {
       <div className="border-t border-slate-800/80 bg-slate-950/60">
         <div className="container-main py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-500 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} Compare Degree. All rights reserved.
+            &copy; {new Date().getFullYear()} Growhys Innovations Private Limited. All rights reserved.
           </p>
 
           {/* Social Icons */}

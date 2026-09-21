@@ -22,6 +22,7 @@ import {
   Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { submitCounsellingData } from "@/lib/googleFormConfig";
 
 const STEPS = [
   { id: "education", title: "Education & Qualification", subtitle: "Your current academic background" },
@@ -30,6 +31,7 @@ const STEPS = [
   { id: "career", title: "Career Ambition", subtitle: "Your primary goal after graduation" },
   { id: "course", title: "Preferred Course", subtitle: "Target degree or let us recommend" },
   { id: "preferences", title: "Location & Budget", subtitle: "Where and how you wish to study" },
+  { id: "counselling", title: "Get Free Expert Counselling", subtitle: "Fill this form to unlock your personalized recommendations" },
 ];
 
 export default function CourseFinderWizard({ onComplete }) {
@@ -46,16 +48,50 @@ export default function CourseFinderWizard({ onComplete }) {
     preferredCourseId: "all",
     region: "all",
     budget: "flexible",
+    name: "",
+    phone: "",
+    email: "",
   });
 
   const currentStep = STEPS[currentStepIndex];
   const progressPercent = Math.round(((currentStepIndex + 1) / STEPS.length) * 100);
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (currentStepIndex === 6) {
+      if (!answers.name || !answers.phone || !answers.email) {
+        alert("Please fill in all the details to continue.");
+        return;
+      }
+      setIsAnalyzing(true);
+      try {
+        await submitCounsellingData({
+          name: answers.name,
+          phone: answers.phone,
+          email: answers.email,
+          answersSummary: {
+            education: answers.education,
+            stream: answers.stream,
+            percentage: answers.percentage,
+            interests: answers.interests,
+            careerGoals: answers.careerGoals,
+            preferredCourseId: answers.preferredCourseId,
+            region: answers.region,
+            budget: answers.budget
+          }
+        });
+      } catch (err) {
+        console.error("Failed to submit counselling data", err);
+      }
+      setTimeout(() => {
+        setIsAnalyzing(false);
+        if (onComplete) onComplete(answers);
+      }, 1200);
+      return;
+    }
+
     if (currentStepIndex < STEPS.length - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      // Final submit
       setIsAnalyzing(true);
       setTimeout(() => {
         setIsAnalyzing(false);
@@ -568,6 +604,59 @@ export default function CourseFinderWizard({ onComplete }) {
                           <div className="text-[10px] text-slate-500 mt-0.5">{bg.sub}</div>
                         </div>
                       ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {currentStepIndex === 6 && (
+                <motion.div
+                  key="step6"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-6"
+                >
+                  <div className="bg-crimson-50/50 p-4 rounded-xl border border-crimson-100 mb-6 text-left">
+                    <p className="text-sm text-navy">
+                      You're almost there! We've found <span className="font-bold text-crimson">colleges & courses</span> matching your profile. Please provide your details to view your personalized recommendations and get free expert guidance.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 text-left">
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name <span className="text-crimson">*</span></label>
+                      <input 
+                        type="text" 
+                        required
+                        value={answers.name}
+                        onChange={(e) => setAnswers({...answers, name: e.target.value})}
+                        className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-2 focus:ring-crimson/20 transition-all"
+                        placeholder="e.g. John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number <span className="text-crimson">*</span></label>
+                      <input 
+                        type="tel" 
+                        required
+                        value={answers.phone}
+                        onChange={(e) => setAnswers({...answers, phone: e.target.value})}
+                        className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-2 focus:ring-crimson/20 transition-all"
+                        placeholder="e.g. +91 9876543210"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email Address <span className="text-crimson">*</span></label>
+                      <input 
+                        type="email" 
+                        required
+                        value={answers.email}
+                        onChange={(e) => setAnswers({...answers, email: e.target.value})}
+                        className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-2 focus:ring-crimson/20 transition-all"
+                        placeholder="e.g. john@example.com"
+                      />
                     </div>
                   </div>
                 </motion.div>
