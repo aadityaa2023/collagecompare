@@ -110,10 +110,6 @@ export default function CollegeDetailPage({ params }) {
                     <Calendar className="h-3.5 w-3.5 text-slate-300" />
                     Est. {college.established}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
-                    {college.rating}/5 ({college.reviewCount} reviews)
-                  </span>
                 </div>
               </div>
 
@@ -163,20 +159,6 @@ export default function CollegeDetailPage({ params }) {
                   icon: TrendingUp,
                   color: "text-blue-600",
                 },
-                {
-                  label: "Placement",
-                  value: `${college.placementPercentage}%`,
-                  icon: Briefcase,
-                  color: "text-crimson",
-                },
-                {
-                  label: "Students",
-                  value:
-                    college.totalStudents >= 1000
-                      ? `${(college.totalStudents / 1000).toFixed(0)}K+`
-                      : college.totalStudents,
-                  icon: Users,
-                  color: "text-purple-600",
                 },
               ].map((stat) => (
                 <div key={stat.label} className="flex items-center gap-3">
@@ -207,8 +189,6 @@ export default function CollegeDetailPage({ params }) {
                   "Courses & Fees",
                   "Placements",
                   "Rankings",
-                  "Campus",
-                  "Reviews",
                 ].map((tab) => (
                   <TabsTrigger
                     key={tab}
@@ -254,14 +234,6 @@ export default function CollegeDetailPage({ params }) {
                       label: "Type",
                       value: college.type,
                     },
-                    {
-                      label: "Total Students",
-                      value: college.totalStudents.toLocaleString(),
-                    },
-                    {
-                      label: "Rating",
-                      value: `${college.rating}/5`,
-                    },
                   ].map((item) => (
                     <div
                       key={item.label}
@@ -278,21 +250,6 @@ export default function CollegeDetailPage({ params }) {
                 </div>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h2 className="text-base font-semibold text-navy mb-3">
-                  Entrance Exams
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {college.entranceExams.map((exam) => (
-                    <Badge
-                      key={exam}
-                      variant="outline"
-                      className="text-xs border-slate-200 text-slate-600"
-                    >
-                      {exam}
-                    </Badge>
-                  ))}
-                </div>
               </div>
             </TabsContent>
 
@@ -347,10 +304,6 @@ export default function CollegeDetailPage({ params }) {
                     label: "Highest Package",
                     value: formatPackage(college.highestPackage),
                   },
-                  {
-                    label: "Placement Rate",
-                    value: `${college.placementPercentage}%`,
-                  },
                 ].map((stat) => (
                   <div
                     key={stat.label}
@@ -394,99 +347,10 @@ export default function CollegeDetailPage({ params }) {
                     {college.naacGrade}
                   </Badge>
                 </div>
-                <div className="flex items-center justify-between py-3">
-                  <span className="text-sm text-slate-600">Student Rating</span>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
-                    <span className="text-sm font-semibold text-navy">
-                      {college.rating}/5
-                    </span>
-                    <span className="text-xs text-slate-500">
-                      ({college.reviewCount})
-                    </span>
-                  </div>
                 </div>
               </div>
             </TabsContent>
 
-            {/* Campus Tab */}
-            <TabsContent value="campus" className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
-                <div className="h-64 sm:h-80 relative overflow-hidden bg-slate-900">
-                  <Image
-                    src={college.campus || "/campus-placeholder.jpg"}
-                    alt={`${college.name} Campus`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 1200px"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 text-white">
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-white/20 backdrop-blur-md mb-2 inline-block">
-                      Campus Infrastructure & Life
-                    </span>
-                    <h3 className="text-xl sm:text-2xl font-bold">
-                      {college.shortName} Campus
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-200 mt-1 flex items-center gap-1.5">
-                      <MapPin className="h-3.5 w-3.5 text-crimson" />
-                      {college.location.city}, {college.location.state} &middot; Est. {college.established}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-base font-bold text-navy mb-4">
-                    Campus Facilities & Amenities
-                  </h3>
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {college.facilities.map((facility) => (
-                      <div
-                        key={facility}
-                        className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/70"
-                      >
-                        <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                        <span className="text-sm text-slate-700 font-semibold">
-                          {facility}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            {/* Reviews Tab */}
-            <TabsContent value="reviews">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-navy">
-                      {college.rating}
-                    </p>
-                    <div className="flex gap-0.5 justify-center my-1">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < Math.floor(college.rating)
-                              ? "text-amber-500 fill-amber-500"
-                              : "text-slate-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      {college.reviewCount} reviews
-                    </p>
-                  </div>
-                </div>
-                <p className="text-sm text-slate-500">
-                  Detailed student reviews are being collected. Check back soon
-                  for verified student experiences at {college.shortName}.
-                </p>
-              </div>
-            </TabsContent>
           </Tabs>
         </div>
 

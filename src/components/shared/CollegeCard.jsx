@@ -135,21 +135,13 @@ export default function CollegeCard({ college, compact = false }) {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-2 pt-3 border-t border-slate-100">
+              <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100">
                 <div>
                   <p className="text-[10px] uppercase tracking-wider text-slate-400 mb-0.5">
                     Rank
                   </p>
                   <p className="text-sm font-bold text-navy">
                     #{college.nirfRanking}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-wider text-slate-400 mb-0.5">
-                    Placed
-                  </p>
-                  <p className="text-sm font-bold text-navy">
-                    {college.placementPercentage}%
                   </p>
                 </div>
                 <div>

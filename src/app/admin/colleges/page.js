@@ -46,17 +46,11 @@ const defaultFormData = {
   fees: "{\n  \"btech\": 1000000\n}",
   avgPackage: "",
   highestPackage: "",
-  placementPercentage: "",
-  totalStudents: "",
   coursesOffered: "",
-  facilities: "",
-  rating: 0,
-  reviewCount: 0,
   logo: "",
   campus: "",
   about: "",
   topRecruiters: "",
-  entranceExams: "",
   cutoff: "{}",
 };
 
@@ -69,21 +63,20 @@ export default function CollegesPage() {
   
   const [formData, setFormData] = useState(defaultFormData);
 
-  const fetchColleges = async () => {
-    try {
-      const res = await fetch("/api/admin/colleges");
-      if (res.ok) {
-        const data = await res.json();
-        setColleges(data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch colleges");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchColleges = async () => {
+      try {
+        const res = await fetch("/api/admin/colleges");
+        if (res.ok) {
+          const data = await res.json();
+          setColleges(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch colleges");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchColleges();
   }, []);
 
@@ -100,17 +93,11 @@ export default function CollegesPage() {
         fees: parseJson(formData.fees),
         cutoff: parseJson(formData.cutoff),
         coursesOffered: parseArray(formData.coursesOffered),
-        facilities: parseArray(formData.facilities),
         topRecruiters: parseArray(formData.topRecruiters),
-        entranceExams: parseArray(formData.entranceExams),
         established: Number(formData.established) || undefined,
         nirfRanking: Number(formData.nirfRanking) || undefined,
         avgPackage: Number(formData.avgPackage) || undefined,
         highestPackage: Number(formData.highestPackage) || undefined,
-        placementPercentage: Number(formData.placementPercentage) || undefined,
-        totalStudents: Number(formData.totalStudents) || undefined,
-        rating: Number(formData.rating) || 0,
-        reviewCount: Number(formData.reviewCount) || 0,
       };
 
       if (isEditing) {
@@ -163,17 +150,11 @@ export default function CollegesPage() {
       fees: formatJson(college.fees),
       avgPackage: college.avgPackage || "",
       highestPackage: college.highestPackage || "",
-      placementPercentage: college.placementPercentage || "",
-      totalStudents: college.totalStudents || "",
       coursesOffered: formatArray(college.coursesOffered),
-      facilities: formatArray(college.facilities),
-      rating: college.rating || 0,
-      reviewCount: college.reviewCount || 0,
       logo: college.logo || "",
       campus: college.campus || "",
       about: college.about || "",
       topRecruiters: formatArray(college.topRecruiters),
-      entranceExams: formatArray(college.entranceExams),
       cutoff: formatJson(college.cutoff),
     });
     setEditingId(college._id);
@@ -309,21 +290,6 @@ export default function CollegesPage() {
               <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
                 placeholder="e.g. A++" value={formData.naacGrade} onChange={e => setFormData({...formData, naacGrade: e.target.value})} />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Total Students</label>
-              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="e.g. 10000" value={formData.totalStudents} onChange={e => setFormData({...formData, totalStudents: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Student Rating (Out of 5)</label>
-              <input type="number" step="0.1" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="e.g. 4.5" value={formData.rating} onChange={e => setFormData({...formData, rating: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Review Count</label>
-              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="e.g. 1200" value={formData.reviewCount} onChange={e => setFormData({...formData, reviewCount: e.target.value})} />
-            </div>
 
             {/* Placements & Fees */}
             <div className="lg:col-span-3 pb-2 border-b border-slate-100 mb-2 mt-4">
@@ -339,11 +305,6 @@ export default function CollegesPage() {
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Highest Package (LPA)</label>
               <input type="number" step="0.1" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
                 placeholder="e.g. 50" value={formData.highestPackage} onChange={e => setFormData({...formData, highestPackage: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Placement %</label>
-              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="e.g. 95" value={formData.placementPercentage} onChange={e => setFormData({...formData, placementPercentage: e.target.value})} />
             </div>
             
             <div className="lg:col-span-3">
@@ -366,16 +327,6 @@ export default function CollegesPage() {
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Top Recruiters</label>
               <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
                 placeholder="Google, Microsoft, Amazon" value={formData.topRecruiters} onChange={e => setFormData({...formData, topRecruiters: e.target.value})} />
-            </div>
-            <div className="lg:col-span-3">
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Facilities</label>
-              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="Hostel, Gym, Library" value={formData.facilities} onChange={e => setFormData({...formData, facilities: e.target.value})} />
-            </div>
-            <div className="lg:col-span-3">
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Entrance Exams</label>
-              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="JEE Main, CAT" value={formData.entranceExams} onChange={e => setFormData({...formData, entranceExams: e.target.value})} />
             </div>
 
             {/* Media & Other */}

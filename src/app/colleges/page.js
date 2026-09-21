@@ -50,7 +50,6 @@ const sortOptions = [
   { value: "ranking", label: "NIRF Ranking" },
   { value: "fees-low", label: "Fees: Low to High" },
   { value: "fees-high", label: "Fees: High to Low" },
-  { value: "placement", label: "Placement %" },
   { value: "package", label: "Avg Package" },
 ];
 
@@ -236,9 +235,6 @@ export default function CollegesPage() {
         break;
       case "fees-high":
         result.sort((a, b) => (b.fees?.btech || 0) - (a.fees?.btech || 0));
-        break;
-      case "placement":
-        result.sort((a, b) => (b.placementPercentage || 0) - (a.placementPercentage || 0));
         break;
       case "package":
         result.sort((a, b) => (b.avgPackage || 0) - (a.avgPackage || 0));

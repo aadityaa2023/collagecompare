@@ -16,17 +16,11 @@ const collegeSchema = new mongoose.Schema(
     fees: { type: Map, of: Number }, // e.g., { "btech": 1600000, "mba": 400000 }
     avgPackage: { type: Number },
     highestPackage: { type: Number },
-    placementPercentage: { type: Number },
-    totalStudents: { type: Number },
     coursesOffered: [{ type: String }],
-    facilities: [{ type: String }],
-    rating: { type: Number, required: true, default: 0 },
-    reviewCount: { type: Number, default: 0 },
     logo: { type: String },
     campus: { type: String },
     about: { type: String },
     topRecruiters: [{ type: String }],
-    entranceExams: [{ type: String }],
     cutoff: { type: Map, of: String }, // e.g., { "merit": "50% marks" }
   },
   {
