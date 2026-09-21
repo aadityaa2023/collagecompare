@@ -46,7 +46,7 @@ export default function ExploreCoursesSection({ courseList = [] }) {
             className="self-start md:self-auto border-slate-200 hover:border-slate-300 text-slate-700 hover:text-navy bg-white shadow-xs font-semibold text-sm rounded-xl px-4 h-10"
           >
             <Link href="/courses">
-              View All 200+ Courses
+              View All Courses
               <ChevronRight className="ml-1.5 h-4 w-4 text-slate-400" />
             </Link>
           </Button>

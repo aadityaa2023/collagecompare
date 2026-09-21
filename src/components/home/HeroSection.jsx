@@ -74,13 +74,18 @@ export default function HeroSection() {
             </motion.h1>
 
             {/* Subheading */}
-            <motion.p
+            <motion.div
               variants={fadeUp}
               custom={2}
-              className="text-sm sm:text-lg text-slate-600 leading-relaxed mb-5 sm:mb-6 max-w-xl"
+              className="mb-5 sm:mb-6 max-w-xl"
             >
-              Unbiased side-by-side comparisons of <strong className="text-navy font-semibold">fees, verified placements, NIRF rankings, and ROI</strong> for top colleges across India. Stop guessing, start deciding.
-            </motion.p>
+              <h2 className="text-base sm:text-lg font-bold text-navy mb-1">
+                No Cost EMI Support
+              </h2>
+              <p className="text-sm sm:text-lg text-slate-600 leading-relaxed">
+                Flexible payment options with No Cost EMI support, making your course fees easier to manage without paying extra interest.
+              </p>
+            </motion.div>
 
             {/* Command-Bar Search */}
             <motion.div variants={fadeUp} custom={3} className="mb-5 sm:mb-6 max-w-xl">
