@@ -57,13 +57,13 @@ export async function PUT(request) {
   try {
     await dbConnect();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { documentId, ...updateData } = body;
 
-    if (!id) {
-      return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+    if (!documentId) {
+      return NextResponse.json({ error: 'Missing documentId' }, { status: 400 });
     }
 
-    const updatedCollege = await College.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedCollege = await College.findByIdAndUpdate(documentId, updateData, { new: true });
     return NextResponse.json(updatedCollege);
   } catch (error) {
     console.error('Error updating college:', error);

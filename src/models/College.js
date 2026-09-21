@@ -2,26 +2,32 @@ import mongoose from 'mongoose';
 
 const collegeSchema = new mongoose.Schema(
   {
+    id: { type: String, required: true, unique: true },
     name: { type: String, required: true },
-    location: { type: String, required: true },
-    type: { type: String, required: true },
-    fees: { type: String, required: true },
-    rating: { type: Number, required: true, default: 0 },
-    established: { type: String },
-    image: { type: String },
-    courses: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
-      },
-    ],
-    features: [{ type: String }],
-    rankings: [{ type: String }],
-    placements: {
-      highest: { type: String },
-      average: { type: String },
-      topRecruiters: [{ type: String }],
+    shortName: { type: String, required: true },
+    location: {
+      city: { type: String, required: true },
+      state: { type: String, required: true },
     },
+    type: { type: String, required: true },
+    established: { type: Number },
+    nirfRanking: { type: Number },
+    naacGrade: { type: String },
+    fees: { type: Map, of: Number }, // e.g., { "btech": 1600000, "mba": 400000 }
+    avgPackage: { type: Number },
+    highestPackage: { type: Number },
+    placementPercentage: { type: Number },
+    totalStudents: { type: Number },
+    coursesOffered: [{ type: String }],
+    facilities: [{ type: String }],
+    rating: { type: Number, required: true, default: 0 },
+    reviewCount: { type: Number, default: 0 },
+    logo: { type: String },
+    campus: { type: String },
+    about: { type: String },
+    topRecruiters: [{ type: String }],
+    entranceExams: [{ type: String }],
+    cutoff: { type: Map, of: String }, // e.g., { "merit": "50% marks" }
   },
   {
     timestamps: true,

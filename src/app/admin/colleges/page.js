@@ -4,6 +4,62 @@ import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit, Loader2, MapPin, Building2, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Helper to convert comma separated string to array
+const parseArray = (str) => {
+  if (!str) return [];
+  if (Array.isArray(str)) return str;
+  return str.split(',').map(s => s.trim()).filter(s => s);
+};
+
+// Helper to convert array to comma separated string
+const formatArray = (arr) => {
+  if (!arr || !Array.isArray(arr)) return "";
+  return arr.join(', ');
+};
+
+// Helper to convert object to pretty JSON string
+const formatJson = (obj) => {
+  if (!obj || Object.keys(obj).length === 0) return "";
+  return JSON.stringify(obj, null, 2);
+};
+
+// Helper to parse JSON string to object
+const parseJson = (str) => {
+  if (!str || !str.trim()) return {};
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    console.error("Invalid JSON format");
+    return {};
+  }
+};
+
+const defaultFormData = {
+  id: "",
+  name: "",
+  shortName: "",
+  location: { city: "", state: "" },
+  type: "Private",
+  established: "",
+  nirfRanking: "",
+  naacGrade: "",
+  fees: "{\n  \"btech\": 1000000\n}",
+  avgPackage: "",
+  highestPackage: "",
+  placementPercentage: "",
+  totalStudents: "",
+  coursesOffered: "",
+  facilities: "",
+  rating: 0,
+  reviewCount: 0,
+  logo: "",
+  campus: "",
+  about: "",
+  topRecruiters: "",
+  entranceExams: "",
+  cutoff: "{}",
+};
+
 export default function CollegesPage() {
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,13 +67,7 @@ export default function CollegesPage() {
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   
-  // Basic form state
-  const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    type: "Private",
-    fees: "",
-  });
+  const [formData, setFormData] = useState(defaultFormData);
 
   useEffect(() => {
     fetchColleges();
@@ -43,12 +93,43 @@ export default function CollegesPage() {
       const isEditing = !!editingId;
       const url = "/api/admin/colleges";
       const method = isEditing ? "PUT" : "POST";
-      const body = isEditing ? { ...formData, id: editingId } : formData;
+      
+      // Prepare payload
+      const payload = {
+        ...formData,
+        fees: parseJson(formData.fees),
+        cutoff: parseJson(formData.cutoff),
+        coursesOffered: parseArray(formData.coursesOffered),
+        facilities: parseArray(formData.facilities),
+        topRecruiters: parseArray(formData.topRecruiters),
+        entranceExams: parseArray(formData.entranceExams),
+        established: Number(formData.established) || undefined,
+        nirfRanking: Number(formData.nirfRanking) || undefined,
+        avgPackage: Number(formData.avgPackage) || undefined,
+        highestPackage: Number(formData.highestPackage) || undefined,
+        placementPercentage: Number(formData.placementPercentage) || undefined,
+        totalStudents: Number(formData.totalStudents) || undefined,
+        rating: Number(formData.rating) || 0,
+        reviewCount: Number(formData.reviewCount) || 0,
+      };
+
+      if (isEditing) {
+        payload._id = editingId; // the API uses findByIdAndUpdate which expects id. Wait, the old code passed id: editingId in the body
+        payload.id = payload._id; // Just in case, the model has its own string 'id' field now. Let's make sure API gets the MongoDB _id.
+      }
+      
+      // The old API expected the mongodb _id to be passed as 'id' in the body for PUT
+      const bodyToSend = isEditing ? { ...payload, _id: editingId, id: editingId } : payload;
+      // Wait, our new model uses 'id' as a required string field. The old API uses `const { id, ...updateData } = body; await College.findByIdAndUpdate(id, updateData)`
+      // This means the API route pulls `id` from body to use as the Mongoose ObjectId.
+      // We must pass the Mongoose ObjectId as `_id` and the slug id as `slugId` or rename the slug id to something else? 
+      // Actually, if the model has `id: { type: String }` and the API route uses `const { id, ...updateData } = body; findByIdAndUpdate(id)`, there's a conflict!
+      // Let's pass `_id` as the document ID and keep `id` as the slug. I should fix the API route next.
 
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify(isEditing ? { ...payload, documentId: editingId } : payload),
       });
       
       if (res.ok) {
@@ -59,18 +140,41 @@ export default function CollegesPage() {
           setColleges([savedCollege, ...colleges]);
         }
         closeForm();
+      } else {
+        const err = await res.json();
+        alert("Error saving: " + (err.error || "Unknown error"));
       }
     } catch (error) {
-      console.error("Failed to save college");
+      console.error("Failed to save college", error);
+      alert("Failed to save college");
     }
   };
 
   const openEditForm = (college) => {
     setFormData({
-      name: college.name,
-      location: college.location,
-      type: college.type,
-      fees: college.fees,
+      id: college.id || "",
+      name: college.name || "",
+      shortName: college.shortName || "",
+      location: { city: college.location?.city || "", state: college.location?.state || "" },
+      type: college.type || "Private",
+      established: college.established || "",
+      nirfRanking: college.nirfRanking || "",
+      naacGrade: college.naacGrade || "",
+      fees: formatJson(college.fees),
+      avgPackage: college.avgPackage || "",
+      highestPackage: college.highestPackage || "",
+      placementPercentage: college.placementPercentage || "",
+      totalStudents: college.totalStudents || "",
+      coursesOffered: formatArray(college.coursesOffered),
+      facilities: formatArray(college.facilities),
+      rating: college.rating || 0,
+      reviewCount: college.reviewCount || 0,
+      logo: college.logo || "",
+      campus: college.campus || "",
+      about: college.about || "",
+      topRecruiters: formatArray(college.topRecruiters),
+      entranceExams: formatArray(college.entranceExams),
+      cutoff: formatJson(college.cutoff),
     });
     setEditingId(college._id);
     setShowAddForm(true);
@@ -80,7 +184,7 @@ export default function CollegesPage() {
   const closeForm = () => {
     setShowAddForm(false);
     setEditingId(null);
-    setFormData({ name: "", location: "", type: "Private", fees: "" });
+    setFormData(defaultFormData);
   };
 
   const handleDelete = async (id) => {
@@ -97,8 +201,8 @@ export default function CollegesPage() {
   };
 
   const filteredColleges = colleges.filter(college => 
-    college.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    college.location.toLowerCase().includes(searchTerm.toLowerCase())
+    college.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    college.location?.city?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -133,53 +237,169 @@ export default function CollegesPage() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-navy">{editingId ? "Edit College" : "Add New College"}</h2>
           </div>
-          <form onSubmit={handleSaveCollege} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSaveCollege} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Basic Information */}
+            <div className="lg:col-span-3 pb-2 border-b border-slate-100 mb-2">
+              <h3 className="text-sm font-semibold text-slate-800">Basic Information</h3>
+            </div>
+            
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">College Name</label>
-              <input 
-                required 
-                type="text" 
-                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
-                placeholder="e.g. Indian Institute of Technology"
-                value={formData.name}
-                onChange={e => setFormData({...formData, name: e.target.value})}
-              />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Slug ID (Unique URL)</label>
+              <input required type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. shoolini-university-online" value={formData.id} onChange={e => setFormData({...formData, id: e.target.value})} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Location</label>
-              <input 
-                required 
-                type="text" 
-                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
-                placeholder="e.g. Mumbai, Maharashtra"
-                value={formData.location}
-                onChange={e => setFormData({...formData, location: e.target.value})}
-              />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
+              <input required type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. Indian Institute of Technology" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Short Name</label>
+              <input required type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. IIT Bombay" value={formData.shortName} onChange={e => setFormData({...formData, shortName: e.target.value})} />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">City</label>
+              <input required type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. Mumbai" value={formData.location.city} onChange={e => setFormData({...formData, location: {...formData.location, city: e.target.value}})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">State/Country</label>
+              <input required type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. Maharashtra" value={formData.location.state} onChange={e => setFormData({...formData, location: {...formData.location, state: e.target.value}})} />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Institution Type</label>
-              <select 
-                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white cursor-pointer"
-                value={formData.type}
-                onChange={e => setFormData({...formData, type: e.target.value})}
-              >
+              <select className="form-select w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none cursor-pointer"
+                value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
                 <option value="Private">Private</option>
                 <option value="Public">Public</option>
                 <option value="Government">Government</option>
+                <option value="IIT">IIT</option>
+                <option value="NIT">NIT</option>
+                <option value="Deemed">Deemed</option>
+                <option value="State">State</option>
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Fees (per year)</label>
-              <input 
-                required 
-                type="text" 
-                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
-                placeholder="e.g. ₹ 2,00,000"
-                value={formData.fees}
-                onChange={e => setFormData({...formData, fees: e.target.value})}
-              />
+
+            <div className="lg:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">About</label>
+              <textarea rows={3} className="form-textarea w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="Description of the college..." value={formData.about} onChange={e => setFormData({...formData, about: e.target.value})} />
             </div>
-            <div className="md:col-span-2 flex justify-end gap-3 mt-4 pt-6 border-t border-slate-100">
+
+            {/* Stats & Rankings */}
+            <div className="lg:col-span-3 pb-2 border-b border-slate-100 mb-2 mt-4">
+              <h3 className="text-sm font-semibold text-slate-800">Stats & Rankings</h3>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Established Year</label>
+              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 1958" value={formData.established} onChange={e => setFormData({...formData, established: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">NIRF Ranking</label>
+              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 3" value={formData.nirfRanking} onChange={e => setFormData({...formData, nirfRanking: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">NAAC Grade</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. A++" value={formData.naacGrade} onChange={e => setFormData({...formData, naacGrade: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Total Students</label>
+              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 10000" value={formData.totalStudents} onChange={e => setFormData({...formData, totalStudents: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Student Rating (Out of 5)</label>
+              <input type="number" step="0.1" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 4.5" value={formData.rating} onChange={e => setFormData({...formData, rating: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Review Count</label>
+              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 1200" value={formData.reviewCount} onChange={e => setFormData({...formData, reviewCount: e.target.value})} />
+            </div>
+
+            {/* Placements & Fees */}
+            <div className="lg:col-span-3 pb-2 border-b border-slate-100 mb-2 mt-4">
+              <h3 className="text-sm font-semibold text-slate-800">Placements & Fees</h3>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Avg Package (LPA)</label>
+              <input type="number" step="0.1" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 12.5" value={formData.avgPackage} onChange={e => setFormData({...formData, avgPackage: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Highest Package (LPA)</label>
+              <input type="number" step="0.1" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 50" value={formData.highestPackage} onChange={e => setFormData({...formData, highestPackage: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Placement %</label>
+              <input type="number" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="e.g. 95" value={formData.placementPercentage} onChange={e => setFormData({...formData, placementPercentage: e.target.value})} />
+            </div>
+            
+            <div className="lg:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Fees (JSON format, keys in quotes)</label>
+              <textarea rows={3} className="form-textarea w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none font-mono text-xs" 
+                placeholder='{"btech": 1200000, "mba": 800000}' value={formData.fees} onChange={e => setFormData({...formData, fees: e.target.value})} />
+            </div>
+
+            {/* Arrays (Comma separated) */}
+            <div className="lg:col-span-3 pb-2 border-b border-slate-100 mb-2 mt-4">
+              <h3 className="text-sm font-semibold text-slate-800">Lists (Comma separated)</h3>
+            </div>
+
+            <div className="lg:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Courses Offered</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="B.Tech, MBA, M.Tech, Ph.D" value={formData.coursesOffered} onChange={e => setFormData({...formData, coursesOffered: e.target.value})} />
+            </div>
+            <div className="lg:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Top Recruiters</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="Google, Microsoft, Amazon" value={formData.topRecruiters} onChange={e => setFormData({...formData, topRecruiters: e.target.value})} />
+            </div>
+            <div className="lg:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Facilities</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="Hostel, Gym, Library" value={formData.facilities} onChange={e => setFormData({...formData, facilities: e.target.value})} />
+            </div>
+            <div className="lg:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Entrance Exams</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="JEE Main, CAT" value={formData.entranceExams} onChange={e => setFormData({...formData, entranceExams: e.target.value})} />
+            </div>
+
+            {/* Media & Other */}
+            <div className="lg:col-span-3 pb-2 border-b border-slate-100 mb-2 mt-4">
+              <h3 className="text-sm font-semibold text-slate-800">Media & Other</h3>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Logo URL</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="https://..." value={formData.logo} onChange={e => setFormData({...formData, logo: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Campus Image URL</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
+                placeholder="/colleges/campus..." value={formData.campus} onChange={e => setFormData({...formData, campus: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Cutoff (JSON)</label>
+              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none font-mono text-xs" 
+                placeholder='{"merit": "50%"}' value={formData.cutoff} onChange={e => setFormData({...formData, cutoff: e.target.value})} />
+            </div>
+
+            <div className="lg:col-span-3 flex justify-end gap-3 mt-4 pt-6 border-t border-slate-100">
               <Button type="button" variant="outline" onClick={closeForm} className="rounded-xl border-slate-200">Cancel</Button>
               <Button type="submit" className="bg-navy hover:bg-navy-light text-white rounded-xl shadow-lg shadow-navy/20">
                 {editingId ? "Update College" : "Save College"}
@@ -208,8 +428,8 @@ export default function CollegesPage() {
               <thead className="text-xs text-slate-500 uppercase bg-slate-50/50 border-b border-slate-100">
                 <tr>
                   <th scope="col" className="px-6 py-4 font-semibold tracking-wider">Institution</th>
-                  <th scope="col" className="px-6 py-4 font-semibold tracking-wider">Type</th>
-                  <th scope="col" className="px-6 py-4 font-semibold tracking-wider">Avg. Fees</th>
+                  <th scope="col" className="px-6 py-4 font-semibold tracking-wider">Type & Rank</th>
+                  <th scope="col" className="px-6 py-4 font-semibold tracking-wider">Placements</th>
                   <th scope="col" className="px-6 py-4 font-semibold text-right tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -218,14 +438,18 @@ export default function CollegesPage() {
                   <tr key={college._id} className="bg-white hover:bg-slate-50/50 transition-colors group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center border border-blue-100/50 shrink-0">
-                          <Building2 className="h-5 w-5 text-blue-600" />
+                        <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center border border-blue-100/50 shrink-0 overflow-hidden">
+                          {college.logo ? (
+                            <img src={college.logo} alt={college.name} className="h-full w-full object-cover" />
+                          ) : (
+                            <Building2 className="h-5 w-5 text-blue-600" />
+                          )}
                         </div>
                         <div>
                           <div className="font-semibold text-navy text-base">{college.name}</div>
                           <div className="text-xs text-slate-500 flex items-center mt-1">
                             <MapPin className="h-3 w-3 mr-1 text-slate-400" />
-                            {college.location}
+                            {college.location?.city || "Unknown"}, {college.location?.state || "Unknown"}
                           </div>
                         </div>
                       </div>
@@ -238,10 +462,21 @@ export default function CollegesPage() {
                       }`}>
                         {college.type}
                       </span>
+                      {college.nirfRanking && (
+                        <div className="text-xs text-amber-600 font-medium mt-2">
+                          NIRF #{college.nirfRanking}
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-5">
-                      <div className="font-medium text-slate-700">{college.fees}</div>
-                      <div className="text-xs text-slate-400">per year approx.</div>
+                      {college.avgPackage ? (
+                        <>
+                          <div className="font-medium text-slate-700">{college.avgPackage} LPA (Avg)</div>
+                          {college.highestPackage && <div className="text-xs text-slate-400">{college.highestPackage} LPA (High)</div>}
+                        </>
+                      ) : (
+                        <span className="text-xs text-slate-400">Not updated</span>
+                      )}
                     </td>
                     <td className="px-6 py-5 text-right">
                       <div className="flex justify-end gap-2">
@@ -269,3 +504,4 @@ export default function CollegesPage() {
     </div>
   );
 }
+
