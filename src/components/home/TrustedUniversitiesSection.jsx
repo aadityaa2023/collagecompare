@@ -75,9 +75,9 @@ export default function TrustedUniversitiesSection() {
                     <div className="flex items-center justify-between w-full shrink-0">
                       <div className="flex items-center gap-2">
                         {/* Green book icon like reference */}
-                        <span className="text-base select-none leading-none">📗</span>
+                        <span className="text-base select-none leading-none"></span>
                         <p className="font-medium text-[15px] leading-none text-slate-700 group-hover:text-navy transition-colors whitespace-nowrap">
-                          {univ.courses || "Available Courses"}
+                          View Course
                         </p>
                       </div>
 
