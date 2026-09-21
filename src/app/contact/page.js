@@ -55,7 +55,7 @@ export default function ContactPage() {
                     <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-crimson-light shrink-0" />
                     <div>
                       <p className="font-medium text-sm sm:text-base">Phone</p>
-                      <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">+91 8377059878</p>
+                      <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">+91 8377959878</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3.5 sm:gap-4">
@@ -70,8 +70,7 @@ export default function ContactPage() {
                     <div>
                       <p className="font-medium text-sm sm:text-base">Office</p>
                       <p className="text-xs sm:text-sm text-crimson-100 mt-0.5 sm:mt-1">
-                        Spectrum@Metro , Plot C & D Gardenia Gateway<br />
-                        Sector 75 , Noida -201316
+                        Spectrum@Metro,Plot C & D Gardenia Gateway, Sector 75 , Noida -201316
                       </p>
                     </div>
                   </div>

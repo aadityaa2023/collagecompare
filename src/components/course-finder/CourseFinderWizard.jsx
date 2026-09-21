@@ -30,7 +30,7 @@ const STEPS = [
   { id: "interests", title: "Fields of Interest", subtitle: "What you enjoy learning and building" },
   { id: "career", title: "Career Ambition", subtitle: "Your primary goal after graduation" },
   { id: "course", title: "Preferred Course", subtitle: "Target degree or let us recommend" },
-  { id: "preferences", title: "Location & Budget", subtitle: "Where and how you wish to study" },
+  { id: "preferences", title: "Working Status & Budget", subtitle: "Your current status and financial preferences" },
   { id: "counselling", title: "Get Free Expert Counselling", subtitle: "Fill this form to unlock your personalized recommendations" },
 ];
 
@@ -327,8 +327,8 @@ export default function CourseFinderWizard({ onComplete }) {
                     {[
                       {
                         id: "tech",
-                        title: "AI & Software",
-                        desc: "AI, Coding, Cloud",
+                        title: "Doctorate and Executive Programs",
+                        desc: "DBA, EMBA , PGDM , Global MBA",
                         icon: Cpu,
                       },
                       {
@@ -340,13 +340,13 @@ export default function CourseFinderWizard({ onComplete }) {
                       {
                         id: "healthcare",
                         title: "Hospitality & Healthcare",
-                        desc: "Pharma, Biotech, Clinical Research",
+                        desc: "Hospitality and Healthcare Management",
                         icon: HeartPulse,
                       },
                       {
                         id: "design",
                         title: "Arts & Research",
-                        desc: "BA, MA , Design",
+                        desc: "BA, MA, BSC, MSC",
                         icon: Palette,
                       },
                       {
@@ -357,8 +357,8 @@ export default function CourseFinderWizard({ onComplete }) {
                       },
                       {
                         id: "analytics",
-                        title: "Data & Computer Applications",
-                        desc: "Data Science, BCA/MCA, IT Systems",
+                        title: "AI, Data & Computer Applications",
+                        desc: "Data Science, BCA/MCA, AI, Cloud",
                         icon: Layers,
                       },
                     ].map((item) => {
@@ -502,17 +502,23 @@ export default function CourseFinderWizard({ onComplete }) {
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {[
                       { id: "all", label: "Auto-Recommend for Me", highlight: true },
-                      { id: "btech-cse", label: "B.Tech Computer Science" },
-                      { id: "btech-ece", label: "B.Tech ECE" },
-                      { id: "mba", label: "MBA / PGDM" },
-                      { id: "bba", label: "BBA (Management)" },
-                      { id: "bsc-cs", label: "B.Sc Computer Science" },
-                      { id: "mca", label: "MCA / IT" },
-                      { id: "bpharm", label: "B.Pharm (Pharmacy)" },
-                      { id: "barch", label: "B.Arch (Architecture)" },
-                      { id: "llb", label: "LLB (Law)" },
-                      { id: "btech-mech", label: "B.Tech Mechanical" },
-                      { id: "btech-civil", label: "B.Tech Civil" },
+                      { id: "btech-cse", label: "BA" },
+                      { id: "btech-ece", label: "B.COM" },
+                      { id: "mba", label: "BBA" },
+                      { id: "bba", label: "BCA" },
+                      { id: "bsc-cs", label: "BA (Hons)" },
+                      { id: "mca", label: "B.COM (Hons)" },
+                      { id: "bpharm", label: "BBA (Hons)" },
+                      { id: "llb", label: "BSC" },
+                      { id: "ma", label: "MA" },
+                      { id: "mcom", label: "M.COM" },
+                      { id: "mba", label: "MBA" },
+                      { id: "mca", label: "MCA" },
+                      { id: "msc-ds", label: "MSC Data Science" },
+                      { id: "msc-math", label: "MSC Mathematics" },
+                      { id: "dba", label: "DBA" },
+                      { id: "btech-mech", label: "Executive Programs" },
+                      { id: "btech-mech", label: "Certificate & Diploma" },
                     ].map((c) => {
                       const selected = answers.preferredCourseId === c.id;
                       return (
@@ -545,26 +551,25 @@ export default function CourseFinderWizard({ onComplete }) {
                 >
                   <div>
                     <label className="block text-sm font-bold text-navy mb-2.5">
-                      Preferred Study Location in India
+                      Your Working status
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                       {[
-                        { id: "all", label: "All India / Top Metro", sub: "Best institutes nationwide" },
-                        { id: "north", label: "North India", sub: "Delhi-NCR, Punjab, UP" },
-                        { id: "south", label: "South India", sub: "Bengaluru, Chennai, Hyd" },
-                        { id: "west", label: "West India", sub: "Mumbai, Pune, Gujarat" },
-                        { id: "east", label: "East & Central", sub: "Kolkata, Bhubaneswar, etc." },
-                      ].map((reg) => (
+                        { id: "student", label: "Student", sub: "Currently pursuing a degree" },
+                        { id: "working_professional", label: "Working Professional", sub: "Currently employed" },
+                        { id: "unemployed", label: "Unemployed", sub: "Looking for job opportunities" },
+                        { id: "self_employed", label: "Self Employed", sub: "Business owner / Freelancer" },
+                      ].map((status) => (
                         <div
-                          key={reg.id}
-                          onClick={() => setAnswers({ ...answers, region: reg.id })}
-                          className={`p-3 rounded-xl border-2 cursor-pointer text-left transition-all ${answers.region === reg.id
+                          key={status.id}
+                          onClick={() => setAnswers({ ...answers, workingStatus: status.id })}
+                          className={`p-3 rounded-xl border-2 cursor-pointer text-left transition-all ${answers.workingStatus === status.id
                             ? "border-crimson bg-crimson-50/60 font-bold"
                             : "border-slate-200 hover:border-slate-300 text-slate-700"
                             }`}
                         >
-                          <div className="text-xs font-bold text-navy">{reg.label}</div>
-                          <div className="text-[10px] text-slate-500 mt-0.5">{reg.sub}</div>
+                          <div className="text-xs font-bold text-navy">{status.label}</div>
+                          <div className="text-[10px] text-slate-500 mt-0.5">{status.sub}</div>
                         </div>
                       ))}
                     </div>
@@ -572,13 +577,13 @@ export default function CourseFinderWizard({ onComplete }) {
 
                   <div>
                     <label className="block text-sm font-bold text-navy mb-2.5">
-                      Budget & Scholarship Preferences
+                      Budget Preferences
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {[
-                        { id: "budget_low", label: "Subsidized / Govt (< ₹2L / Year)", sub: "IITs, NITs, State Govt Colleges" },
+                        { id: "budget_low", label: "Budget Friendly (< ₹2L / Year)", sub: "Top Private Universities with your Budget" },
                         { id: "budget_mid", label: "Mid-Range (₹2L - ₹4L / Year)", sub: "Top private & deemed universities" },
-                        { id: "scholarship", label: "Seeking Merit Scholarship / Waiver", sub: "Up to 100% tuition assistance" },
+                        { id: "scholarship", label: "For working professionals", sub: "Weekend / Evening Batches" },
                         { id: "flexible", label: "Flexible Budget / ROI Focused", sub: "Quality and placements matter most" },
                       ].map((bg) => (
                         <div

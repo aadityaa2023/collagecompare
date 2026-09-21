@@ -49,7 +49,10 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+import dbConnect from "@/lib/mongodb";
+
+export default async function RootLayout({ children }) {
+  await dbConnect();
   return (
     <html
       lang="en"

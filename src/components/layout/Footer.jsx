@@ -131,7 +131,7 @@ export default function Footer() {
                 <div className="h-7 w-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-crimson group-hover:text-white transition-colors">
                   <Phone className="h-3.5 w-3.5" />
                 </div>
-                <span>+91 8377059878</span>
+                <span>+91 8377959878</span>
               </a>
             </div>
           </div>
