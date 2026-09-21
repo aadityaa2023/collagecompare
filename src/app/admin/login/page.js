@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { GraduationCap, Lock, ArrowRight, AlertCircle } from "lucide-react";
+import { GraduationCap, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AdminLogin() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -20,7 +22,7 @@ export default function AdminLogin() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (res.ok) {
@@ -28,7 +30,7 @@ export default function AdminLogin() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || "Invalid password");
+        setError(data.error || "Invalid username or password");
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
@@ -60,6 +62,31 @@ export default function AdminLogin() {
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label
+                htmlFor="username"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Admin Email / Username
+              </label>
+              <div className="mt-2 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="block w-full pl-10 pr-3 sm:text-sm border border-slate-300 rounded-lg focus:ring-crimson focus:border-crimson py-3 bg-slate-50 transition-colors text-slate-900"
+                  placeholder="Enter admin email or username"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
                 htmlFor="password"
                 className="block text-sm font-medium text-slate-700"
               >
@@ -72,14 +99,26 @@ export default function AdminLogin() {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 sm:text-sm border-slate-300 rounded-lg focus:ring-crimson focus:border-crimson py-3 bg-slate-50 transition-colors"
+                  className="block w-full pl-10 pr-10 sm:text-sm border border-slate-300 rounded-lg focus:ring-crimson focus:border-crimson py-3 bg-slate-50 transition-colors text-slate-900"
                   placeholder="Enter secure password"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors focus:outline-none cursor-pointer"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
             </div>
 
