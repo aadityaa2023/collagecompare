@@ -210,19 +210,17 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={item.id}
                           onClick={() => setAnswers({ ...answers, education: item.id })}
-                          className={`p-4 rounded-2xl border-2 text-left cursor-pointer transition-all duration-200 ${
-                            selected
-                              ? "border-crimson bg-crimson-50/50 shadow-md shadow-crimson/10"
-                              : "border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/60"
-                          }`}
+                          className={`p-4 rounded-2xl border-2 text-left cursor-pointer transition-all duration-200 ${selected
+                            ? "border-crimson bg-crimson-50/50 shadow-md shadow-crimson/10"
+                            : "border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/60"
+                            }`}
                         >
                           <div className="flex items-start gap-3">
                             <div
-                              className={`p-2 rounded-xl shrink-0 ${
-                                selected
-                                  ? "bg-crimson text-white"
-                                  : "bg-slate-100 text-slate-600"
-                              }`}
+                              className={`p-2 rounded-xl shrink-0 ${selected
+                                ? "bg-crimson text-white"
+                                : "bg-slate-100 text-slate-600"
+                                }`}
                             >
                               <Icon className="h-5 w-5" />
                             </div>
@@ -266,11 +264,10 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={st.id}
                           onClick={() => setAnswers({ ...answers, stream: st.id })}
-                          className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                            answers.stream === st.id
-                              ? "border-crimson bg-crimson-50/60 text-navy font-bold"
-                              : "border-slate-200 hover:border-slate-300 text-slate-700"
-                          }`}
+                          className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${answers.stream === st.id
+                            ? "border-crimson bg-crimson-50/60 text-navy font-bold"
+                            : "border-slate-200 hover:border-slate-300 text-slate-700"
+                            }`}
                         >
                           <div className="flex items-center justify-between">
                             <div>
@@ -300,11 +297,10 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={pct.id}
                           onClick={() => setAnswers({ ...answers, percentage: pct.id })}
-                          className={`p-3 text-center rounded-xl border-2 cursor-pointer transition-all ${
-                            answers.percentage === pct.id
-                              ? "border-crimson bg-crimson-50/70 text-navy font-bold"
-                              : "border-slate-200 hover:border-slate-300 text-slate-700"
-                          }`}
+                          className={`p-3 text-center rounded-xl border-2 cursor-pointer transition-all ${answers.percentage === pct.id
+                            ? "border-crimson bg-crimson-50/70 text-navy font-bold"
+                            : "border-slate-200 hover:border-slate-300 text-slate-700"
+                            }`}
                         >
                           <div className="text-xs font-bold">{pct.label}</div>
                           <div className="text-[10px] text-slate-500 mt-0.5">{pct.tag}</div>
@@ -331,32 +327,32 @@ export default function CourseFinderWizard({ onComplete }) {
                     {[
                       {
                         id: "tech",
-                        title: "Engineering & Software",
-                        desc: "AI, Coding, Cloud, Robotics, Hardware",
+                        title: "AI & Software",
+                        desc: "AI, Coding, Cloud",
                         icon: Cpu,
                       },
                       {
                         id: "management",
                         title: "Management & Business",
-                        desc: "Leadership, Startups, Marketing, Finance",
+                        desc: "BBA, MBA,Marketing, Finance",
                         icon: TrendingUp,
                       },
                       {
                         id: "healthcare",
-                        title: "Healthcare & Life Sciences",
+                        title: "Hospitality & Healthcare",
                         desc: "Pharma, Biotech, Clinical Research",
                         icon: HeartPulse,
                       },
                       {
                         id: "design",
-                        title: "Design & Architecture",
-                        desc: "Architecture, UI/UX, Spatial Planning",
+                        title: "Arts & Research",
+                        desc: "BA, MA , Design",
                         icon: Palette,
                       },
                       {
                         id: "law",
-                        title: "Law & Corporate Governance",
-                        desc: "Corporate Law, Advocacy, Advisory",
+                        title: "Banking & Commerce",
+                        desc: "B.Com, M.Com, Finance, Banking, Accounting",
                         icon: Scale,
                       },
                       {
@@ -372,19 +368,17 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={item.id}
                           onClick={() => toggleInterest(item.id)}
-                          className={`p-3.5 rounded-2xl border-2 text-left cursor-pointer transition-all ${
-                            isSelected
-                              ? "border-crimson bg-crimson-50/50 shadow-xs"
-                              : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/50"
-                          }`}
+                          className={`p-3.5 rounded-2xl border-2 text-left cursor-pointer transition-all ${isSelected
+                            ? "border-crimson bg-crimson-50/50 shadow-xs"
+                            : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/50"
+                            }`}
                         >
                           <div className="flex items-start gap-3">
                             <div
-                              className={`p-2 rounded-xl shrink-0 ${
-                                isSelected
-                                  ? "bg-crimson text-white"
-                                  : "bg-slate-100 text-slate-600"
-                              }`}
+                              className={`p-2 rounded-xl shrink-0 ${isSelected
+                                ? "bg-crimson text-white"
+                                : "bg-slate-100 text-slate-600"
+                                }`}
                             >
                               <Icon className="h-4 w-4" />
                             </div>
@@ -460,19 +454,17 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={item.id}
                           onClick={() => setAnswers({ ...answers, careerGoals: [item.id] })}
-                          className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all ${
-                            selected
-                              ? "border-crimson bg-crimson-50/50 shadow-xs"
-                              : "border-slate-200 hover:border-slate-300"
-                          }`}
+                          className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all ${selected
+                            ? "border-crimson bg-crimson-50/50 shadow-xs"
+                            : "border-slate-200 hover:border-slate-300"
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <div
-                              className={`p-2 rounded-lg shrink-0 ${
-                                selected
-                                  ? "bg-crimson text-white"
-                                  : "bg-slate-100 text-slate-600"
-                              }`}
+                              className={`p-2 rounded-lg shrink-0 ${selected
+                                ? "bg-crimson text-white"
+                                : "bg-slate-100 text-slate-600"
+                                }`}
                             >
                               <Icon className="h-4 w-4" />
                             </div>
@@ -527,13 +519,12 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={c.id}
                           onClick={() => setAnswers({ ...answers, preferredCourseId: c.id })}
-                          className={`p-3 rounded-xl border-2 text-center cursor-pointer transition-all ${
-                            selected
-                              ? "border-crimson bg-crimson text-white font-bold shadow-md shadow-crimson/20"
-                              : c.highlight
+                          className={`p-3 rounded-xl border-2 text-center cursor-pointer transition-all ${selected
+                            ? "border-crimson bg-crimson text-white font-bold shadow-md shadow-crimson/20"
+                            : c.highlight
                               ? "border-amber-300 bg-amber-50/50 text-navy font-semibold hover:border-amber-400"
                               : "border-slate-200 hover:border-slate-300 text-slate-700 bg-white"
-                          }`}
+                            }`}
                         >
                           <div className="text-xs font-semibold">{c.label}</div>
                         </div>
@@ -567,11 +558,10 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={reg.id}
                           onClick={() => setAnswers({ ...answers, region: reg.id })}
-                          className={`p-3 rounded-xl border-2 cursor-pointer text-left transition-all ${
-                            answers.region === reg.id
-                              ? "border-crimson bg-crimson-50/60 font-bold"
-                              : "border-slate-200 hover:border-slate-300 text-slate-700"
-                          }`}
+                          className={`p-3 rounded-xl border-2 cursor-pointer text-left transition-all ${answers.region === reg.id
+                            ? "border-crimson bg-crimson-50/60 font-bold"
+                            : "border-slate-200 hover:border-slate-300 text-slate-700"
+                            }`}
                         >
                           <div className="text-xs font-bold text-navy">{reg.label}</div>
                           <div className="text-[10px] text-slate-500 mt-0.5">{reg.sub}</div>
@@ -594,11 +584,10 @@ export default function CourseFinderWizard({ onComplete }) {
                         <div
                           key={bg.id}
                           onClick={() => setAnswers({ ...answers, budget: bg.id })}
-                          className={`p-3 rounded-xl border-2 cursor-pointer text-left transition-all ${
-                            answers.budget === bg.id
-                              ? "border-crimson bg-crimson-50/60 font-bold"
-                              : "border-slate-200 hover:border-slate-300 text-slate-700"
-                          }`}
+                          className={`p-3 rounded-xl border-2 cursor-pointer text-left transition-all ${answers.budget === bg.id
+                            ? "border-crimson bg-crimson-50/60 font-bold"
+                            : "border-slate-200 hover:border-slate-300 text-slate-700"
+                            }`}
                         >
                           <div className="text-xs font-bold text-navy">{bg.label}</div>
                           <div className="text-[10px] text-slate-500 mt-0.5">{bg.sub}</div>
@@ -627,33 +616,33 @@ export default function CourseFinderWizard({ onComplete }) {
                   <div className="space-y-4 text-left">
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name <span className="text-crimson">*</span></label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         required
                         value={answers.name}
-                        onChange={(e) => setAnswers({...answers, name: e.target.value})}
+                        onChange={(e) => setAnswers({ ...answers, name: e.target.value })}
                         className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-2 focus:ring-crimson/20 transition-all"
                         placeholder="e.g. John Doe"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number <span className="text-crimson">*</span></label>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         required
                         value={answers.phone}
-                        onChange={(e) => setAnswers({...answers, phone: e.target.value})}
+                        onChange={(e) => setAnswers({ ...answers, phone: e.target.value })}
                         className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-2 focus:ring-crimson/20 transition-all"
                         placeholder="e.g. +91 9876543210"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email Address <span className="text-crimson">*</span></label>
-                      <input 
-                        type="email" 
+                      <input
+                        type="email"
                         required
                         value={answers.email}
-                        onChange={(e) => setAnswers({...answers, email: e.target.value})}
+                        onChange={(e) => setAnswers({ ...answers, email: e.target.value })}
                         className="w-full p-3 bg-white border border-slate-200 rounded-lg outline-none focus:border-crimson/50 focus:ring-2 focus:ring-crimson/20 transition-all"
                         placeholder="e.g. john@example.com"
                       />
