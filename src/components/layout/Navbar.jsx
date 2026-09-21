@@ -105,7 +105,7 @@ export default function Navbar() {
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <div className="flex flex-col h-full overflow-hidden">
                   {/* Mobile Drawer Header */}
-                  <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50">
+                  <div className="flex items-center justify-between p-4 pr-11 border-b border-slate-100 bg-slate-50/50">
                     <Image
                       src="/logo.png"
                       alt="Compare Degree"
@@ -145,11 +145,11 @@ export default function Navbar() {
                       </p>
                       <div className="space-y-1.5 text-xs font-semibold">
                         <a
-                          href="tel:+919876543210"
+                          href="tel:+918377959878"
                           className="flex items-center gap-2 text-slate-600 hover:text-crimson transition-colors"
                         >
                           <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                          <span>+91 98765 43210</span>
+                          <span>+91 83779 59878</span>
                         </a>
                         <a
                           href="mailto:info@comparedegree.com"

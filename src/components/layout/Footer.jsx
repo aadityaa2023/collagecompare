@@ -125,7 +125,7 @@ export default function Footer() {
                 <span>info@comparedegree.com</span>
               </a>
               <a
-                href="tel:+911234567890"
+                href="tel:+918377959878"
                 className="group flex items-center gap-2.5 text-slate-400 hover:text-white transition-colors"
               >
                 <div className="h-7 w-7 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-crimson group-hover:text-white transition-colors">
