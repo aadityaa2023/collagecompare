@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
@@ -10,11 +10,23 @@ import { colleges as trustedUniversities } from "@/data/colleges";
 
 export default function TrustedUniversitiesSection() {
   const [showAll, setShowAll] = useState(false);
+  const [univList, setUnivList] = useState(trustedUniversities);
+
+  useEffect(() => {
+    fetch("/api/colleges", { cache: "no-store" })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setUnivList(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Initial 12 cards match the 3 rows x 4 cols layout shown in reference
   const displayedUniversities = showAll
-    ? trustedUniversities
-    : trustedUniversities.slice(0, 12);
+    ? univList
+    : univList.slice(0, 12);
 
   return (
     <SectionWrapper className="section-padding bg-white relative overflow-hidden">
@@ -103,7 +115,7 @@ export default function TrustedUniversitiesSection() {
         </motion.div>
 
         {/* Show More / Show Less Toggle Button */}
-        {trustedUniversities.length > 12 && (
+        {univList.length > 12 && (
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button
               type="button"
@@ -117,7 +129,7 @@ export default function TrustedUniversitiesSection() {
                 </>
               ) : (
                 <>
-                  View All {trustedUniversities.length} Universities{" "}
+                  View All {univList.length} Universities{" "}
                   <ChevronDown className="ml-1.5 h-4 w-4" />
                 </>
               )}

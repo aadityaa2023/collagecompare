@@ -11,22 +11,47 @@ export default function SearchBar({ className = "", variant = "hero" }) {
   const [activeTab, setActiveTab] = useState("colleges");
   const [showResults, setShowResults] = useState(false);
   const [dbCourses, setDbCourses] = useState([]);
+  const [dbColleges, setDbColleges] = useState([]);
   const inputRef = useRef(null);
   const containerRef = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
     // Pre-fetch courses for client-side search
-    fetch("/api/courses").then(res => res.json()).then(data => {
-      if (Array.isArray(data)) {
-        setDbCourses(data.map(c => ({ ...c, id: c.slug })));
-      }
-    }).catch(err => console.error("Failed to prefetch courses for search", err));
+    fetch("/api/courses", { cache: "no-store" })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setDbCourses(data.map(c => ({ ...c, id: c.slug })));
+        }
+      })
+      .catch(err => console.error("Failed to prefetch courses for search", err));
+
+    // Pre-fetch colleges for client-side search
+    fetch("/api/colleges", { cache: "no-store" })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setDbColleges(data);
+        }
+      })
+      .catch(err => console.error("Failed to prefetch colleges for search", err));
   }, []);
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
-    if (activeTab === "colleges") return searchColleges(query).slice(0, 5);
+    if (activeTab === "colleges") {
+      const q = query.toLowerCase();
+      if (dbColleges.length > 0) {
+        return dbColleges.filter(c =>
+          c.name?.toLowerCase().includes(q) ||
+          c.shortName?.toLowerCase().includes(q) ||
+          c.location?.city?.toLowerCase().includes(q) ||
+          c.location?.state?.toLowerCase().includes(q)
+        ).slice(0, 5);
+      }
+      return searchColleges(query).slice(0, 5);
+    }
     
     // Search courses locally
     const q = query.toLowerCase();
@@ -34,7 +59,7 @@ export default function SearchBar({ className = "", variant = "hero" }) {
       c.name?.toLowerCase().includes(q) || 
       c.shortName?.toLowerCase().includes(q)
     ).slice(0, 5);
-  }, [query, activeTab, dbCourses]);
+  }, [query, activeTab, dbCourses, dbColleges]);
 
   const isHero = variant === "hero";
 

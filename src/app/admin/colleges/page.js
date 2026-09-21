@@ -52,7 +52,7 @@ export default function CollegesPage() {
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const res = await fetch("/api/admin/colleges");
+        const res = await fetch("/api/admin/colleges", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           setColleges(data);

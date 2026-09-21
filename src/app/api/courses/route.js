@@ -3,6 +3,15 @@ import dbConnect from '@/lib/mongodb';
 import Course from '@/models/Course';
 import { courses as localCourses } from '@/data/courses';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const noCacheHeaders = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+  Pragma: 'no-cache',
+  Expires: '0',
+};
+
 export async function GET() {
   try {
     await dbConnect();
@@ -13,13 +22,13 @@ export async function GET() {
         slug: c.id,
       }));
     }
-    return NextResponse.json(courses);
+    return NextResponse.json(courses, { headers: noCacheHeaders });
   } catch (error) {
     console.error('Failed to fetch courses from DB, using fallback:', error);
     const fallback = localCourses.map((c) => ({
       ...c,
       slug: c.id,
     }));
-    return NextResponse.json(fallback);
+    return NextResponse.json(fallback, { headers: noCacheHeaders });
   }
 }

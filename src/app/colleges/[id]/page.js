@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -18,6 +18,7 @@ import {
   ChevronRight,
   Check,
   Briefcase,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,9 +29,45 @@ import { colleges, getCollegeById, formatFees, formatPackage } from "@/data/coll
 
 export default function CollegeDetailPage({ params }) {
   const { id } = use(params);
-  const college = getCollegeById(id);
+  const initialCollege = getCollegeById(id);
+  const [college, setCollege] = useState(initialCollege);
+  const [loading, setLoading] = useState(!initialCollege);
+  const [error, setError] = useState(false);
 
-  if (!college) {
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCollege = async () => {
+      try {
+        const res = await fetch(`/api/colleges/${id}`, { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted) setCollege(data);
+        } else if (!initialCollege) {
+          if (isMounted) setError(true);
+        }
+      } catch (err) {
+        if (!initialCollege && isMounted) setError(true);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+    fetchCollege();
+    return () => { isMounted = false; };
+  }, [id, initialCollege]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 bg-slate-50 flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-10 w-10 text-crimson animate-spin" />
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error || !college) {
     notFound();
   }
 

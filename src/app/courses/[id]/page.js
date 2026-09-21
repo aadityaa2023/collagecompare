@@ -31,7 +31,7 @@ export default function CourseDetailPage({ params }) {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await fetch(`/api/courses/${id}`);
+        const res = await fetch(`/api/courses/${id}`, { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           setCourse(data);

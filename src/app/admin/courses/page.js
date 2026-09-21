@@ -45,7 +45,7 @@ export default function CoursesPage() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch("/api/admin/courses");
+      const res = await fetch("/api/admin/courses", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setCourses(data);

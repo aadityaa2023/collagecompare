@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import dbConnect from "@/lib/mongodb";
 import Lead from "@/models/Lead";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const noCacheHeaders = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+  Pragma: 'no-cache',
+  Expires: '0',
+};
 
 export async function POST(request) {
   try {
@@ -11,7 +21,7 @@ export async function POST(request) {
     if (!name || !phone) {
       return NextResponse.json(
         { error: "Name and Phone Number are required." },
-        { status: 400 }
+        { status: 400, headers: noCacheHeaders }
       );
     }
 
@@ -25,7 +35,8 @@ export async function POST(request) {
 
     await lead.save();
 
-    // Leads are now exclusively stored in MongoDB and accessible via Admin Panel
+    revalidatePath('/admin');
+    revalidatePath('/admin/leads');
 
     return NextResponse.json(
       {
@@ -33,13 +44,13 @@ export async function POST(request) {
         message: "Counselling lead received successfully",
         leadId: lead._id,
       },
-      { status: 200 }
+      { status: 200, headers: noCacheHeaders }
     );
   } catch (error) {
     console.error("Error processing counselling submission:", error);
     return NextResponse.json(
       { error: "Failed to process counselling request" },
-      { status: 500 }
+      { status: 500, headers: noCacheHeaders }
     );
   }
 }
@@ -50,14 +61,17 @@ export async function GET() {
     const totalLeads = await Lead.countDocuments();
     const leads = await Lead.find().sort({ createdAt: -1 }).limit(10);
     
-    return NextResponse.json({
-      totalLeads,
-      leads,
-    });
+    return NextResponse.json(
+      {
+        totalLeads,
+        leads,
+      },
+      { headers: noCacheHeaders }
+    );
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch leads" },
-      { status: 500 }
+      { status: 500, headers: noCacheHeaders }
     );
   }
 }

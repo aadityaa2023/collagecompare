@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { Search, SlidersHorizontal, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -166,6 +166,21 @@ export default function CollegesPage() {
   const [feeRange, setFeeRange] = useState("All");
   const [minPackage, setMinPackage] = useState("All");
   const [sort, setSort] = useState("ranking");
+  const [collegeList, setCollegeList] = useState(colleges);
+
+  useEffect(() => {
+    fetch("/api/colleges", { cache: "no-store" })
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw new Error("Failed to fetch");
+      })
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setCollegeList(data);
+        }
+      })
+      .catch((err) => console.error("Failed to load colleges dynamically:", err));
+  }, []);
 
   const activeFilters = [];
   if (selectedCourses.length > 0)
@@ -182,7 +197,7 @@ export default function CollegesPage() {
     });
 
   const filtered = useMemo(() => {
-    let result = [...colleges];
+    let result = [...collegeList];
 
     // Search query
     if (query.trim()) {
@@ -267,7 +282,7 @@ export default function CollegesPage() {
               Explore Online Universities
             </h1>
             <p className="text-xs sm:text-sm text-slate-500">
-              Discover {colleges.length}+ top online colleges, compare fees, and check placements.
+              Discover {collegeList.length}+ top online colleges, compare fees, and check placements.
             </p>
           </div>
         </div>

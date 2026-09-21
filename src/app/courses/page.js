@@ -23,7 +23,7 @@ export default function CoursesPage() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await fetch("/api/courses");
+        const res = await fetch("/api/courses", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           // Provide default IDs for routing if missing, maps to slug

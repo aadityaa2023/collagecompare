@@ -11,6 +11,9 @@ import {
 import dbConnect from "@/lib/mongodb";
 import Course from "@/models/Course";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function HomePage() {
   await dbConnect();
   // Fetch courses and serialize them for the client component

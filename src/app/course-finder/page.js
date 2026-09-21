@@ -15,7 +15,7 @@ export default function CourseFinderPage() {
   const [dbCourses, setDbCourses] = useState([]);
 
   useEffect(() => {
-    fetch("/api/courses").then(res => res.json()).then(data => {
+    fetch("/api/courses", { cache: "no-store" }).then(res => res.json()).then(data => {
       if (Array.isArray(data)) setDbCourses(data);
     }).catch(console.error);
   }, []);

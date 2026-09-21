@@ -15,7 +15,7 @@ export default function LeadsPage() {
 
   const fetchLeads = async () => {
     try {
-      const res = await fetch("/api/admin/leads");
+      const res = await fetch("/api/admin/leads", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setLeads(data);
