@@ -50,10 +50,10 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="Compare Degree"
-              width={140}
-              height={32}
+              width={160}
+              height={42}
               style={{ width: "auto" }}
-              className="h-6.5 sm:h-7 lg:h-8 w-auto object-contain"
+              className="h-8 sm:h-9 lg:h-10 w-auto object-contain"
               priority
             />
           </Link>
@@ -64,7 +64,7 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-navy transition-colors rounded-md hover:bg-slate-50"
+                className="px-3.5 py-2 text-sm font-semibold text-slate-900 hover:text-crimson transition-colors rounded-md hover:bg-slate-50"
               >
                 {link.label}
               </Link>
@@ -109,10 +109,10 @@ export default function Navbar() {
                     <Image
                       src="/logo.png"
                       alt="Compare Degree"
-                      width={120}
-                      height={28}
+                      width={140}
+                      height={36}
                       style={{ width: "auto" }}
-                      className="h-6.5 w-auto object-contain"
+                      className="h-8 w-auto object-contain"
                     />
                     <span className="text-[10px] font-bold uppercase tracking-wider text-crimson bg-crimson-50 px-2 py-0.5 rounded-md border border-crimson/20">
                       Mobile App
@@ -126,7 +126,7 @@ export default function Navbar() {
                         <SheetClose asChild key={link.label}>
                           <Link
                             href={link.href}
-                            className="flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-crimson rounded-xl transition-all active:scale-98"
+                            className="flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 hover:text-crimson rounded-xl transition-all active:scale-98"
                           >
                             <span>{link.label}</span>
                             <span className="text-slate-300 text-xs font-normal">&rsaquo;</span>
