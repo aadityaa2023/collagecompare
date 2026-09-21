@@ -159,7 +159,6 @@ export default function CollegeDetailPage({ params }) {
                   icon: TrendingUp,
                   color: "text-blue-600",
                 },
-                },
               ].map((stat) => (
                 <div key={stat.label} className="flex items-center gap-3">
                   <div
@@ -248,8 +247,6 @@ export default function CollegeDetailPage({ params }) {
                     </div>
                   ))}
                 </div>
-              </div>
-
               </div>
             </TabsContent>
 
@@ -346,7 +343,6 @@ export default function CollegeDetailPage({ params }) {
                   <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">
                     {college.naacGrade}
                   </Badge>
-                </div>
                 </div>
               </div>
             </TabsContent>
