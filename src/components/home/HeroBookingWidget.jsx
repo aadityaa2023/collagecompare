@@ -67,7 +67,7 @@ export default function HeroBookingWidget() {
       {/* Trust Banner */}
       <div className="bg-emerald-50 border border-emerald-100 text-emerald-800 text-[11px] sm:text-xs font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl flex items-center justify-center gap-1.5 mb-5 sm:mb-8 mx-auto max-w-full text-center">
         <Zap className="h-3.5 w-3.5 fill-emerald-600 text-emerald-600 shrink-0" />
-        <span className="truncate">92% admission rate &middot; 25K+ students counselled</span>
+        <span className="truncate">95% admission rate &middot; 50K+ students counselled</span>
       </div>
 
       {/* Progress Bar */}
