@@ -12,6 +12,16 @@ const leadSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    email: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    city: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     state: {
       type: String,
       default: 'Not specified',
@@ -19,6 +29,10 @@ const leadSchema = new mongoose.Schema(
     preferredCourse: {
       type: String,
       default: 'General Counselling',
+    },
+    source: {
+      type: String,
+      default: 'Website Popup',
     },
     answersSummary: {
       type: mongoose.Schema.Types.Mixed,

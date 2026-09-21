@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trash2, Phone, Calendar, Loader2, Search, Filter, Users } from "lucide-react";
+import { Trash2, Phone, Calendar, Loader2, Search, Filter, Users, Mail, MapPin, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function LeadsPage() {
@@ -56,10 +56,18 @@ export default function LeadsPage() {
     }
   };
 
-  const filteredLeads = leads.filter(lead => 
-    lead.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    lead.preferredCourse.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredLeads = leads.filter(lead => {
+    const query = searchTerm.toLowerCase();
+    return (
+      (lead.name && lead.name.toLowerCase().includes(query)) ||
+      (lead.phone && lead.phone.toLowerCase().includes(query)) ||
+      (lead.email && lead.email.toLowerCase().includes(query)) ||
+      (lead.preferredCourse && lead.preferredCourse.toLowerCase().includes(query)) ||
+      (lead.city && lead.city.toLowerCase().includes(query)) ||
+      (lead.state && lead.state.toLowerCase().includes(query)) ||
+      (lead.source && lead.source.toLowerCase().includes(query))
+    );
+  });
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
@@ -130,16 +138,31 @@ export default function LeadsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center text-navy font-medium bg-slate-50 px-3 py-1.5 rounded-lg w-fit">
-                        <Phone className="h-3.5 w-3.5 mr-2 text-slate-400" />
-                        {lead.phone}
+                      <div className="space-y-1">
+                        <div className="flex items-center text-navy font-medium bg-slate-50 px-2.5 py-1 rounded-lg w-fit text-xs sm:text-sm">
+                          <Phone className="h-3.5 w-3.5 mr-1.5 text-slate-400" />
+                          {lead.phone}
+                        </div>
+                        {lead.email && (
+                          <div className="flex items-center text-slate-600 text-xs px-0.5">
+                            <Mail className="h-3 w-3 mr-1.5 text-slate-400" />
+                            {lead.email}
+                          </div>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-navy font-medium">{lead.preferredCourse}</div>
-                      <div className="text-xs text-slate-500 mt-0.5 flex items-center">
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mr-1.5"></span>
-                        {lead.state}
+                      <div className="text-xs text-slate-500 mt-1 flex flex-wrap items-center gap-1.5">
+                        <span className="inline-flex items-center">
+                          <MapPin className="h-3 w-3 mr-1 text-slate-400" />
+                          {lead.city ? `${lead.city}, ${lead.state}` : lead.state}
+                        </span>
+                        {lead.source && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600">
+                            {lead.source}
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4">

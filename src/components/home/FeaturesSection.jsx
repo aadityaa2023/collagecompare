@@ -7,9 +7,9 @@ import SectionWrapper from "@/components/shared/SectionWrapper";
 const defaultFeatures = [
   {
     icon: IndianRupee,
-    title: "Side-by-Side Fees",
+    title: "No Cost EMI Support",
     description:
-      "True 4-year tuition breakdown, hostel charges, and hidden costs before you fill out an application.",
+      "Flexible payment options with No Cost EMI support, making your course fees easier to manage without paying extra interest.",
     color: "text-emerald-600",
     bgColor: "bg-emerald-50",
     borderColor: "border-emerald-100",

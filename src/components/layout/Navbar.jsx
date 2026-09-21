@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet";
+import { openLeadModal } from "@/components/shared/LeadPopupModal";
 
 const navLinks = [
   { label: "Colleges", href: "/colleges" },
@@ -61,13 +62,23 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="px-3.5 py-2 text-sm font-semibold text-slate-900 hover:text-crimson transition-colors rounded-md hover:bg-slate-50"
-              >
-                {link.label}
-              </Link>
+              link.href === "/contact" ? (
+                <button
+                  key={link.label}
+                  onClick={openLeadModal}
+                  className="px-3.5 py-2 text-sm font-semibold text-slate-900 hover:text-crimson transition-colors rounded-md hover:bg-slate-50 cursor-pointer"
+                >
+                  {link.label}
+                </button>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="px-3.5 py-2 text-sm font-semibold text-slate-900 hover:text-crimson transition-colors rounded-md hover:bg-slate-50"
+                >
+                  {link.label}
+                </Link>
+              )
             ))}
           </div>
 
@@ -124,13 +135,23 @@ export default function Navbar() {
                     <div className="px-3 py-2 space-y-1">
                       {navLinks.map((link) => (
                         <SheetClose asChild key={link.label}>
-                          <Link
-                            href={link.href}
-                            className="flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 hover:text-crimson rounded-xl transition-all active:scale-98"
-                          >
-                            <span>{link.label}</span>
-                            <span className="text-slate-300 text-xs font-normal">&rsaquo;</span>
-                          </Link>
+                          {link.href === "/contact" ? (
+                            <button
+                              onClick={openLeadModal}
+                              className="flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold text-slate-800 hover:text-crimson hover:bg-rose-50/50 rounded-xl transition-all cursor-pointer text-left w-full"
+                            >
+                              <span>{link.label}</span>
+                              <span className="text-slate-300 text-xs font-normal">&rsaquo;</span>
+                            </button>
+                          ) : (
+                            <Link
+                              href={link.href}
+                              className="flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold text-slate-800 hover:text-crimson hover:bg-rose-50/50 rounded-xl transition-all"
+                            >
+                              <span>{link.label}</span>
+                              <span className="text-slate-300 text-xs font-normal">&rsaquo;</span>
+                            </Link>
+                          )}
                         </SheetClose>
                       ))}
                     </div>

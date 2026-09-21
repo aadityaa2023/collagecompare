@@ -7,6 +7,7 @@ import {
   ExploreCoursesSection,
   HowItWorksSection,
   TestimonialsSection,
+  ContactSection,
 } from "@/components/home";
 import dbConnect from "@/lib/mongodb";
 import Course from "@/models/Course";
@@ -34,6 +35,7 @@ export default async function HomePage() {
         <ExploreCoursesSection courseList={courses} />
         <HowItWorksSection />
         <TestimonialsSection />
+        <ContactSection />
       </main>
       <Footer />
     </>

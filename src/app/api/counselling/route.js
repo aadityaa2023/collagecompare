@@ -16,7 +16,7 @@ export async function POST(request) {
   try {
     await dbConnect();
     const body = await request.json();
-    const { name, phone, state, preferredCourse, answersSummary } = body;
+    const { name, phone, email, state, city, preferredCourse, course, source, answersSummary } = body;
 
     if (!name || !phone) {
       return NextResponse.json(
@@ -28,8 +28,11 @@ export async function POST(request) {
     const lead = new Lead({
       name: name.trim(),
       phone: phone.trim(),
+      email: (email || "").trim().toLowerCase(),
+      city: (city || "").trim(),
       state: state || "Not specified",
-      preferredCourse: preferredCourse || "General Counselling",
+      preferredCourse: preferredCourse || course || "General Counselling",
+      source: source || "Website Lead Form",
       answersSummary: answersSummary || {},
     });
 

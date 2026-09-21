@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 import NavigationProgressBar from "@/components/layout/NavigationProgressBar";
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
+import LeadPopupModal from "@/components/shared/LeadPopupModal";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -61,6 +62,7 @@ export default async function RootLayout({ children }) {
           <NavigationProgressBar />
         </Suspense>
         {children}
+        <LeadPopupModal />
         <MobileBottomNav />
       </body>
     </html>
