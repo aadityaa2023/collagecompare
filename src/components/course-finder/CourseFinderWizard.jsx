@@ -22,7 +22,7 @@ import {
   Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { submitCounsellingData } from "@/lib/googleFormConfig";
+import { submitCounsellingData } from "@/lib/leadService";
 
 const STEPS = [
   { id: "education", title: "Education & Qualification", subtitle: "Your current academic background" },
@@ -502,14 +502,14 @@ export default function CourseFinderWizard({ onComplete }) {
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {[
                       { id: "all", label: "Auto-Recommend for Me", highlight: true },
-                      { id: "btech-cse", label: "BA" },
-                      { id: "btech-ece", label: "B.COM" },
-                      { id: "mba", label: "BBA" },
-                      { id: "bba", label: "BCA" },
-                      { id: "bsc-cs", label: "BA (Hons)" },
-                      { id: "mca", label: "B.COM (Hons)" },
-                      { id: "bpharm", label: "BBA (Hons)" },
-                      { id: "llb", label: "BSC" },
+                      { id: "ba", label: "BA" },
+                      { id: "bcom", label: "B.COM" },
+                      { id: "bba", label: "BBA" },
+                      { id: "bca", label: "BCA" },
+                      { id: "ba-hons", label: "BA (Hons)" },
+                      { id: "bcom-hons", label: "B.COM (Hons)" },
+                      { id: "bba-hons", label: "BBA (Hons)" },
+                      { id: "bsc", label: "BSC" },
                       { id: "ma", label: "MA" },
                       { id: "mcom", label: "M.COM" },
                       { id: "mba", label: "MBA" },
@@ -517,8 +517,8 @@ export default function CourseFinderWizard({ onComplete }) {
                       { id: "msc-ds", label: "MSC Data Science" },
                       { id: "msc-math", label: "MSC Mathematics" },
                       { id: "dba", label: "DBA" },
-                      { id: "btech-mech", label: "Executive Programs" },
-                      { id: "btech-mech", label: "Certificate & Diploma" },
+                      { id: "exec-prog", label: "Executive Programs" },
+                      { id: "cert-dip", label: "Certificate & Diploma" },
                     ].map((c) => {
                       const selected = answers.preferredCourseId === c.id;
                       return (

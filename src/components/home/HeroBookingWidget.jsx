@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, ChevronRight, CheckCircle2, Loader2 } from "lucide-react";
-import { submitCounsellingData } from "@/lib/googleFormConfig";
+import { submitCounsellingData } from "@/lib/leadService";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 

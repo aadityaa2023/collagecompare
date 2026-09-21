@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit, Loader2, Search, Filter, BookOpen, GraduationCap, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ImageUpload from "@/components/shared/ImageUpload";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState([]);
@@ -12,6 +13,7 @@ export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Basic form state
+  const [formData, setFormData] = useState({
     name: "",
     slug: "",
     shortName: "",
@@ -181,7 +183,11 @@ export default function CoursesPage() {
                 className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
                 placeholder="e.g. B.Tech Computer Science"
                 value={formData.name}
-                onChange={e => setFormData({...formData, name: e.target.value})}
+                onChange={e => {
+                  const newName = e.target.value;
+                  const newSlug = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                  setFormData({...formData, name: newName, slug: newSlug});
+                }}
               />
             </div>
             <div>
@@ -251,13 +257,12 @@ export default function CoursesPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Image URL</label>
-              <input 
-                type="text" 
-                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
-                placeholder="e.g. /courses/course-cse.jpg"
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Course Image</label>
+              <ImageUpload
+                folder="courses"
+                placeholder="Upload Course Image"
                 value={formData.image}
-                onChange={e => setFormData({...formData, image: e.target.value})}
+                onChange={(url) => setFormData({...formData, image: url})}
               />
             </div>
             <div className="md:col-span-2">

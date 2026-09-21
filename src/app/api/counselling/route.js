@@ -25,27 +25,7 @@ export async function POST(request) {
 
     await lead.save();
 
-    // If an external Google Form or webhook URL is configured in server env, forward to it
-    const externalWebhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
-    if (externalWebhook) {
-      try {
-        await fetch(externalWebhook, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: lead._id,
-            name: lead.name,
-            phone: lead.phone,
-            state: lead.state,
-            preferredCourse: lead.preferredCourse,
-            answersSummary: lead.answersSummary,
-            receivedAt: lead.createdAt,
-          }),
-        });
-      } catch (fwdErr) {
-        console.warn("Failed forwarding to external webhook:", fwdErr);
-      }
-    }
+    // Leads are now exclusively stored in MongoDB and accessible via Admin Panel
 
     return NextResponse.json(
       {

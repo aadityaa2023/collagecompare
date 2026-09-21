@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Edit, Loader2, MapPin, Building2, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ImageUpload from "@/components/shared/ImageUpload";
 
 // Helper to convert comma separated string to array
 const parseArray = (str) => {
@@ -17,22 +18,7 @@ const formatArray = (arr) => {
   return arr.join(', ');
 };
 
-// Helper to convert object to pretty JSON string
-const formatJson = (obj) => {
-  if (!obj || Object.keys(obj).length === 0) return "";
-  return JSON.stringify(obj, null, 2);
-};
-
-// Helper to parse JSON string to object
-const parseJson = (str) => {
-  if (!str || !str.trim()) return {};
-  try {
-    return JSON.parse(str);
-  } catch (e) {
-    console.error("Invalid JSON format");
-    return {};
-  }
-};
+// Helper functions removed as they are no longer needed
 
 const defaultFormData = {
   id: "",
@@ -43,7 +29,7 @@ const defaultFormData = {
   established: "",
   nirfRanking: "",
   naacGrade: "",
-  fees: "{\n  \"btech\": 1000000\n}",
+  fees: [{ key: "", value: "" }],
   avgPackage: "",
   highestPackage: "",
   coursesOffered: "",
@@ -51,7 +37,7 @@ const defaultFormData = {
   campus: "",
   about: "",
   topRecruiters: "",
-  cutoff: "{}",
+  cutoff: [{ key: "", value: "" }],
 };
 
 export default function CollegesPage() {
@@ -90,8 +76,14 @@ export default function CollegesPage() {
       // Prepare payload
       const payload = {
         ...formData,
-        fees: parseJson(formData.fees),
-        cutoff: parseJson(formData.cutoff),
+        fees: formData.fees.reduce((acc, { key, value }) => {
+          if (key && value) acc[key] = Number(value);
+          return acc;
+        }, {}),
+        cutoff: formData.cutoff.reduce((acc, { key, value }) => {
+          if (key && value) acc[key] = value;
+          return acc;
+        }, {}),
         coursesOffered: parseArray(formData.coursesOffered),
         topRecruiters: parseArray(formData.topRecruiters),
         established: Number(formData.established) || undefined,
@@ -147,7 +139,9 @@ export default function CollegesPage() {
       established: college.established || "",
       nirfRanking: college.nirfRanking || "",
       naacGrade: college.naacGrade || "",
-      fees: formatJson(college.fees),
+      fees: college.fees && Object.keys(college.fees).length > 0 
+        ? Object.entries(college.fees).map(([key, value]) => ({ key, value: String(value) })) 
+        : [{ key: "", value: "" }],
       avgPackage: college.avgPackage || "",
       highestPackage: college.highestPackage || "",
       coursesOffered: formatArray(college.coursesOffered),
@@ -155,7 +149,9 @@ export default function CollegesPage() {
       campus: college.campus || "",
       about: college.about || "",
       topRecruiters: formatArray(college.topRecruiters),
-      cutoff: formatJson(college.cutoff),
+      cutoff: college.cutoff && Object.keys(college.cutoff).length > 0 
+        ? Object.entries(college.cutoff).map(([key, value]) => ({ key, value })) 
+        : [{ key: "", value: "" }],
     });
     setEditingId(college._id);
     setShowAddForm(true);
@@ -232,7 +228,12 @@ export default function CollegesPage() {
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
               <input required type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="e.g. Indian Institute of Technology" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                value={formData.name} 
+                onChange={e => {
+                  const newName = e.target.value;
+                  const newSlug = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                  setFormData({...formData, name: newName, id: newSlug});
+                }} />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Short Name</label>
@@ -308,9 +309,30 @@ export default function CollegesPage() {
             </div>
             
             <div className="lg:col-span-3">
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Fees (JSON format, keys in quotes)</label>
-              <textarea rows={3} className="form-textarea w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none font-mono text-xs" 
-                placeholder='{"btech": 1200000, "mba": 800000}' value={formData.fees} onChange={e => setFormData({...formData, fees: e.target.value})} />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Fees per Course</label>
+              {formData.fees.map((fee, index) => (
+                <div key={index} className="flex gap-3 mb-2">
+                  <input type="text" placeholder="Course (e.g. btech)" className="form-input w-1/2 rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" value={fee.key} onChange={e => {
+                    const newFees = [...formData.fees];
+                    newFees[index].key = e.target.value;
+                    setFormData({...formData, fees: newFees});
+                  }} />
+                  <input type="number" placeholder="Amount (e.g. 1000000)" className="form-input w-1/2 rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" value={fee.value} onChange={e => {
+                    const newFees = [...formData.fees];
+                    newFees[index].value = e.target.value;
+                    setFormData({...formData, fees: newFees});
+                  }} />
+                  <Button type="button" variant="outline" className="text-red-500 hover:text-red-600 hover:bg-red-50 border-red-100 px-3 rounded-xl" onClick={() => {
+                    const newFees = formData.fees.filter((_, i) => i !== index);
+                    setFormData({...formData, fees: newFees.length ? newFees : [{key: "", value: ""}]});
+                  }}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" variant="outline" className="text-sm mt-1 rounded-xl bg-slate-50 text-slate-700" onClick={() => setFormData({...formData, fees: [...formData.fees, {key: "", value: ""}]})}>
+                <Plus className="h-4 w-4 mr-2" /> Add Fee Entry
+              </Button>
             </div>
 
             {/* Arrays (Comma separated) */}
@@ -335,19 +357,54 @@ export default function CollegesPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Logo URL</label>
-              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="https://..." value={formData.logo} onChange={e => setFormData({...formData, logo: e.target.value})} />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                Logo Image
+              </label>
+              <ImageUpload
+                folder="colleges"
+                placeholder="Upload Logo"
+                recommendedSize="400x400px (1:1)"
+                value={formData.logo}
+                onChange={(url) => setFormData({...formData, logo: url})}
+              />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Campus Image URL</label>
-              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" 
-                placeholder="/colleges/campus..." value={formData.campus} onChange={e => setFormData({...formData, campus: e.target.value})} />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                Campus Image
+              </label>
+              <ImageUpload
+                folder="colleges"
+                placeholder="Upload Campus Image"
+                recommendedSize="800x400px (2:1)"
+                value={formData.campus}
+                onChange={(url) => setFormData({...formData, campus: url})}
+              />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Cutoff (JSON)</label>
-              <input type="text" className="form-input w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none font-mono text-xs" 
-                placeholder='{"merit": "50%"}' value={formData.cutoff} onChange={e => setFormData({...formData, cutoff: e.target.value})} />
+            <div className="lg:col-span-3">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Cutoffs</label>
+              {formData.cutoff.map((c, index) => (
+                <div key={index} className="flex gap-3 mb-2">
+                  <input type="text" placeholder="Exam/Category (e.g. merit)" className="form-input w-1/2 rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" value={c.key} onChange={e => {
+                    const newCutoff = [...formData.cutoff];
+                    newCutoff[index].key = e.target.value;
+                    setFormData({...formData, cutoff: newCutoff});
+                  }} />
+                  <input type="text" placeholder="Score (e.g. 50%)" className="form-input w-1/2 rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none" value={c.value} onChange={e => {
+                    const newCutoff = [...formData.cutoff];
+                    newCutoff[index].value = e.target.value;
+                    setFormData({...formData, cutoff: newCutoff});
+                  }} />
+                  <Button type="button" variant="outline" className="text-red-500 hover:text-red-600 hover:bg-red-50 border-red-100 px-3 rounded-xl" onClick={() => {
+                    const newCutoff = formData.cutoff.filter((_, i) => i !== index);
+                    setFormData({...formData, cutoff: newCutoff.length ? newCutoff : [{key: "", value: ""}]});
+                  }}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" variant="outline" className="text-sm mt-1 rounded-xl bg-slate-50 text-slate-700" onClick={() => setFormData({...formData, cutoff: [...formData.cutoff, {key: "", value: ""}]})}>
+                <Plus className="h-4 w-4 mr-2" /> Add Cutoff Entry
+              </Button>
             </div>
 
             <div className="lg:col-span-3 flex justify-end gap-3 mt-4 pt-6 border-t border-slate-100">

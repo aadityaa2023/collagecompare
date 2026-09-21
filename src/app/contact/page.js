@@ -4,7 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { submitCounsellingData } from "@/lib/googleFormConfig";
+import { submitCounsellingData } from "@/lib/leadService";
 
 export default function ContactPage() {
   const handleSubmit = async (e) => {

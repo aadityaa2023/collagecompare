@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Compass } from "lucide-react";
+import { Menu, X, ChevronDown, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet";
 
@@ -78,8 +78,8 @@ export default function Navbar() {
               className="relative group bg-crimson hover:bg-crimson-dark text-white font-bold px-5 h-9.5 text-xs rounded-xl shadow-md shadow-crimson/20 hover:shadow-lg hover:shadow-crimson/30 transition-all cursor-pointer"
             >
               <Link href="/course-finder" className="flex items-center gap-2">
-                <Compass className="h-4 w-4 transition-transform group-hover:rotate-45" />
-                <span>Course Finder</span>
+                <UserCheck className="h-4 w-4 transition-transform group-hover:scale-110" />
+                <span>Course Advisor</span>
               </Link>
             </Button>
           </div>
@@ -88,10 +88,10 @@ export default function Navbar() {
           <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/course-finder"
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold bg-crimson/10 text-crimson rounded-lg active:scale-95 transition-all"
+              className="flex items-center gap-1.5 bg-crimson hover:bg-crimson-light text-white px-4 py-2.25 rounded-xl text-sm font-semibold shadow-[0_8px_20px_-8px_rgba(225,29,72,0.6)] hover:shadow-[0_8px_25px_-5px_rgba(225,29,72,0.7)] transition-all hover:-translate-y-0.5"
             >
-              <Compass className="h-3.5 w-3.5 text-crimson" />
-              <span>Finder</span>
+              <UserCheck className="h-4 w-4" />
+              <span>Course Advisor</span>
             </Link>
 
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -170,7 +170,7 @@ export default function Navbar() {
                         className="w-full h-11 text-sm font-bold bg-crimson hover:bg-crimson-dark text-white rounded-xl shadow-md shadow-crimson/25 flex items-center justify-center gap-2 active:scale-98"
                       >
                         <Link href="/course-finder">
-                          <Compass className="h-4 w-4" />
+                          <UserCheck className="h-4 w-4" />
                           <span>Find Best College & Course</span>
                         </Link>
                       </Button>
