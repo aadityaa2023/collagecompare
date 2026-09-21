@@ -27,6 +27,7 @@ export default function CourseDetailPage({ params }) {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [allColleges, setAllColleges] = useState([]);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -47,6 +48,15 @@ export default function CourseDetailPage({ params }) {
     fetchCourse();
   }, [id]);
 
+  useEffect(() => {
+    fetch("/api/colleges", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setAllColleges(data);
+      })
+      .catch(() => {});
+  }, []);
+
   if (loading) {
     return (
       <>
@@ -64,7 +74,12 @@ export default function CourseDetailPage({ params }) {
   }
 
   const topColleges = (course.topColleges || [])
-    .map((cid) => getCollegeById(cid))
+    .map((cid) => {
+      const fromDb = allColleges.find(
+        (c) => c.id === cid || c.id?.toLowerCase() === cid?.toLowerCase() || c._id === cid
+      );
+      return fromDb || getCollegeById(cid);
+    })
     .filter(Boolean);
 
   return (

@@ -64,7 +64,7 @@ export default function CollegeCard({ college, compact = false }) {
               <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
                 <MapPin className="h-3 w-3 shrink-0" />
                 <span className="truncate">
-                  {college.location.city}, {college.location.state}
+                  {college.location?.city || "Online"}, {college.location?.state || "India"}
                 </span>
               </div>
             </div>
@@ -130,7 +130,7 @@ export default function CollegeCard({ college, compact = false }) {
 
                 <div className="flex items-center gap-1 text-xs text-slate-500 mb-3">
                   <MapPin className="h-3 w-3 shrink-0" />
-                  {college.location.city}, {college.location.state}
+                  {college.location?.city || "Online"}, {college.location?.state || "India"}
                 </div>
               </div>
 
@@ -141,7 +141,7 @@ export default function CollegeCard({ college, compact = false }) {
                     Rank
                   </p>
                   <p className="text-sm font-bold text-navy">
-                    #{college.nirfRanking}
+                    #{college.nirfRanking || "—"}
                   </p>
                 </div>
                 <div>

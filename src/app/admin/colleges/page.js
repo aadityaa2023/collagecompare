@@ -93,28 +93,20 @@ export default function CollegesPage() {
       };
 
       if (isEditing) {
-        payload._id = editingId; // the API uses findByIdAndUpdate which expects id. Wait, the old code passed id: editingId in the body
-        payload.id = payload._id; // Just in case, the model has its own string 'id' field now. Let's make sure API gets the MongoDB _id.
+        payload.documentId = editingId;
+        payload.id = formData.id || payload.id || editingId;
       }
-      
-      // The old API expected the mongodb _id to be passed as 'id' in the body for PUT
-      const bodyToSend = isEditing ? { ...payload, _id: editingId, id: editingId } : payload;
-      // Wait, our new model uses 'id' as a required string field. The old API uses `const { id, ...updateData } = body; await College.findByIdAndUpdate(id, updateData)`
-      // This means the API route pulls `id` from body to use as the Mongoose ObjectId.
-      // We must pass the Mongoose ObjectId as `_id` and the slug id as `slugId` or rename the slug id to something else? 
-      // Actually, if the model has `id: { type: String }` and the API route uses `const { id, ...updateData } = body; findByIdAndUpdate(id)`, there's a conflict!
-      // Let's pass `_id` as the document ID and keep `id` as the slug. I should fix the API route next.
 
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(isEditing ? { ...payload, documentId: editingId } : payload),
+        body: JSON.stringify(payload),
       });
       
       if (res.ok) {
         const savedCollege = await res.json();
         if (isEditing) {
-          setColleges(colleges.map(c => c._id === editingId ? savedCollege : c));
+          setColleges(colleges.map(c => (c._id === editingId || c.id === savedCollege.id) ? savedCollege : c));
         } else {
           setColleges([savedCollege, ...colleges]);
         }

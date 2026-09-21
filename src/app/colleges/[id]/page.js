@@ -141,7 +141,7 @@ export default function CollegeDetailPage({ params }) {
                 <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200 mt-3">
                   <span className="flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5 text-crimson" />
-                    {college.location.city}, {college.location.state}
+                    {college.location?.city || "Online"}, {college.location?.state || "India"}
                   </span>
                   <span className="flex items-center gap-1">
                     <Calendar className="h-3.5 w-3.5 text-slate-300" />
@@ -303,7 +303,7 @@ export default function CollegeDetailPage({ params }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {Object.entries(college.fees).map(([course, fee]) => (
+                      {Object.entries(college.fees || {}).map(([course, fee]) => (
                         <tr
                           key={course}
                           className="border-b border-slate-100 last:border-0"
@@ -354,7 +354,7 @@ export default function CollegeDetailPage({ params }) {
                   Top Recruiters
                 </h2>
                 <div className="flex flex-wrap gap-2">
-                  {college.topRecruiters.map((recruiter) => (
+                  {(college.topRecruiters || []).map((recruiter) => (
                     <div
                       key={recruiter}
                       className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-navy font-medium"

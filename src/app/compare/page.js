@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, Suspense } from "react";
+import { useState, useMemo, useCallback, Suspense, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -33,25 +33,26 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { colleges, getCollegeById, formatFees, formatPackage } from "@/data/colleges";
 
-function CollegeSelector({ selectedId, onSelect, excludeIds = [] }) {
+function CollegeSelector({ selectedId, onSelect, excludeIds = [], collegeList = colleges, findCollege }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
 
   const filtered = useMemo(() => {
-    let result = colleges.filter((c) => !excludeIds.includes(c.id));
+    let result = (collegeList || colleges).filter((c) => !excludeIds.includes(c.id));
     if (query.trim()) {
       const q = query.toLowerCase();
       result = result.filter(
         (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.shortName.toLowerCase().includes(q) ||
-          c.location.city.toLowerCase().includes(q)
+          c.name?.toLowerCase().includes(q) ||
+          c.shortName?.toLowerCase().includes(q) ||
+          c.location?.city?.toLowerCase().includes(q) ||
+          c.location?.state?.toLowerCase().includes(q)
       );
     }
     return result.slice(0, 8);
-  }, [query, excludeIds]);
+  }, [query, excludeIds, collegeList]);
 
-  const selected = selectedId ? getCollegeById(selectedId) : null;
+  const selected = selectedId ? (findCollege ? findCollege(selectedId) : getCollegeById(selectedId)) : null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -136,8 +137,8 @@ function CollegeSelector({ selectedId, onSelect, excludeIds = [] }) {
                   {college.shortName}
                 </p>
                 <p className="text-xs text-slate-500">
-                  {college.location.city} &middot; {college.type} &middot; NIRF #
-                  {college.nirfRanking}
+                  {college.location?.city || (typeof college.location === "string" ? college.location : "Online")} &middot; {college.type || "Private"} &middot; NIRF #
+                  {college.nirfRanking || "N/A"}
                 </p>
               </div>
               {selectedId === college.id && (
@@ -217,6 +218,23 @@ function CompareContent() {
     initialC2,
     "",
   ]);
+  const [collegeList, setCollegeList] = useState(colleges);
+
+  useEffect(() => {
+    fetch("/api/colleges", { cache: "no-store" })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setCollegeList(data);
+        }
+      })
+      .catch((err) => console.error("Failed to load colleges for comparison:", err));
+  }, []);
+
+  const findCollege = useCallback((id) => {
+    if (!id) return null;
+    return collegeList.find(c => c.id === id || c.id?.toLowerCase() === id?.toLowerCase() || c._id === id) || getCollegeById(id);
+  }, [collegeList]);
 
   const setCollegeAt = useCallback((index, id) => {
     setSelectedIds((prev) => {
@@ -235,7 +253,7 @@ function CompareContent() {
   }, []);
 
   const selectedColleges = selectedIds
-    .map((id) => (id ? getCollegeById(id) : null))
+    .map((id) => findCollege(id))
     .filter(Boolean);
 
   const excludeIds = selectedIds.filter(Boolean);
@@ -263,6 +281,8 @@ function CompareContent() {
                 selectedId={id}
                 onSelect={(newId) => setCollegeAt(i, newId)}
                 excludeIds={excludeIds.filter((eid) => eid !== id)}
+                collegeList={collegeList}
+                findCollege={findCollege}
               />
               {id && (
                 <button
@@ -313,7 +333,7 @@ function CompareContent() {
                             {c.shortName}
                           </span>
                           <span className="text-[11px] text-slate-400">
-                            {c.location.city} &middot; {c.type}
+                            {c.location?.city || "Online"} &middot; {c.type}
                           </span>
                         </div>
                       </th>
@@ -337,22 +357,22 @@ function CompareContent() {
                   />
                   <CompareRow
                     label="Established"
-                    values={selectedColleges.map((c) => c.established)}
+                    values={selectedColleges.map((c) => c.established || "—")}
                   />
                   <CompareRow
                     label="Location"
                     values={selectedColleges.map(
-                      (c) => `${c.location.city}, ${c.location.state}`
+                      (c) => `${c.location?.city || "Online"}, ${c.location?.state || "India"}`
                     )}
                   />
                   <CompareRow
                     label="NAAC Grade"
-                    values={selectedColleges.map((c) => c.naacGrade)}
+                    values={selectedColleges.map((c) => c.naacGrade || "—")}
                   />
                   <CompareRow
                     label="Total Students"
                     values={selectedColleges.map((c) =>
-                      c.totalStudents.toLocaleString()
+                      c.totalStudents ? c.totalStudents.toLocaleString() : "—"
                     )}
                     highlightBetter="higher"
                   />
