@@ -7,7 +7,6 @@ import { ChevronRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/shared/SectionWrapper";
 import CourseCard from "@/components/shared/CourseCard";
-import { courses } from "@/data/courses";
 
 const CATEGORIES = [
   { id: "all", label: "All Programs" },
@@ -17,7 +16,7 @@ const CATEGORIES = [
   { id: "pg", label: "Postgraduate", filter: (c) => c.level === "PG" },
 ];
 
-export default function ExploreCoursesSection({ courseList = courses }) {
+export default function ExploreCoursesSection({ courseList = [] }) {
   const [activeCategory, setActiveCategory] = useState("all");
 
   const filteredCourses = courseList.filter((course) => {

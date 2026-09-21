@@ -3,7 +3,6 @@
 import { Search, ArrowRight, Building2, BookOpen, Command, X } from "lucide-react";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { searchColleges } from "@/data/colleges";
-import { searchCourses } from "@/data/courses";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -11,15 +10,31 @@ export default function SearchBar({ className = "", variant = "hero" }) {
   const [query, setQuery] = useState("");
   const [activeTab, setActiveTab] = useState("colleges");
   const [showResults, setShowResults] = useState(false);
+  const [dbCourses, setDbCourses] = useState([]);
   const inputRef = useRef(null);
   const containerRef = useRef(null);
   const router = useRouter();
 
+  useEffect(() => {
+    // Pre-fetch courses for client-side search
+    fetch("/api/courses").then(res => res.json()).then(data => {
+      if (Array.isArray(data)) {
+        setDbCourses(data.map(c => ({ ...c, id: c.slug })));
+      }
+    }).catch(err => console.error("Failed to prefetch courses for search", err));
+  }, []);
+
   const results = useMemo(() => {
     if (!query.trim()) return [];
     if (activeTab === "colleges") return searchColleges(query).slice(0, 5);
-    return searchCourses(query).slice(0, 5);
-  }, [query, activeTab]);
+    
+    // Search courses locally
+    const q = query.toLowerCase();
+    return dbCourses.filter(c => 
+      c.name?.toLowerCase().includes(q) || 
+      c.shortName?.toLowerCase().includes(q)
+    ).slice(0, 5);
+  }, [query, activeTab, dbCourses]);
 
   const isHero = variant === "hero";
 

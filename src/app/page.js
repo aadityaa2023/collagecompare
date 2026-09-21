@@ -8,8 +8,19 @@ import {
   HowItWorksSection,
   TestimonialsSection,
 } from "@/components/home";
+import dbConnect from "@/lib/mongodb";
+import Course from "@/models/Course";
 
-export default function HomePage() {
+export default async function HomePage() {
+  await dbConnect();
+  // Fetch courses and serialize them for the client component
+  const dbCourses = await Course.find({}).lean();
+  const courses = dbCourses.map(c => ({
+    ...c,
+    _id: c._id.toString(),
+    id: c.slug, // mapping for the frontend to use
+  }));
+
   return (
     <>
       <Navbar />
@@ -17,7 +28,7 @@ export default function HomePage() {
         <HeroSection />
         <TrustedUniversitiesSection />
         <FeaturesSection />
-        <ExploreCoursesSection />
+        <ExploreCoursesSection courseList={courses} />
         <HowItWorksSection />
         <TestimonialsSection />
       </main>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CourseFinderWizard from "@/components/course-finder/CourseFinderWizard";
@@ -12,10 +12,17 @@ import Image from "next/image";
 export default function CourseFinderPage() {
   const [recommendations, setRecommendations] = useState(null);
   const [userAnswers, setUserAnswers] = useState(null);
+  const [dbCourses, setDbCourses] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/courses").then(res => res.json()).then(data => {
+      if (Array.isArray(data)) setDbCourses(data);
+    }).catch(console.error);
+  }, []);
 
   const handleWizardComplete = (answers) => {
     setUserAnswers(answers);
-    const results = getPersonalizedRecommendations(answers);
+    const results = getPersonalizedRecommendations(answers, dbCourses.length ? dbCourses : undefined);
     setRecommendations(results);
     // Smooth scroll up to top of results
     if (typeof window !== "undefined") {

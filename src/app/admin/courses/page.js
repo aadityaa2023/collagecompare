@@ -12,12 +12,30 @@ export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Basic form state
-  const [formData, setFormData] = useState({
     name: "",
+    slug: "",
+    shortName: "",
     level: "UG",
     duration: "",
     category: "",
+    avgFees: "",
+    image: "",
+    topColleges: "",
+    eligibilityExams: "",
+    subjects: "",
+    careers: "",
   });
+
+  const parseArray = (str) => {
+    if (!str) return [];
+    if (Array.isArray(str)) return str;
+    return str.split(",").map((s) => s.trim()).filter((s) => s !== "");
+  };
+
+  const formatArray = (arr) => {
+    if (!arr || !Array.isArray(arr)) return "";
+    return arr.join(", ");
+  };
 
   useEffect(() => {
     fetchCourses();
@@ -43,7 +61,17 @@ export default function CoursesPage() {
       const isEditing = !!editingId;
       const url = "/api/admin/courses";
       const method = isEditing ? "PUT" : "POST";
-      const body = isEditing ? { ...formData, id: editingId } : formData;
+      
+      const payload = {
+        ...formData,
+        avgFees: Number(formData.avgFees) || undefined,
+        topColleges: parseArray(formData.topColleges),
+        eligibilityExams: parseArray(formData.eligibilityExams),
+        subjects: parseArray(formData.subjects),
+        careers: parseArray(formData.careers),
+      };
+
+      const body = isEditing ? { ...payload, id: editingId } : payload;
 
       const res = await fetch(url, {
         method,
@@ -67,10 +95,18 @@ export default function CoursesPage() {
 
   const openEditForm = (course) => {
     setFormData({
-      name: course.name,
-      level: course.level,
-      duration: course.duration,
-      category: course.category,
+      name: course.name || "",
+      slug: course.slug || "",
+      shortName: course.shortName || "",
+      level: course.level || "UG",
+      duration: course.duration || "",
+      category: course.category || "",
+      avgFees: course.avgFees || "",
+      image: course.image || "",
+      topColleges: formatArray(course.topColleges),
+      eligibilityExams: formatArray(course.eligibilityExams),
+      subjects: formatArray(course.subjects),
+      careers: formatArray(course.careers),
     });
     setEditingId(course._id);
     setShowAddForm(true);
@@ -80,7 +116,10 @@ export default function CoursesPage() {
   const closeForm = () => {
     setShowAddForm(false);
     setEditingId(null);
-    setFormData({ name: "", level: "UG", duration: "", category: "" });
+    setFormData({ 
+      name: "", slug: "", shortName: "", level: "UG", duration: "", category: "",
+      avgFees: "", image: "", topColleges: "", eligibilityExams: "", subjects: "", careers: ""
+    });
   };
 
   const handleDelete = async (id) => {
@@ -146,6 +185,27 @@ export default function CoursesPage() {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Slug (Unique ID)</label>
+              <input 
+                required 
+                type="text" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="e.g. btech-cse"
+                value={formData.slug}
+                onChange={e => setFormData({...formData, slug: e.target.value})}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Short Name</label>
+              <input 
+                type="text" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="e.g. B.Tech CSE"
+                value={formData.shortName}
+                onChange={e => setFormData({...formData, shortName: e.target.value})}
+              />
+            </div>
+            <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Category</label>
               <input 
                 required 
@@ -178,6 +238,66 @@ export default function CoursesPage() {
                 placeholder="e.g. 4 Years"
                 value={formData.duration}
                 onChange={e => setFormData({...formData, duration: e.target.value})}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Average Fees (Total)</label>
+              <input 
+                type="number" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="e.g. 1200000"
+                value={formData.avgFees}
+                onChange={e => setFormData({...formData, avgFees: e.target.value})}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Image URL</label>
+              <input 
+                type="text" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="e.g. /courses/course-cse.jpg"
+                value={formData.image}
+                onChange={e => setFormData({...formData, image: e.target.value})}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Top Colleges (Comma separated slugs)</label>
+              <input 
+                type="text" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="iiit-hyderabad, lpu-jalandhar"
+                value={formData.topColleges}
+                onChange={e => setFormData({...formData, topColleges: e.target.value})}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Eligibility Exams (Comma separated)</label>
+              <input 
+                type="text" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="JEE Main, BITSAT"
+                value={formData.eligibilityExams}
+                onChange={e => setFormData({...formData, eligibilityExams: e.target.value})}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Subjects (Comma separated)</label>
+              <input 
+                type="text" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="Data Structures, Algorithms"
+                value={formData.subjects}
+                onChange={e => setFormData({...formData, subjects: e.target.value})}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Careers (Comma separated)</label>
+              <input 
+                type="text" 
+                className="w-full rounded-xl border border-slate-200 py-2.5 px-4 focus:ring-2 focus:ring-crimson/20 focus:border-crimson outline-none transition-all bg-slate-50 focus:bg-white" 
+                placeholder="Software Engineer, Product Manager"
+                value={formData.careers}
+                onChange={e => setFormData({...formData, careers: e.target.value})}
               />
             </div>
             <div className="md:col-span-2 flex justify-end gap-3 mt-4 pt-6 border-t border-slate-100">

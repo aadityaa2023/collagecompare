@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CourseCard from "@/components/shared/CourseCard";
-import { courses } from "@/data/courses";
 
 const categories = [
   { value: "all", label: "All Courses" },
@@ -16,8 +15,28 @@ const categories = [
 ];
 
 export default function CoursesPage() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [level, setLevel] = useState("all");
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch("/api/courses");
+        if (res.ok) {
+          const data = await res.json();
+          // Provide default IDs for routing if missing, maps to slug
+          setCourses(data.map(c => ({ ...c, id: c.slug })));
+        }
+      } catch (error) {
+        console.error("Failed to fetch courses", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const filtered = useMemo(() => {
     let result = [...courses];
@@ -28,12 +47,24 @@ export default function CoursesPage() {
       const q = query.toLowerCase();
       result = result.filter(
         (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.shortName.toLowerCase().includes(q)
+          c.name?.toLowerCase().includes(q) ||
+          c.shortName?.toLowerCase().includes(q)
       );
     }
     return result;
-  }, [query, level]);
+  }, [query, level, courses]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 bg-slate-50 flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-10 w-10 text-crimson animate-spin" />
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>

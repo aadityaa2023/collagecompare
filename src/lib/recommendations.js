@@ -5,7 +5,7 @@ import { courses } from "@/data/courses";
  * Intelligent recommendation engine that analyzes student answers from the
  * Course Finder questionnaire and scores courses and colleges.
  */
-export function getPersonalizedRecommendations(answers = {}) {
+export function getPersonalizedRecommendations(answers = {}, dbCourses = courses, dbColleges = colleges) {
   const {
     education = "12th", // "10th", "12th", "graduate", "diploma"
     stream = "pcm", // "pcm", "pcb", "commerce", "arts", "vocational"
@@ -23,9 +23,10 @@ export function getPersonalizedRecommendations(answers = {}) {
   const targetLevel = isPostGraduate ? "PG" : "UG";
 
   // 2. Score Courses
-  const scoredCourses = courses.map((course) => {
+  const scoredCourses = dbCourses.map((course) => {
     let score = 50; // base score
     const reasons = [];
+    const courseId = course.slug || course.id;
 
     // Match Level
     if (course.level === targetLevel) {
@@ -36,22 +37,22 @@ export function getPersonalizedRecommendations(answers = {}) {
 
     // Match Stream
     if (stream === "pcm") {
-      if (course.id.startsWith("btech") || course.id.includes("cs") || course.id === "barch") {
+      if (courseId.startsWith("btech") || courseId.includes("cs") || courseId === "barch") {
         score += 25;
         reasons.push("Perfect match for Science (PCM) students");
       }
     } else if (stream === "pcb") {
-      if (course.id === "bpharm") {
+      if (courseId === "bpharm") {
         score += 35;
         reasons.push("Direct eligibility for Science (PCB) stream");
       }
     } else if (stream === "commerce") {
-      if (course.id === "bba" || course.id === "mba") {
+      if (courseId === "bba" || courseId === "mba") {
         score += 35;
         reasons.push("Direct alignment with Commerce & Management background");
       }
     } else if (stream === "arts") {
-      if (course.id === "llb" || course.id === "bba") {
+      if (courseId === "llb" || courseId === "bba") {
         score += 30;
         reasons.push("Excellent foundation for Arts & Humanities students");
       }
@@ -59,45 +60,45 @@ export function getPersonalizedRecommendations(answers = {}) {
 
     // Match Interests
     const interestSet = new Set(Array.isArray(interests) ? interests : [interests]);
-    if (interestSet.has("tech") && (course.id.includes("btech") || course.id.includes("cs") || course.id === "mca")) {
+    if (interestSet.has("tech") && (courseId.includes("btech") || courseId.includes("cs") || courseId === "mca")) {
       score += 20;
       reasons.push("Matches your interest in Software, Coding & AI");
     }
-    if (interestSet.has("management") && (course.id === "bba" || course.id === "mba")) {
+    if (interestSet.has("management") && (courseId === "bba" || courseId === "mba")) {
       score += 20;
       reasons.push("Matches your interest in Business Strategy & Leadership");
     }
-    if (interestSet.has("healthcare") && course.id === "bpharm") {
+    if (interestSet.has("healthcare") && courseId === "bpharm") {
       score += 20;
       reasons.push("Matches your healthcare and medical sciences interest");
     }
-    if (interestSet.has("design") && course.id === "barch") {
+    if (interestSet.has("design") && courseId === "barch") {
       score += 20;
       reasons.push("Matches your passion for Creative Architecture & Design");
     }
-    if (interestSet.has("law") && course.id === "llb") {
+    if (interestSet.has("law") && courseId === "llb") {
       score += 20;
       reasons.push("Matches your focus on Law, Corporate Advisory & Judiciary");
     }
 
     // Match Career Goals
     const goalSet = new Set(Array.isArray(careerGoals) ? careerGoals : [careerGoals]);
-    if (goalSet.has("high_salary") && (course.id === "btech-cse" || course.id === "mba")) {
+    if (goalSet.has("high_salary") && (courseId === "btech-cse" || courseId === "mba")) {
       score += 15;
       reasons.push("Highest average starting CTC in India (₹12 - ₹24 LPA)");
     }
-    if (goalSet.has("research") && (course.id.includes("mtech") || course.id.includes("btech"))) {
+    if (goalSet.has("research") && (courseId.includes("mtech") || courseId.includes("btech"))) {
       score += 15;
       reasons.push("High R&D and global master's admission rate");
     }
-    if (goalSet.has("startup") && (course.id === "bba" || course.id === "mba" || course.id === "btech-cse")) {
+    if (goalSet.has("startup") && (courseId === "bba" || courseId === "mba" || courseId === "btech-cse")) {
       score += 15;
       reasons.push("Strong entrepreneurship and incubator network");
     }
 
     // Exact User Selected Course Preference Override
     if (preferredCourseId && preferredCourseId !== "all") {
-      if (course.id === preferredCourseId) {
+      if (courseId === preferredCourseId) {
         score += 40;
         reasons.unshift("Your specifically preferred course");
       }
@@ -108,6 +109,7 @@ export function getPersonalizedRecommendations(answers = {}) {
 
     return {
       ...course,
+      id: courseId,
       score,
       matchPercentage,
       reasons: reasons.slice(0, 3),

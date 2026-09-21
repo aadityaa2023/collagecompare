@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -13,24 +13,57 @@ import {
   Briefcase,
   FileText,
   Award,
+  Loader2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CollegeCard from "@/components/shared/CollegeCard";
-import { getCourseById } from "@/data/courses";
 import { getCollegeById } from "@/data/colleges";
 
 export default function CourseDetailPage({ params }) {
   const { id } = use(params);
-  const course = getCourseById(id);
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  if (!course) {
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const res = await fetch(`/api/courses/${id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setCourse(data);
+        } else {
+          setError(true);
+        }
+      } catch (err) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourse();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 bg-slate-50 flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-10 w-10 text-crimson animate-spin" />
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error || !course) {
     notFound();
   }
 
-  const topColleges = course.topColleges
+  const topColleges = (course.topColleges || [])
     .map((cid) => getCollegeById(cid))
     .filter(Boolean);
 
