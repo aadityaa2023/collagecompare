@@ -99,7 +99,7 @@ export default function HeroSection() {
               >
                 <Link href="/course-finder">
                   <Compass className="mr-2 h-4 w-4 shrink-0" />
-                  <span>Find My Best Course & College</span>
+                  <span>Guide me for course and collage</span>
                 </Link>
               </Button>
               <Button

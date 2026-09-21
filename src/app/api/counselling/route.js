@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-
-// In-memory leads store for this dev/runtime session
-const inMemoryLeads = [];
+import dbConnect from "@/lib/mongodb";
+import Lead from "@/models/Lead";
 
 export async function POST(request) {
   try {
+    await dbConnect();
     const body = await request.json();
     const { name, phone, state, preferredCourse, answersSummary } = body;
 
@@ -15,17 +15,15 @@ export async function POST(request) {
       );
     }
 
-    const lead = {
-      id: `LEAD-${Date.now().toString(36).toUpperCase()}`,
+    const lead = new Lead({
       name: name.trim(),
       phone: phone.trim(),
       state: state || "Not specified",
       preferredCourse: preferredCourse || "General Counselling",
       answersSummary: answersSummary || {},
-      receivedAt: new Date().toISOString(),
-    };
+    });
 
-    inMemoryLeads.unshift(lead);
+    await lead.save();
 
     // If an external Google Form or webhook URL is configured in server env, forward to it
     const externalWebhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
@@ -34,7 +32,15 @@ export async function POST(request) {
         await fetch(externalWebhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(lead),
+          body: JSON.stringify({
+            id: lead._id,
+            name: lead.name,
+            phone: lead.phone,
+            state: lead.state,
+            preferredCourse: lead.preferredCourse,
+            answersSummary: lead.answersSummary,
+            receivedAt: lead.createdAt,
+          }),
         });
       } catch (fwdErr) {
         console.warn("Failed forwarding to external webhook:", fwdErr);
@@ -45,7 +51,7 @@ export async function POST(request) {
       {
         success: true,
         message: "Counselling lead received successfully",
-        leadId: lead.id,
+        leadId: lead._id,
       },
       { status: 200 }
     );
@@ -59,9 +65,19 @@ export async function POST(request) {
 }
 
 export async function GET() {
-  // Return the count of leads and recent leads for diagnostics
-  return NextResponse.json({
-    totalLeads: inMemoryLeads.length,
-    leads: inMemoryLeads.slice(0, 10),
-  });
+  try {
+    await dbConnect();
+    const totalLeads = await Lead.countDocuments();
+    const leads = await Lead.find().sort({ createdAt: -1 }).limit(10);
+    
+    return NextResponse.json({
+      totalLeads,
+      leads,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch leads" },
+      { status: 500 }
+    );
+  }
 }
