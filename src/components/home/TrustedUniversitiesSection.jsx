@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/shared/SectionWrapper";
-import trustedUniversities from "@/data/trustedUniversities.json";
+import { colleges as trustedUniversities } from "@/data/colleges";
 
 export default function TrustedUniversitiesSection() {
   const [showAll, setShowAll] = useState(false);
@@ -22,10 +22,10 @@ export default function TrustedUniversitiesSection() {
         {/* Section Header - matches reference UX with current brand theme */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-8 sm:mb-11">
           <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-navy leading-tight mb-2 sm:mb-3 font-heading">
-            Start with a name <span className="gradient-text-crimson">you trust</span>
+            Compare Degree. <span className="gradient-text-crimson">Verify Instantly.</span>
           </h2>
           <p className="text-base sm:text-lg text-slate-500 font-medium">
-            UGC-DEB verified universities only.
+            The safer way to choose UGC-DEB recognized higher education.
           </p>
         </div>
 
@@ -55,12 +55,21 @@ export default function TrustedUniversitiesSection() {
                     {/* Top Logo Container with horizontal branding */}
                     <div className="relative h-[4.5rem] w-full flex items-center justify-center overflow-hidden shrink-0 px-1 py-1">
                       {univ.logo ? (
-                        <img
-                          src={univ.logo}
-                          alt={univ.name}
-                          loading="lazy"
-                          className="max-h-[3.6rem] w-auto max-w-[92%] object-contain transition-transform duration-200 group-hover:scale-103"
-                        />
+                        <>
+                          <img
+                            src={univ.logo}
+                            alt={univ.name}
+                            loading="lazy"
+                            className="max-h-[3.6rem] w-auto max-w-[92%] object-contain transition-transform duration-200 group-hover:scale-103"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextElementSibling.style.display = 'block';
+                            }}
+                          />
+                          <span className="hidden font-bold text-navy text-sm text-center">
+                            {univ.name}
+                          </span>
+                        </>
                       ) : (
                         <span className="font-bold text-navy text-sm text-center">
                           {univ.name}
