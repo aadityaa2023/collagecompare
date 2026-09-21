@@ -69,10 +69,6 @@ export default function CollegesPage() {
   
   const [formData, setFormData] = useState(defaultFormData);
 
-  useEffect(() => {
-    fetchColleges();
-  }, []);
-
   const fetchColleges = async () => {
     try {
       const res = await fetch("/api/admin/colleges");
@@ -86,6 +82,10 @@ export default function CollegesPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchColleges();
+  }, []);
 
   const handleSaveCollege = async (e) => {
     e.preventDefault();
