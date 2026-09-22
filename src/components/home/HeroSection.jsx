@@ -86,6 +86,10 @@ export default function HeroSection() {
           <BubblingBackground />
         </div>
 
+        <h1 className="sr-only">
+          Compare Degrees, Colleges & Online Universities in India — Choose Your Future
+        </h1>
+
         {/* ── Part 2: Search + Booking Widget (card) ── */}
         <div className="bg-[#F7F7F7] px-4 pt-1 pb-5 relative z-20">
           {/* Search Bar with Colleges / Courses tabs */}
