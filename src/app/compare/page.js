@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, Suspense, useEffect } from "react";
+import React, { useState, useMemo, useCallback, Suspense, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -32,6 +32,67 @@ import {
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { formatFees, formatPackage } from "@/lib/formatters";
+
+function isEmptyValue(val, type = "text") {
+  if (val === null || val === undefined || val === false || val === "") return true;
+  if (type === "check") {
+    return !val || val === "false" || val === 0 || val === "0";
+  }
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    if (
+      trimmed === "" ||
+      trimmed === "—" ||
+      trimmed === "-" ||
+      trimmed === "--" ||
+      trimmed === "N/A" ||
+      trimmed === "NA" ||
+      trimmed === "n/a" ||
+      trimmed === "null" ||
+      trimmed === "undefined" ||
+      trimmed === "None" ||
+      trimmed === "#" ||
+      trimmed === "#N/A" ||
+      trimmed === "#undefined" ||
+      trimmed === "undefined%" ||
+      trimmed === "undefined/5" ||
+      trimmed === "0%" ||
+      trimmed === "0/5"
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const FEE_LABEL_MAP = {
+  btech: "B.Tech Fees",
+  mtech: "M.Tech Fees",
+  mba: "MBA Fees",
+  bba: "BBA Fees",
+  bca: "BCA Fees",
+  mca: "MCA Fees",
+  bsc: "B.Sc Fees",
+  msc: "M.Sc Fees",
+  bcom: "B.Com Fees",
+  mcom: "M.Com Fees",
+  ba: "BA Fees",
+  ma: "MA Fees",
+  bed: "B.Ed Fees",
+  llb: "LLB Fees",
+  llm: "LLM Fees",
+  mbbs: "MBBS Fees",
+  bdes: "B.Des Fees",
+  bpharm: "B.Pharm Fees",
+  mpharm: "M.Pharm Fees",
+  phd: "Ph.D Fees",
+};
+
+function getFeeLabel(key) {
+  const lower = String(key).toLowerCase().replace(/[^a-z]/g, "");
+  if (FEE_LABEL_MAP[lower]) return FEE_LABEL_MAP[lower];
+  return `${key.toUpperCase()} Fees`;
+}
 
 function CollegeSelector({ selectedId, onSelect, excludeIds = [], collegeList = [], findCollege }) {
   const [query, setQuery] = useState("");
@@ -74,7 +135,7 @@ function CollegeSelector({ selectedId, onSelect, excludeIds = [], collegeList = 
                   {selected.shortName}
                 </p>
                 <p className="text-xs text-slate-500">
-                  {selected.location.city}, {selected.location.state}
+                  {selected.location?.city || "Online"}, {selected.location?.state || "India"}
                 </p>
               </div>
               <ChevronDown className="h-4 w-4 text-slate-400 group-hover:text-slate-600" />
@@ -158,53 +219,98 @@ function CollegeSelector({ selectedId, onSelect, excludeIds = [], collegeList = 
 }
 
 function CompareRow({ label, values, type = "text", highlightBetter = null }) {
+  // If all values across compared colleges are empty, don't show this row
+  if (!values || !Array.isArray(values) || values.length === 0 || values.every((v) => isEmptyValue(v, type))) {
+    return null;
+  }
+
   const getBetterIdx =
     highlightBetter === "higher"
       ? () => {
-          const nums = values.map((v) =>
-            typeof v === "number" ? v : parseFloat(String(v).replace(/[^0-9.]/g, "")) || 0
-          );
-          const max = Math.max(...nums.filter(n => !isNaN(n)));
+          const nums = values.map((v) => {
+            if (isEmptyValue(v, type)) return -Infinity;
+            if (typeof v === "number") return v;
+            const parsed = parseFloat(String(v).replace(/[^0-9.]/g, ""));
+            return isNaN(parsed) ? -Infinity : parsed;
+          });
+          const validNums = nums.filter((n) => n !== -Infinity);
+          if (validNums.length === 0) return -1;
+          const max = Math.max(...validNums);
           return nums.indexOf(max);
         }
       : highlightBetter === "lower"
       ? () => {
-          const nums = values.map((v) =>
-            typeof v === "number" ? v : parseFloat(String(v).replace(/[^0-9.]/g, "")) || 0
-          );
-          const min = Math.min(...nums.filter(n => !isNaN(n) && n > 0));
+          const nums = values.map((v) => {
+            if (isEmptyValue(v, type)) return Infinity;
+            if (typeof v === "number") return v;
+            const parsed = parseFloat(String(v).replace(/[^0-9.]/g, ""));
+            return isNaN(parsed) || parsed <= 0 ? Infinity : parsed;
+          });
+          const validNums = nums.filter((n) => n !== Infinity);
+          if (validNums.length === 0) return -1;
+          const min = Math.min(...validNums);
           return nums.indexOf(min);
         }
       : null;
 
   const betterIdx = getBetterIdx ? getBetterIdx() : -1;
+  const nonCount = values.filter((v) => !isEmptyValue(v, type)).length;
 
   return (
     <tr className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors">
       <td className="px-3 sm:px-5 py-3 text-xs sm:text-sm text-slate-700 font-semibold bg-white sticky left-0 z-10 border-r border-slate-200 shadow-[2px_0_6px_-2px_rgba(0,0,0,0.06)] whitespace-nowrap w-36 sm:w-48">
         {label}
       </td>
-      {values.map((val, i) => (
-        <td
-          key={i}
-          className={`px-3 sm:px-5 py-3 text-xs sm:text-sm text-center min-w-[140px] sm:min-w-[180px] ${
-            betterIdx === i && values.length > 1
-              ? "text-emerald-700 font-bold bg-emerald-50/40"
-              : "text-navy font-medium"
-          }`}
-        >
-          {type === "check" ? (
-            val ? (
-              <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+      {values.map((val, i) => {
+        const empty = isEmptyValue(val, type);
+        return (
+          <td
+            key={i}
+            className={`px-3 sm:px-5 py-3 text-xs sm:text-sm text-center min-w-[140px] sm:min-w-[180px] ${
+              !empty && betterIdx === i && nonCount > 1
+                ? "text-emerald-700 font-bold bg-emerald-50/40"
+                : "text-navy font-medium"
+            }`}
+          >
+            {type === "check" ? (
+              val && !empty ? (
+                <Check className="h-4 w-4 text-emerald-500 mx-auto" />
+              ) : (
+                <Minus className="h-4 w-4 text-slate-300 mx-auto" />
+              )
             ) : (
-              <Minus className="h-4 w-4 text-slate-300 mx-auto" />
-            )
-          ) : (
-            val || "—"
-          )}
-        </td>
-      ))}
+              empty ? "—" : val
+            )}
+          </td>
+        );
+      })}
     </tr>
+  );
+}
+
+function CompareSection({ title, colSpan, children }) {
+  const childrenArray = React.Children.toArray(children);
+  const hasVisibleRows = childrenArray.some((child) => {
+    if (!child || !child.props) return false;
+    const { values, type } = child.props;
+    if (!values || !Array.isArray(values)) return true;
+    return !values.every((v) => isEmptyValue(v, type));
+  });
+
+  if (!hasVisibleRows) return null;
+
+  return (
+    <>
+      <tr>
+        <td
+          colSpan={colSpan}
+          className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
+        >
+          {title}
+        </td>
+      </tr>
+      {children}
+    </>
   );
 }
 
@@ -221,14 +327,66 @@ function CompareContent() {
   const [collegeList, setCollegeList] = useState([]);
 
   useEffect(() => {
-    fetch("/api/colleges", { cache: "no-store" })
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setCollegeList(data);
+    let isMounted = true;
+
+    const fetchColleges = async () => {
+      try {
+        const res = await fetch(`/api/colleges?t=${Date.now()}`, {
+          cache: "no-store",
+          headers: {
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache"
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && Array.isArray(data) && data.length > 0) {
+            setCollegeList(data);
+          }
         }
-      })
-      .catch((err) => console.error("Failed to load colleges for comparison:", err));
+      } catch (err) {
+        console.error("Failed to load colleges for comparison:", err);
+      }
+    };
+
+    fetchColleges();
+
+    // 1. Refetch when window or tab gets focus or visibility changes
+    const onFocus = () => fetchColleges();
+    window.addEventListener("focus", onFocus);
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") fetchColleges();
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    // 2. Real-time updates via BroadcastChannel across tabs
+    let bc;
+    try {
+      bc = new BroadcastChannel("cc_college_updates");
+      bc.onmessage = () => {
+        fetchColleges();
+      };
+    } catch (e) {}
+
+    // 3. Fallback storage listener for cross-tab updates
+    const onStorage = (e) => {
+      if (e.key === "cc_last_college_update") {
+        fetchColleges();
+      }
+    };
+    window.addEventListener("storage", onStorage);
+
+    // 4. Background auto-sync interval (every 8 seconds)
+    const interval = setInterval(fetchColleges, 8000);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("storage", onStorage);
+      if (bc) bc.close();
+      clearInterval(interval);
+    };
   }, []);
 
   const findCollege = useCallback((id) => {
@@ -258,6 +416,69 @@ function CompareContent() {
 
   const excludeIds = selectedIds.filter(Boolean);
   const hasComparison = selectedColleges.length >= 2;
+
+  const allFeeKeys = useMemo(() => {
+    const defaultKeys = ["btech", "mtech", "mba", "bba", "bca", "mca", "bsc", "bcom", "llb", "bpharm"];
+    const set = new Set(defaultKeys);
+    selectedColleges.forEach((c) => {
+      if (c.fees && typeof c.fees === "object") {
+        Object.keys(c.fees).forEach((k) => {
+          if (c.fees[k] !== undefined && c.fees[k] !== null && c.fees[k] !== "") {
+            set.add(k);
+          }
+        });
+      }
+    });
+    return Array.from(set);
+  }, [selectedColleges]);
+
+  const allComparedCourses = useMemo(() => {
+    const defaultCourses = [
+      "B.Tech",
+      "M.Tech",
+      "MBA",
+      "MCA",
+      "B.Sc",
+      "M.Sc",
+      "B.Com",
+      "BBA",
+      "BCA",
+      "B.Arch",
+      "B.Pharm",
+      "LLB",
+      "MBBS",
+      "Ph.D",
+    ];
+    const set = new Set(defaultCourses);
+    selectedColleges.forEach((c) => {
+      (c.coursesOffered || []).forEach((course) => {
+        if (course && typeof course === "string") set.add(course.trim());
+      });
+    });
+    return Array.from(set);
+  }, [selectedColleges]);
+
+  const allComparedFacilities = useMemo(() => {
+    const defaultFacilities = [
+      "Central Library",
+      "Sports Complex",
+      "Swimming Pool",
+      "Hospital",
+      "Wi-Fi Campus",
+      "Hostels",
+      "Research Labs",
+      "Innovation Center",
+      "Cafeteria",
+      "Auditorium",
+    ];
+    const set = new Set(defaultFacilities);
+    selectedColleges.forEach((c) => {
+      (c.facilities || []).forEach((f) => {
+        if (f && typeof f === "string") set.add(f.trim());
+      });
+    });
+    return Array.from(set);
+  }, [selectedColleges]);
 
   return (
     <main className="flex-1 bg-slate-50">
@@ -326,14 +547,14 @@ function CompareContent() {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                             <div className="absolute bottom-1 left-1.5 right-1.5 flex justify-between items-center text-[9px] text-white font-bold">
-                              <span>#{c.nirfRanking} NIRF</span>
+                              <span>#{c.nirfRanking || "N/A"} NIRF</span>
                             </div>
                           </div>
                           <span className="text-sm font-bold text-navy">
                             {c.shortName}
                           </span>
                           <span className="text-[11px] text-slate-400">
-                            {c.location?.city || "Online"} &middot; {c.type}
+                            {c.location?.city || "Online"} &middot; {c.type || "Private"}
                           </span>
                         </div>
                       </th>
@@ -343,214 +564,163 @@ function CompareContent() {
 
                 <tbody>
                   {/* Basic Info */}
-                  <tr>
-                    <td
-                      colSpan={selectedColleges.length + 1}
-                      className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
-                    >
-                      Basic Information
-                    </td>
-                  </tr>
-                  <CompareRow
-                    label="Type"
-                    values={selectedColleges.map((c) => c.type)}
-                  />
-                  <CompareRow
-                    label="Established"
-                    values={selectedColleges.map((c) => c.established || "—")}
-                  />
-                  <CompareRow
-                    label="Location"
-                    values={selectedColleges.map(
-                      (c) => `${c.location?.city || "Online"}, ${c.location?.state || "India"}`
-                    )}
-                  />
-                  <CompareRow
-                    label="NAAC Grade"
-                    values={selectedColleges.map((c) => c.naacGrade || "—")}
-                  />
-                  <CompareRow
-                    label="Total Students"
-                    values={selectedColleges.map((c) =>
-                      c.totalStudents ? c.totalStudents.toLocaleString() : "—"
-                    )}
-                    highlightBetter="higher"
-                  />
+                  <CompareSection title="Basic Information" colSpan={selectedColleges.length + 1}>
+                    <CompareRow
+                      label="Type"
+                      values={selectedColleges.map((c) => c.type)}
+                    />
+                    <CompareRow
+                      label="Established"
+                      values={selectedColleges.map((c) => c.established)}
+                    />
+                    <CompareRow
+                      label="Location"
+                      values={selectedColleges.map((c) =>
+                        c.location?.city
+                          ? `${c.location.city}, ${c.location.state || "India"}`
+                          : (typeof c.location === "string" && c.location ? c.location : "")
+                      )}
+                    />
+                    <CompareRow
+                      label="NAAC Grade"
+                      values={selectedColleges.map((c) => c.naacGrade)}
+                    />
+                    <CompareRow
+                      label="Total Students"
+                      values={selectedColleges.map((c) =>
+                        c.totalStudents ? c.totalStudents.toLocaleString() : ""
+                      )}
+                      highlightBetter="higher"
+                    />
+                  </CompareSection>
 
                   {/* Fees */}
-                  <tr>
-                    <td
-                      colSpan={selectedColleges.length + 1}
-                      className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
-                    >
-                      Fees
-                    </td>
-                  </tr>
-                  <CompareRow
-                    label="B.Tech Fees"
-                    values={selectedColleges.map((c) =>
-                      c.fees.btech ? formatFees(c.fees.btech) : "—"
-                    )}
-                    highlightBetter="lower"
-                  />
-                  <CompareRow
-                    label="M.Tech Fees"
-                    values={selectedColleges.map((c) =>
-                      c.fees.mtech ? formatFees(c.fees.mtech) : "—"
-                    )}
-                    highlightBetter="lower"
-                  />
-                  <CompareRow
-                    label="MBA Fees"
-                    values={selectedColleges.map((c) =>
-                      c.fees.mba ? formatFees(c.fees.mba) : "—"
-                    )}
-                    highlightBetter="lower"
-                  />
+                  <CompareSection title="Fees" colSpan={selectedColleges.length + 1}>
+                    {allFeeKeys.map((key) => (
+                      <CompareRow
+                        key={key}
+                        label={getFeeLabel(key)}
+                        values={selectedColleges.map((c) => {
+                          const feeVal =
+                            c.fees && typeof c.fees === "object"
+                              ? c.fees[key] || (c.fees.get ? c.fees.get(key) : undefined)
+                              : undefined;
+                          return feeVal ? formatFees(feeVal) : "";
+                        })}
+                        highlightBetter="lower"
+                      />
+                    ))}
+                  </CompareSection>
 
                   {/* Placements */}
-                  <tr>
-                    <td
-                      colSpan={selectedColleges.length + 1}
-                      className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
-                    >
-                      Placements
-                    </td>
-                  </tr>
-                  <CompareRow
-                    label="Avg Package"
-                    values={selectedColleges.map((c) =>
-                      formatPackage(c.avgPackage)
-                    )}
-                    highlightBetter="higher"
-                  />
-                  <CompareRow
-                    label="Highest Package"
-                    values={selectedColleges.map((c) =>
-                      formatPackage(c.highestPackage)
-                    )}
-                    highlightBetter="higher"
-                  />
-                  <CompareRow
-                    label="Placement %"
-                    values={selectedColleges.map(
-                      (c) => `${c.placementPercentage}%`
-                    )}
-                    highlightBetter="higher"
-                  />
-                  <CompareRow
-                    label="Top Recruiters"
-                    values={selectedColleges.map((c) =>
-                      c.topRecruiters.slice(0, 4).join(", ")
-                    )}
-                  />
+                  <CompareSection title="Placements" colSpan={selectedColleges.length + 1}>
+                    <CompareRow
+                      label="Avg Package"
+                      values={selectedColleges.map((c) =>
+                        c.avgPackage ? formatPackage(c.avgPackage) : ""
+                      )}
+                      highlightBetter="higher"
+                    />
+                    <CompareRow
+                      label="Highest Package"
+                      values={selectedColleges.map((c) =>
+                        c.highestPackage ? formatPackage(c.highestPackage) : ""
+                      )}
+                      highlightBetter="higher"
+                    />
+                    <CompareRow
+                      label="Placement %"
+                      values={selectedColleges.map((c) =>
+                        c.placementPercentage ? `${c.placementPercentage}%` : ""
+                      )}
+                      highlightBetter="higher"
+                    />
+                    <CompareRow
+                      label="Top Recruiters"
+                      values={selectedColleges.map((c) =>
+                        Array.isArray(c.topRecruiters) && c.topRecruiters.length > 0
+                          ? c.topRecruiters.slice(0, 4).join(", ")
+                          : ""
+                      )}
+                    />
+                  </CompareSection>
 
                   {/* Rankings */}
-                  <tr>
-                    <td
-                      colSpan={selectedColleges.length + 1}
-                      className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
-                    >
-                      Rankings & Ratings
-                    </td>
-                  </tr>
-                  <CompareRow
-                    label="NIRF Ranking"
-                    values={selectedColleges.map(
-                      (c) => `#${c.nirfRanking}`
-                    )}
-                    highlightBetter="lower"
-                  />
-                  <CompareRow
-                    label="Student Rating"
-                    values={selectedColleges.map((c) => `${c.rating}/5`)}
-                    highlightBetter="higher"
-                  />
-                  <CompareRow
-                    label="Reviews"
-                    values={selectedColleges.map((c) =>
-                      c.reviewCount.toLocaleString()
-                    )}
-                    highlightBetter="higher"
-                  />
+                  <CompareSection title="Rankings & Ratings" colSpan={selectedColleges.length + 1}>
+                    <CompareRow
+                      label="NIRF Ranking"
+                      values={selectedColleges.map((c) =>
+                        c.nirfRanking ? `#${c.nirfRanking}` : ""
+                      )}
+                      highlightBetter="lower"
+                    />
+                    <CompareRow
+                      label="Student Rating"
+                      values={selectedColleges.map((c) =>
+                        c.rating ? `${c.rating}/5` : ""
+                      )}
+                      highlightBetter="higher"
+                    />
+                    <CompareRow
+                      label="Reviews"
+                      values={selectedColleges.map((c) =>
+                        c.reviewCount ? c.reviewCount.toLocaleString() : ""
+                      )}
+                      highlightBetter="higher"
+                    />
+                  </CompareSection>
 
                   {/* Courses */}
-                  <tr>
-                    <td
-                      colSpan={selectedColleges.length + 1}
-                      className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
-                    >
-                      Courses Offered
-                    </td>
-                  </tr>
-                  {[
-                    "B.Tech",
-                    "M.Tech",
-                    "MBA",
-                    "MCA",
-                    "B.Sc",
-                    "M.Sc",
-                    "B.Arch",
-                    "B.Pharm",
-                    "LLB",
-                    "Ph.D",
-                  ].map((course) => (
-                    <CompareRow
-                      key={course}
-                      label={course}
-                      values={selectedColleges.map((c) =>
-                        c.coursesOffered.includes(course)
-                      )}
-                      type="check"
-                    />
-                  ))}
+                  <CompareSection title="Courses Offered" colSpan={selectedColleges.length + 1}>
+                    {allComparedCourses.map((course) => (
+                      <CompareRow
+                        key={course}
+                        label={course}
+                        values={selectedColleges.map((c) =>
+                          (c.coursesOffered || []).some(
+                            (co) =>
+                              co &&
+                              typeof co === "string" &&
+                              co.toLowerCase().trim() === course.toLowerCase().trim()
+                          )
+                        )}
+                        type="check"
+                      />
+                    ))}
+                  </CompareSection>
 
                   {/* Eligibility */}
-                  <tr>
-                    <td
-                      colSpan={selectedColleges.length + 1}
-                      className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
-                    >
-                      Eligibility
-                    </td>
-                  </tr>
-                  <CompareRow
-                    label="Entrance Exams"
-                    values={selectedColleges.map((c) =>
-                      c.entranceExams.join(", ")
-                    )}
-                  />
+                  <CompareSection title="Eligibility" colSpan={selectedColleges.length + 1}>
+                    <CompareRow
+                      label="Entrance Exams"
+                      values={selectedColleges.map((c) =>
+                        Array.isArray(c.entranceExams) && c.entranceExams.length > 0
+                          ? c.entranceExams.join(", ")
+                          : (c.cutoff && typeof c.cutoff === "object"
+                              ? Object.entries(c.cutoff).map(([k, v]) => `${k}: ${v}`).join(", ")
+                              : "")
+                      )}
+                    />
+                  </CompareSection>
 
                   {/* Campus Facilities */}
-                  <tr>
-                    <td
-                      colSpan={selectedColleges.length + 1}
-                      className="px-5 py-2.5 bg-crimson/5 text-xs font-bold text-crimson uppercase tracking-wider"
-                    >
-                      Campus Facilities
-                    </td>
-                  </tr>
-                  {[
-                    "Central Library",
-                    "Sports Complex",
-                    "Swimming Pool",
-                    "Hospital",
-                    "Wi-Fi Campus",
-                    "Hostels",
-                    "Research Labs",
-                    "Innovation Center",
-                    "Cafeteria",
-                    "Auditorium",
-                  ].map((facility) => (
-                    <CompareRow
-                      key={facility}
-                      label={facility}
-                      values={selectedColleges.map((c) =>
-                        c.facilities.includes(facility)
-                      )}
-                      type="check"
-                    />
-                  ))}
+                  <CompareSection title="Campus Facilities" colSpan={selectedColleges.length + 1}>
+                    {allComparedFacilities.map((facility) => (
+                      <CompareRow
+                        key={facility}
+                        label={facility}
+                        values={selectedColleges.map((c) =>
+                          (c.facilities || []).some(
+                            (f) =>
+                              f &&
+                              typeof f === "string" &&
+                              f.toLowerCase().trim() === facility.toLowerCase().trim()
+                          )
+                        )}
+                        type="check"
+                      />
+                    ))}
+                  </CompareSection>
                 </tbody>
               </table>
             </div>

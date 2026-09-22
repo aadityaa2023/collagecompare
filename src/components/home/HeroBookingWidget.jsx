@@ -15,7 +15,7 @@ const CONCERNS = [
   "Compare universities",
 ];
 
-export default function HeroBookingWidget() {
+export default function HeroBookingWidget({ mobileInline = false }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     concern: "",
@@ -26,14 +26,18 @@ export default function HeroBookingWidget() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleNext = () => {
-    if (step === 1) {
-      if (!formData.concern) {
-        setFormData((prev) => ({ ...prev, concern: "General Enquiry" }));
+    // Defer the state update slightly to allow the browser to release pointer capture 
+    // before the element is unmounted by AnimatePresence. Fixes "releasePointerCapture" error.
+    setTimeout(() => {
+      if (step === 1) {
+        if (!formData.concern) {
+          setFormData((prev) => ({ ...prev, concern: "General Enquiry" }));
+        }
+        setStep(2);
+      } else if (step === 2) {
+        handleSubmit();
       }
-      setStep(2);
-    } else if (step === 2) {
-      handleSubmit();
-    }
+    }, 10);
   };
 
   const handleSubmit = async () => {
@@ -58,9 +62,17 @@ export default function HeroBookingWidget() {
   };
 
   return (
-    <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 shadow-2xl shadow-navy/5 border border-white relative overflow-hidden h-full flex flex-col">
+    <div
+      className={`relative overflow-hidden h-full flex flex-col ${
+        mobileInline
+          ? "bg-transparent p-0"
+          : "bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 shadow-2xl shadow-navy/5 border border-white"
+      }`}
+    >
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-crimson/10 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
+      {!mobileInline && (
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-crimson/10 to-transparent rounded-full blur-3xl -z-10 pointer-events-none" />
+      )}
 
       {/* Trust Banner */}
       <div className="bg-emerald-50 border border-emerald-100 text-emerald-800 text-[11px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 mb-5 sm:mb-6 w-full text-center">

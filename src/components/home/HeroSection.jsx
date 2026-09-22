@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -17,16 +18,62 @@ const fadeUp = {
   }),
 };
 
+const BubblingBackground = () => {
+  const [bubbles, setBubbles] = useState([]);
+  
+  useEffect(() => {
+    const newBubbles = Array.from({ length: 25 }).map((_, i) => ({
+      id: i,
+      size: Math.random() * 30 + 10,
+      left: Math.random() * 100,
+      duration: Math.random() * 10 + 8,
+      delay: Math.random() * 5,
+      xOffset: Math.random() * 60 - 30
+    }));
+    setBubbles(newBubbles);
+  }, []);
+
+  if (bubbles.length === 0) return null;
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {bubbles.map((b) => (
+        <motion.div
+          key={b.id}
+          className="absolute bg-white/40 rounded-full blur-[0.5px]"
+          style={{
+            left: `${b.left}%`,
+            width: b.size,
+            height: b.size,
+            bottom: -50,
+          }}
+          animate={{
+            y: [0, -800],
+            x: [0, b.xOffset, 0, -b.xOffset, 0],
+            opacity: [0, 0.8, 0],
+          }}
+          transition={{
+            duration: b.duration,
+            repeat: Infinity,
+            ease: "linear",
+            delay: b.delay,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 export default function HeroSection() {
   return (
     <>
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           MOBILE LAYOUT (< lg)
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="lg:hidden relative overflow-hidden bg-white border-b border-slate-100 z-10">
+      <section className="lg:hidden relative overflow-hidden bg-[#F6F6F6] border-b border-slate-100 z-10">
 
         {/* ── Part 1: Hero Image with Text Overlay ── */}
-        <div className="relative w-full" style={{ height: "52vw", minHeight: "220px", maxHeight: "320px" }}>
+        <div className="relative w-full h-[400px] xs:h-[450px] sm:h-[500px]">
           {/* Background image */}
           <Image
             src="/heroimg.jpeg"
@@ -34,10 +81,11 @@ export default function HeroSection() {
             fill
             priority
             sizes="100vw"
-            className="object-cover object-top"
+            className="object-cover object-[center_top]"
           />
+          <BubblingBackground />
           {/* Bottom fade so it blends into white card below */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-white/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-white/95" />
 
           {/* Social Proof Pill — top left */}
           <motion.div
@@ -46,7 +94,7 @@ export default function HeroSection() {
             transition={{ duration: 0.35, delay: 0.05 }}
             className="absolute top-3 left-3"
           >
-            <div className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/95 border border-slate-200/80 shadow-md backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/95 border border-slate-200/80 shadow-md backdrop-blur-sm z-10 relative">
               <div className="flex -space-x-1.5 items-center shrink-0">
                 {[1, 2, 3].map((n) => (
                   <div key={n} className="relative h-5 w-5 rounded-full overflow-hidden ring-1.5 ring-white shadow-xs">
@@ -68,7 +116,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="absolute bottom-6 left-3 right-3"
+            className="absolute bottom-6 left-3 right-3 z-10"
           >
             <h1 className="text-[1.75rem] leading-[1.1] font-bold tracking-tight drop-shadow-sm">
               <span className="text-navy">Compare Degrees.</span>
@@ -79,7 +127,7 @@ export default function HeroSection() {
         </div>
 
         {/* ── Part 2: Search + Booking Widget (white card) ── */}
-        <div className="bg-white px-4 pt-1 pb-5">
+        <div className="bg-[#F6F6F6] px-4 pt-1 pb-5 relative z-20">
           {/* Search Bar with Colleges / Courses tabs */}
           <div className="mb-4">
             <SearchBar variant="hero" />
@@ -102,9 +150,9 @@ export default function HeroSection() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           DESKTOP LAYOUT (lg+)
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="hidden lg:block relative overflow-visible bg-white radial-glow-hero border-b border-slate-100 z-10">
+      <section className="hidden lg:block relative overflow-visible bg-[#F6F6F6] radial-glow-hero border-b border-slate-100 z-10">
         {/* Hero Central Image */}
-        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none -z-10 overflow-hidden">
+        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden" style={{ zIndex: 0 }}>
           <Image
             src="/heroimg.jpeg"
             alt="Student and University Background"
@@ -113,16 +161,17 @@ export default function HeroSection() {
             sizes="100vw"
             className="object-contain object-center opacity-100"
           />
+          <BubblingBackground />
         </div>
 
-        <div className="container-main relative pt-16 pb-14">
+        <div className="container-main relative pt-16 pb-14 z-10">
           <div className="grid lg:grid-cols-12 gap-8 items-center">
             {/* Left: Copy */}
             <motion.div
               initial="hidden"
               animate="visible"
               variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
-              className="lg:col-span-6 flex flex-col justify-center min-w-0 w-full"
+              className="lg:col-span-6 flex flex-col justify-center min-w-0 w-full relative z-10"
             >
               {/* Social Proof Pill */}
               <motion.div variants={fadeUp} custom={0} className="mb-4">
@@ -190,7 +239,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
-              className="lg:col-span-4 lg:col-start-9 relative overflow-hidden w-full max-w-full rounded-[2rem] transform-gpu"
+              className="lg:col-span-4 lg:col-start-9 relative overflow-hidden w-full max-w-full rounded-[2rem] transform-gpu z-10"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-rose-200/30 rounded-full blur-2xl pointer-events-none -z-10 transform-gpu" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-100/40 rounded-full blur-2xl pointer-events-none -z-10 transform-gpu" />

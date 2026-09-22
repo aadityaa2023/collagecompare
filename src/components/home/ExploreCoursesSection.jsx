@@ -10,7 +10,6 @@ import CourseCard from "@/components/shared/CourseCard";
 
 const CATEGORIES = [
   { id: "all", label: "All Programs" },
-  { id: "tech", label: "Engineering & Tech", filter: (c) => c.shortName?.includes("B.Tech") || c.shortName?.includes("M.Tech") },
   { id: "mgmt", label: "Management & Business", filter: (c) => c.shortName?.includes("MBA") || c.shortName?.includes("BBA") },
   { id: "cse", label: "AI & Computer Science", filter: (c) => c.name?.toLowerCase().includes("computer") || c.name?.toLowerCase().includes("data") },
   { id: "pg", label: "Postgraduate", filter: (c) => c.level === "PG" },
@@ -58,11 +57,10 @@ export default function ExploreCoursesSection({ courseList = [] }) {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${
-                activeCategory === cat.id
+              className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${activeCategory === cat.id
                   ? "bg-navy text-white shadow-sm"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy"
-              }`}
+                }`}
             >
               {cat.label}
             </button>

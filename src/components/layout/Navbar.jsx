@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Colleges", href: "/colleges" },
   { label: "Courses", href: "/courses" },
   { label: "Compare", href: "/compare" },
-  { label: "Rewards", href: "/rewards" },
+  { label: "Scholarships", href: "/scholarships" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
 ];
@@ -100,11 +100,10 @@ export default function Navbar() {
           <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/course-finder"
-              className="flex items-center gap-1.5 bg-crimson hover:bg-crimson-dark text-white px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-[0_8px_20px_-8px_rgba(225,29,72,0.6)] transition-all active:scale-95 touch-manipulation"
+              className="flex items-center gap-1.5 bg-crimson hover:bg-crimson-dark text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-[0_4px_14px_-4px_rgba(225,29,72,0.5)] transition-all active:scale-95 touch-manipulation whitespace-nowrap"
             >
-              <UserCheck className="h-4 w-4 shrink-0" />
-              <span className="hidden xs:inline sm:inline">Advisor</span>
-              <span className="sr-only">Course Advisor</span>
+              <UserCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
+              <span>Course Advisor</span>
             </Link>
 
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
