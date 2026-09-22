@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/shared/SectionWrapper";
 import { formatFees, formatPackage } from "@/lib/formatters";
 
-const DEGREES = ["MBA", "B.Tech", "MCA", "BBA", "B.Sc", "M.Tech"];
+const DEGREES = ["MBA", "BBA", "BCA", "B.Com", "MCA", "MA", "M.Com", "M.Sc"];
 
 const BUDGET_OPTIONS = [
   { id: "any", label: "Any Budget" },
@@ -68,9 +68,12 @@ export default function CollegePredictorSection() {
     let pool = dbColleges.filter((c) => {
       // Check degree offering
       if (selectedDegree) {
-        const offers = c.coursesOffered?.some(
-          (course) => course.toLowerCase() === selectedDegree.toLowerCase()
-        );
+        const selClean = selectedDegree.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const offers = (c.coursesOffered || []).some((course) => {
+          if (!course || typeof course !== "string") return false;
+          const cClean = course.toLowerCase().replace(/[^a-z0-9]/g, "");
+          return cClean === selClean || cClean.includes(selClean) || selClean.includes(cClean);
+        });
         if (!offers) return false;
       }
 

@@ -179,11 +179,11 @@ export default function HeroBookingWidget({ mobileInline = false }) {
                   placeholder="Enter Your Name *"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="h-12 rounded-xl border-slate-200 bg-white text-sm px-4 focus-visible:ring-crimson/20 focus-visible:border-crimson"
+                  className="h-10 sm:h-12 rounded-xl border-slate-200 bg-white text-sm px-3.5 sm:px-4 focus-visible:ring-crimson/20 focus-visible:border-crimson"
                 />
               </div>
               <div>
-                <label className="block text-xs sm:text-[13px] font-bold text-navy mb-1.5">
+                <label className="block text-xs sm:text-[13px] font-bold text-navy mb-1 sm:mb-1.5">
                   Contact Number
                 </label>
                 <Input
@@ -194,7 +194,7 @@ export default function HeroBookingWidget({ mobileInline = false }) {
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value.replace(/\D/g, "").slice(0, 10) })
                   }
-                  className="h-12 rounded-xl border-slate-200 bg-white text-sm px-4 focus-visible:ring-crimson/20 focus-visible:border-crimson"
+                  className="h-10 sm:h-12 rounded-xl border-slate-200 bg-white text-sm px-3.5 sm:px-4 focus-visible:ring-crimson/20 focus-visible:border-crimson"
                 />
               </div>
             </div>
@@ -202,7 +202,7 @@ export default function HeroBookingWidget({ mobileInline = false }) {
             <Button
               onClick={handleNext}
               disabled={!formData.name || formData.phone.length < 10 || isSubmitting}
-              className="w-full bg-crimson hover:bg-crimson-dark text-white font-bold text-sm h-12 rounded-xl mt-5 sm:mt-6 shadow-md shadow-crimson/20 disabled:opacity-70 disabled:cursor-not-allowed active:scale-98 touch-manipulation"
+              className="w-full bg-crimson hover:bg-crimson-dark text-white font-bold text-sm h-11 sm:h-12 rounded-xl mt-4 sm:mt-6 shadow-md shadow-crimson/20 disabled:opacity-70 disabled:cursor-not-allowed active:scale-98 touch-manipulation"
             >
               {isSubmitting ? (
                 <>
