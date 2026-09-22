@@ -100,10 +100,11 @@ export default function Navbar() {
           <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/course-finder"
-              className="flex items-center gap-1.5 bg-crimson hover:bg-crimson-light text-white px-4 py-2.25 rounded-xl text-sm font-semibold shadow-[0_8px_20px_-8px_rgba(225,29,72,0.6)] hover:shadow-[0_8px_25px_-5px_rgba(225,29,72,0.7)] transition-all hover:-translate-y-0.5"
+              className="flex items-center gap-1.5 bg-crimson hover:bg-crimson-dark text-white px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-[0_8px_20px_-8px_rgba(225,29,72,0.6)] transition-all active:scale-95 touch-manipulation"
             >
-              <UserCheck className="h-4 w-4" />
-              <span>Course Advisor</span>
+              <UserCheck className="h-4 w-4 shrink-0" />
+              <span className="hidden xs:inline sm:inline">Advisor</span>
+              <span className="sr-only">Course Advisor</span>
             </Link>
 
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>

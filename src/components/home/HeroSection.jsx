@@ -16,125 +16,189 @@ const fadeUp = {
     transition: { duration: 0.35, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] },
   }),
 };
+
 export default function HeroSection() {
-
   return (
-    <section className="relative overflow-visible bg-white radial-glow-hero border-b border-slate-100 z-10">
-      {/* Hero Central Image */}
-      <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none -z-10 overflow-hidden">
-        <Image
-          src="/heroimg.jpeg"
-          alt="Student and University Background"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover lg:object-contain object-bottom lg:object-center opacity-100"
-        />
-      </div>
+    <>
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          MOBILE LAYOUT (< lg)
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="lg:hidden relative overflow-hidden bg-white border-b border-slate-100 z-10">
 
-      <div className="container-main relative pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-14">
-        <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-8 items-center">
-          {/* Left: Copy (6 cols on lg) */}
+        {/* ── Part 1: Hero Image with Text Overlay ── */}
+        <div className="relative w-full" style={{ height: "52vw", minHeight: "220px", maxHeight: "320px" }}>
+          {/* Background image */}
+          <Image
+            src="/heroimg.jpeg"
+            alt="Student and University Background"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-top"
+          />
+          {/* Bottom fade so it blends into white card below */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-white/90" />
+
+          {/* Social Proof Pill — top left */}
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.08 } },
-            }}
-            className="lg:col-span-6 flex flex-col justify-center min-w-0 w-full"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.05 }}
+            className="absolute top-3 left-3"
           >
-            {/* Social Proof Pill with Real Avatars */}
-            <motion.div variants={fadeUp} custom={0} className="mb-3 sm:mb-4">
-              <div className="inline-flex max-w-full items-center gap-2 sm:gap-3 px-3 sm:px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-sm backdrop-blur-sm">
-                <div className="flex -space-x-2 items-center shrink-0">
-                  <div className="relative h-6 w-6 rounded-full overflow-hidden ring-2 ring-white shadow-xs">
-                    <Image src="/avatars/avatar-1.jpg" alt="Student" fill sizes="24px" className="object-cover" />
+            <div className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/95 border border-slate-200/80 shadow-md backdrop-blur-sm">
+              <div className="flex -space-x-1.5 items-center shrink-0">
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="relative h-5 w-5 rounded-full overflow-hidden ring-1.5 ring-white shadow-xs">
+                    <Image src={`/avatars/avatar-${n}.jpg`} alt="Student" fill sizes="20px" className="object-cover" />
                   </div>
-                  <div className="relative h-6 w-6 rounded-full overflow-hidden ring-2 ring-white shadow-xs">
-                    <Image src="/avatars/avatar-2.jpg" alt="Student" fill sizes="24px" className="object-cover" />
-                  </div>
-                  <div className="relative h-6 w-6 rounded-full overflow-hidden ring-2 ring-white shadow-xs">
-                    <Image src="/avatars/avatar-3.jpg" alt="Student" fill sizes="24px" className="object-cover" />
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-slate-700 truncate">
-                  <div className="flex text-amber-400 shrink-0">
-                    <Star className="h-3.5 w-3.5 fill-amber-400" />
-                  </div>
-                  <span className="font-semibold text-navy shrink-0">4.9/5</span>
-                  <span className="text-slate-400 shrink-0">&middot;</span>
-                  <span className="text-slate-600 font-medium truncate">50,000+ Students</span>
-                </div>
+                ))}
               </div>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1
-              variants={fadeUp}
-              custom={1}
-              className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-navy leading-[1.14] mb-3 sm:mb-5"
-            >
-              Compare Degrees.
-              <br />
-              <span className="gradient-text-crimson">Choose Your Future.</span>
-            </motion.h1>
-
-            {/* Subheading */}
-            <motion.p
-              variants={fadeUp}
-              custom={2}
-              className="text-sm sm:text-[17px] text-slate-700 font-medium leading-relaxed mb-5 sm:mb-6 max-w-[480px]"
-            >
-              Unbiased side-by-side comparisons of fees, verified placements, NIRF rankings, and ROI for top colleges across India. Stop guessing, start deciding.
-            </motion.p>
-
-            {/* Command-Bar Search */}
-            <motion.div variants={fadeUp} custom={3} className="mb-5 sm:mb-6 max-w-xl">
-              <SearchBar variant="hero" />
-            </motion.div>
-
-            {/* Action Buttons */}
-            <motion.div
-              variants={fadeUp}
-              custom={4}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3"
-            >
-              <Button
-                asChild
-                className="bg-crimson hover:bg-crimson-dark text-white font-bold px-6 h-11 text-sm rounded-xl shadow-md shadow-crimson/20 transition-all hover:shadow-lg hover:shadow-crimson/30 active:scale-98 text-center justify-center"
-              >
-                <Link href="/course-finder">
-                  <Compass className="mr-2 h-4 w-4 shrink-0" />
-                  <span>Guide me for course and college</span>
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="font-semibold px-5 h-11 text-sm rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs active:scale-98 text-center justify-center"
-              >
-                <Link href="/compare">Compare Colleges</Link>
-              </Button>
-            </motion.div>
-          </motion.div>
-
-          {/* Right: Interactive Live Comparison Widget (4 cols on lg, leaving middle open) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
-            className="lg:col-span-4 lg:col-start-9 relative overflow-hidden w-full max-w-full rounded-2xl sm:rounded-[2rem] transform-gpu mt-2 lg:mt-0"
-          >
-            {/* Ambient Lighting Gradients behind widget */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-rose-200/30 rounded-full blur-2xl pointer-events-none -z-10 transform-gpu" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-100/40 rounded-full blur-2xl pointer-events-none -z-10 transform-gpu" />
-
-            <div className="h-full">
-              <HeroBookingWidget />
+              <div className="flex items-center gap-1 text-[11px] text-slate-700">
+                <Star className="h-3 w-3 fill-amber-400 text-amber-400 shrink-0" />
+                <span className="font-bold text-navy">4.9/5</span>
+                <span className="text-slate-400">·</span>
+                <span className="font-medium text-slate-600">50,000+ Students</span>
+              </div>
             </div>
           </motion.div>
+
+          {/* Headline — bottom-left of image */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="absolute bottom-6 left-3 right-3"
+          >
+            <h1 className="text-[1.75rem] leading-[1.1] font-bold tracking-tight drop-shadow-sm">
+              <span className="text-navy">Compare Degrees.</span>
+              <br />
+              <span className="gradient-text-crimson">Choose Your Future.</span>
+            </h1>
+          </motion.div>
         </div>
-      </div>
-    </section>
+
+        {/* ── Part 2: Search + Booking Widget (white card) ── */}
+        <div className="bg-white px-4 pt-1 pb-5">
+          {/* Search Bar with Colleges / Courses tabs */}
+          <div className="mb-4">
+            <SearchBar variant="hero" />
+          </div>
+
+          {/* Booking widget — inline, no card border on mobile */}
+          <HeroBookingWidget mobileInline />
+
+          {/* Guide me link */}
+          <Link
+            href="/course-finder"
+            className="mt-3 flex items-center justify-center gap-2 text-sm font-semibold text-slate-600 hover:text-crimson transition-colors touch-manipulation py-1"
+          >
+            <Compass className="h-4 w-4 text-crimson shrink-0" />
+            <span>Guide me for course and college</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          DESKTOP LAYOUT (lg+)
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="hidden lg:block relative overflow-visible bg-white radial-glow-hero border-b border-slate-100 z-10">
+        {/* Hero Central Image */}
+        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none -z-10 overflow-hidden">
+          <Image
+            src="/heroimg.jpeg"
+            alt="Student and University Background"
+            fill
+            priority
+            sizes="100vw"
+            className="object-contain object-center opacity-100"
+          />
+        </div>
+
+        <div className="container-main relative pt-16 pb-14">
+          <div className="grid lg:grid-cols-12 gap-8 items-center">
+            {/* Left: Copy */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+              className="lg:col-span-6 flex flex-col justify-center min-w-0 w-full"
+            >
+              {/* Social Proof Pill */}
+              <motion.div variants={fadeUp} custom={0} className="mb-4">
+                <div className="inline-flex max-w-full items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/80 shadow-sm backdrop-blur-sm">
+                  <div className="flex -space-x-2 items-center shrink-0">
+                    {[1, 2, 3].map((n) => (
+                      <div key={n} className="relative h-6 w-6 rounded-full overflow-hidden ring-2 ring-white shadow-xs">
+                        <Image src={`/avatars/avatar-${n}.jpg`} alt="Student" fill sizes="24px" className="object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-slate-700 truncate">
+                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 shrink-0" />
+                    <span className="font-semibold text-navy shrink-0">4.9/5</span>
+                    <span className="text-slate-400 shrink-0">·</span>
+                    <span className="text-slate-600 font-medium truncate">50,000+ Students</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Headline */}
+              <motion.h1
+                variants={fadeUp}
+                custom={1}
+                className="text-[54px] font-bold tracking-tight text-navy leading-[1.14] mb-5"
+              >
+                Compare Degrees.
+                <br />
+                <span className="gradient-text-crimson">Choose Your Future.</span>
+              </motion.h1>
+
+              {/* Subheading */}
+              <motion.p variants={fadeUp} custom={2} className="text-[17px] text-slate-700 font-medium leading-relaxed mb-6 max-w-[480px]">
+                Unbiased side-by-side comparisons of fees, verified placements, NIRF rankings, and ROI for top colleges across India. Stop guessing, start deciding.
+              </motion.p>
+
+              {/* Search */}
+              <motion.div variants={fadeUp} custom={3} className="mb-6 max-w-xl">
+                <SearchBar variant="hero" />
+              </motion.div>
+
+              {/* Buttons */}
+              <motion.div variants={fadeUp} custom={4} className="flex items-center gap-3">
+                <Button
+                  asChild
+                  className="bg-crimson hover:bg-crimson-dark text-white font-bold px-6 h-11 text-sm rounded-xl shadow-md shadow-crimson/20 transition-all hover:shadow-lg hover:shadow-crimson/30 active:scale-98"
+                >
+                  <Link href="/course-finder">
+                    <Compass className="mr-2 h-4 w-4 shrink-0" />
+                    <span>Guide me for course and college</span>
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="font-semibold px-5 h-11 text-sm rounded-xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs active:scale-98"
+                >
+                  <Link href="/compare">Compare Colleges</Link>
+                </Button>
+              </motion.div>
+            </motion.div>
+
+            {/* Right: Booking Widget */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
+              className="lg:col-span-4 lg:col-start-9 relative overflow-hidden w-full max-w-full rounded-[2rem] transform-gpu"
+            >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-rose-200/30 rounded-full blur-2xl pointer-events-none -z-10 transform-gpu" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-100/40 rounded-full blur-2xl pointer-events-none -z-10 transform-gpu" />
+              <HeroBookingWidget />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

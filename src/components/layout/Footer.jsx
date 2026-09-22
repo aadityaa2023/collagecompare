@@ -81,7 +81,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#0B132B] text-slate-300 border-t border-slate-800/80 relative z-10 pb-20 lg:pb-0">
       {/* Main Footer Content */}
-      <div className="container-main py-12 sm:py-16">
+      <div className="container-main py-10 sm:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Brand Column (takes 4 columns on lg) */}
           <div className="lg:col-span-4 flex flex-col justify-between">
@@ -137,7 +137,7 @@ export default function Footer() {
           </div>
 
           {/* Links Columns (takes 8 columns on lg) */}
-          <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+          <div className="lg:col-span-8 grid grid-cols-2 gap-6 sm:gap-8">
             {/* Company Links */}
             <div>
               <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">
