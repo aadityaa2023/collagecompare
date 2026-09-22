@@ -39,13 +39,13 @@ export default function DegreeComparisonSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.4 }}
-            className="relative bg-white border-2 border-crimson/30 rounded-3xl p-6 sm:p-8 shadow-xl shadow-crimson/5 flex flex-col md:-mt-4 md:mb-4 z-10"
+            className="relative bg-white border-2 border-crimson/30 rounded-3xl p-6 sm:p-8 shadow-xl shadow-crimson/5 flex flex-col z-10"
           >
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-crimson text-white text-[11px] font-bold py-1.5 px-6 rounded-full tracking-wide uppercase shadow-md whitespace-nowrap">
               Most Popular
             </div>
             
-            <div className="text-center mb-8 pt-2">
+            <div className="text-center mb-8 h-16 flex flex-col justify-end">
               <h3 className="text-2xl font-extrabold text-navy">Online Degree</h3>
               <p className="text-xs text-slate-500 mt-1.5 font-medium">Best for modern learners</p>
             </div>
@@ -70,7 +70,7 @@ export default function DegreeComparisonSection() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col"
           >
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 h-16 flex flex-col justify-end">
               <h3 className="text-xl font-bold text-slate-700">Distance Degree</h3>
               <p className="text-xs text-slate-500 mt-1.5 font-medium">For self-paced study</p>
             </div>
@@ -101,7 +101,7 @@ export default function DegreeComparisonSection() {
             transition={{ duration: 0.4, delay: 0.2 }}
             className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex flex-col"
           >
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 h-16 flex flex-col justify-end">
               <h3 className="text-xl font-bold text-slate-700">Regular Degree</h3>
               <p className="text-xs text-slate-500 mt-1.5 font-medium">Traditional campus</p>
             </div>

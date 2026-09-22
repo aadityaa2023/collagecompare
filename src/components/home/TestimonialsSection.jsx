@@ -19,19 +19,24 @@ export default function TestimonialsSection({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
-          {testimonialList.slice(0, 3).map((t, i) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ delay: i * 0.06, duration: 0.35, ease: "easeOut" }}
-              className="transform-gpu"
-            >
-              <TestimonialCard testimonial={t} />
-            </motion.div>
-          ))}
+        {/* Marquee Wrapper */}
+        <div className="relative overflow-hidden w-full flex items-center pt-2 pb-8 -mx-4 px-4 sm:mx-0 sm:px-0">
+          
+          {/* Fading Edges for smooth entry/exit */}
+          <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+          <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+          
+          <div 
+            className="flex w-max animate-marquee hover:[animation-play-state:paused] gap-4 sm:gap-6 px-2"
+            style={{ animationDirection: "reverse" }} /* Reverses to move Left to Right as requested */
+          >
+            {/* Duplicated list for seamless infinite loop (must be exactly 2 sets for -50% translation) */}
+            {[...testimonialList, ...testimonialList].map((t, i) => (
+              <div key={`${t.id}-${i}`} className="w-[280px] sm:w-[350px] shrink-0 transform-gpu">
+                <TestimonialCard testimonial={t} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </SectionWrapper>

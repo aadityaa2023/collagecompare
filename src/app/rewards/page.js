@@ -1,4 +1,6 @@
 import RewardsClient from './RewardsClient';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
 export const metadata = {
   title: 'Rewards & Grants | Compare Degree',
@@ -6,5 +8,11 @@ export const metadata = {
 };
 
 export default function RewardsPage() {
-  return <RewardsClient />;
+  return (
+    <>
+      <Navbar />
+      <RewardsClient />
+      <Footer />
+    </>
+  );
 }
