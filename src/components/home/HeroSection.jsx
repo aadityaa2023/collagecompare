@@ -70,64 +70,24 @@ export default function HeroSection() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           MOBILE LAYOUT (< lg)
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="lg:hidden relative overflow-hidden bg-[#F6F6F6] border-b border-slate-100 z-10">
+      <section className="lg:hidden relative overflow-hidden bg-[#F7F7F7] border-b border-slate-100 z-10">
 
-        {/* ── Part 1: Hero Image with Text Overlay ── */}
-        <div className="relative w-full h-[400px] xs:h-[450px] sm:h-[500px]">
+        {/* ── Part 1: Hero Image (Complete Picture for Mobile) ── */}
+        <div className="relative w-full aspect-[1363/1154] overflow-hidden">
           {/* Background image */}
           <Image
-            src="/heroimg.jpeg"
-            alt="Student and University Background"
+            src="/heromobilenew.jpeg"
+            alt="Compare Degrees - Choose Your Future"
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[center_top]"
+            className="object-contain object-top"
           />
           <BubblingBackground />
-          {/* Bottom fade so it blends into white card below */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-white/95" />
-
-          {/* Social Proof Pill — top left */}
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.05 }}
-            className="absolute top-3 left-3"
-          >
-            <div className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-white/95 border border-slate-200/80 shadow-md backdrop-blur-sm z-10 relative">
-              <div className="flex -space-x-1.5 items-center shrink-0">
-                {[1, 2, 3].map((n) => (
-                  <div key={n} className="relative h-5 w-5 rounded-full overflow-hidden ring-1.5 ring-white shadow-xs">
-                    <Image src={`/avatars/avatar-${n}.jpg`} alt="Student" fill sizes="20px" className="object-cover" />
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-1 text-[11px] text-slate-700">
-                <Star className="h-3 w-3 fill-amber-400 text-amber-400 shrink-0" />
-                <span className="font-bold text-navy">4.9/5</span>
-                <span className="text-slate-400">·</span>
-                <span className="font-medium text-slate-600">50,000+ Students</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Headline — bottom-left of image */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="absolute bottom-6 left-3 right-3 z-10"
-          >
-            <h1 className="text-[1.75rem] leading-[1.1] font-bold tracking-tight drop-shadow-sm">
-              <span className="text-navy">Compare Degrees.</span>
-              <br />
-              <span className="gradient-text-crimson">Choose Your Future.</span>
-            </h1>
-          </motion.div>
         </div>
 
-        {/* ── Part 2: Search + Booking Widget (white card) ── */}
-        <div className="bg-[#F6F6F6] px-4 pt-1 pb-5 relative z-20">
+        {/* ── Part 2: Search + Booking Widget (card) ── */}
+        <div className="bg-[#F7F7F7] px-4 pt-1 pb-5 relative z-20">
           {/* Search Bar with Colleges / Courses tabs */}
           <div className="mb-4">
             <SearchBar variant="hero" />
@@ -150,7 +110,7 @@ export default function HeroSection() {
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           DESKTOP LAYOUT (lg+)
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="hidden lg:block relative overflow-visible bg-[#F6F6F6] radial-glow-hero border-b border-slate-100 z-10">
+      <section className="hidden lg:block relative overflow-visible bg-[#F7F7F7] border-b border-slate-100 z-10">
         {/* Hero Central Image */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden" style={{ zIndex: 0 }}>
           <Image
