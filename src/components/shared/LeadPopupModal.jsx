@@ -119,21 +119,51 @@ export default function LeadPopupModal() {
     }
 
     try {
-      // Clear any legacy dismissed session key
-      sessionStorage.removeItem("cc_lead_dismissed");
-
       const submitted = localStorage.getItem("cc_lead_submitted");
       if (submitted === "true") {
         setHasAlreadySubmitted(true);
         return;
       }
 
-      // Automatically open modal after 1.5s delay if not submitted
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 1500);
+      // 1. Initial Popup
+      const initialShown = sessionStorage.getItem("cc_lead_initial_shown");
+      let initialTimer;
+      if (!initialShown) {
+        initialTimer = setTimeout(() => {
+          setIsOpen((prev) => {
+            if (!prev) {
+              sessionStorage.setItem("cc_lead_initial_shown", "true");
+              return true;
+            }
+            return prev;
+          });
+        }, 1500);
+      }
 
-      return () => clearTimeout(timer);
+      // 2. 1-Minute Interval Popup
+      const intervalTimer = setInterval(() => {
+        const isSub = localStorage.getItem("cc_lead_submitted") === "true";
+        if (isSub) return;
+
+        const lastClosed = sessionStorage.getItem("cc_lead_last_closed");
+        if (lastClosed) {
+          const timePassed = Date.now() - parseInt(lastClosed, 10);
+          if (timePassed >= 60000) {
+            setIsOpen((prev) => {
+              if (!prev) {
+                sessionStorage.removeItem("cc_lead_last_closed");
+                return true;
+              }
+              return prev;
+            });
+          }
+        }
+      }, 5000); // Check every 5 seconds
+
+      return () => {
+        clearTimeout(initialTimer);
+        clearInterval(intervalTimer);
+      };
     } catch (e) {
       console.warn("Storage check error:", e);
     }
@@ -146,6 +176,7 @@ export default function LeadPopupModal() {
 
   const handleClose = () => {
     setIsOpen(false);
+    sessionStorage.setItem("cc_lead_last_closed", Date.now().toString());
   };
 
   const validate = () => {
