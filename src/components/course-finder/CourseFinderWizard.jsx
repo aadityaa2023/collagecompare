@@ -24,6 +24,80 @@ import {
 import { Button } from "@/components/ui/button";
 import { submitCounsellingData } from "@/lib/leadService";
 
+export const EDUCATION_MAP = {
+  "12th": "12th Standard (Appearing / Passed)",
+  "graduate": "Bachelor's Degree (Graduate)",
+  "diploma": "Diploma / Polytechnic",
+  "10th": "10th Standard / Matriculation",
+};
+
+export const STREAM_MAP = {
+  "pcm": "Science (PCM) - Physics, Chemistry, Maths",
+  "pcb": "Science (PCB) - Physics, Chemistry, Biology",
+  "commerce": "Commerce - Accounts, Economics, Business",
+  "arts": "Arts / Humanities - Social Sciences, Languages",
+  "vocational": "Vocational / Others - Applied technical courses",
+};
+
+export const PERCENTAGE_MAP = {
+  "85_plus": "85% & Above (Top Tier)",
+  "70_85": "70% - 85% (Competitive)",
+  "55_70": "55% - 70% (Moderate)",
+  "below_55": "Under 55% (Skill Driven)",
+};
+
+export const INTERESTS_MAP = {
+  "tech": "Doctorate and Executive Programs (DBA, EMBA, PGDM, Global MBA)",
+  "management": "Management & Business (BBA, MBA, Marketing, Finance)",
+  "healthcare": "Hospitality & Healthcare (Hospitality and Healthcare Management)",
+  "design": "Arts & Research (BA, MA, BSC, MSC)",
+  "law": "Banking & Commerce (B.Com, M.Com, Finance, Banking, Accounting)",
+  "analytics": "AI, Data & Computer Applications (Data Science, BCA/MCA, AI, Cloud)",
+};
+
+export const CAREER_GOALS_MAP = {
+  "high_salary": "High-Paying Tech / Corporate Job (₹12 - ₹30+ LPA)",
+  "leadership": "Corporate Leadership & Product Management",
+  "research": "Higher Studies & Global Research (MS/M.Tech/Ph.D)",
+  "startup": "Entrepreneurship & Building a Startup",
+  "govt": "Government Services / PSUs & Civil Exams",
+};
+
+export const COURSES_MAP = {
+  "all": "Auto-Recommend for Me",
+  "ba": "BA",
+  "bcom": "B.COM",
+  "bba": "BBA",
+  "bca": "BCA",
+  "ba-hons": "BA (Hons)",
+  "bcom-hons": "B.COM (Hons)",
+  "bba-hons": "BBA (Hons)",
+  "bsc": "BSC",
+  "ma": "MA",
+  "mcom": "M.COM",
+  "mba": "MBA",
+  "mca": "MCA",
+  "msc-ds": "MSC Data Science",
+  "msc-math": "MSC Mathematics",
+  "dba": "DBA",
+  "exec-prog": "Executive Programs",
+  "cert-dip": "Certificate & Diploma",
+};
+
+export const WORKING_STATUS_MAP = {
+  "student": "Student (Currently pursuing a degree)",
+  "working_professional": "Working Professional (Currently employed)",
+  "unemployed": "Unemployed (Looking for job opportunities)",
+  "self_employed": "Self Employed (Business owner / Freelancer)",
+};
+
+export const BUDGET_MAP = {
+  "budget_low": "Budget Friendly (< ₹2L / Year)",
+  "budget_mid": "Mid-Range (₹2L - ₹4L / Year)",
+  "scholarship": "For Working Professionals (Weekend / Evening Batches)",
+  "flexible": "Flexible Budget / ROI Focused",
+};
+
 const STEPS = [
   { id: "education", title: "Education & Qualification", subtitle: "Your current academic background" },
   { id: "stream", title: "Stream & Performance", subtitle: "Subjects and score bracket" },
@@ -48,6 +122,7 @@ export default function CourseFinderWizard({ onComplete }) {
     preferredCourseId: "all",
     region: "all",
     budget: "flexible",
+    workingStatus: "student",
     name: "",
     phone: "",
     email: "",
@@ -64,20 +139,106 @@ export default function CourseFinderWizard({ onComplete }) {
       }
       setIsAnalyzing(true);
       try {
+        const selectedEducation = EDUCATION_MAP[answers.education] || answers.education;
+        const selectedStream = STREAM_MAP[answers.stream] || answers.stream;
+        const selectedPercentage = PERCENTAGE_MAP[answers.percentage] || answers.percentage;
+        const selectedInterests = (answers.interests || []).map((id) => INTERESTS_MAP[id] || id);
+        const selectedCareerGoals = (answers.careerGoals || []).map((id) => CAREER_GOALS_MAP[id] || id);
+        const selectedCourse = COURSES_MAP[answers.preferredCourseId] || answers.preferredCourseId || "Auto-Recommend for Me";
+        const selectedWorkingStatus = WORKING_STATUS_MAP[answers.workingStatus] || answers.workingStatus || "Student";
+        const selectedBudget = BUDGET_MAP[answers.budget] || answers.budget;
+
+        const stepDetails = [
+          {
+            step: 1,
+            title: "Education & Qualification",
+            question: "What is your current or highest qualification?",
+            answer: selectedEducation,
+            raw: answers.education,
+          },
+          {
+            step: 2,
+            title: "Stream & Performance",
+            question: "Which academic stream did you study and expected score?",
+            answer: `${selectedStream} • Score: ${selectedPercentage}`,
+            stream: selectedStream,
+            percentage: selectedPercentage,
+            raw: { stream: answers.stream, percentage: answers.percentage },
+          },
+          {
+            step: 3,
+            title: "Fields of Interest",
+            question: "Select your field(s) of interest",
+            answer: selectedInterests.join(", "),
+            interests: selectedInterests,
+            raw: answers.interests,
+          },
+          {
+            step: 4,
+            title: "Career Ambition",
+            question: "What is your primary career goal after graduation?",
+            answer: selectedCareerGoals.join(", "),
+            careerGoals: selectedCareerGoals,
+            raw: answers.careerGoals,
+          },
+          {
+            step: 5,
+            title: "Preferred Course",
+            question: "Do you have a specific course in mind?",
+            answer: selectedCourse,
+            raw: answers.preferredCourseId,
+          },
+          {
+            step: 6,
+            title: "Working Status & Budget",
+            question: "Your current status and financial preferences",
+            answer: `Status: ${selectedWorkingStatus} • Budget: ${selectedBudget}`,
+            workingStatus: selectedWorkingStatus,
+            budget: selectedBudget,
+            raw: { workingStatus: answers.workingStatus, budget: answers.budget },
+          },
+          {
+            step: 7,
+            title: "Lead Contact Information",
+            question: "Student Details for Counselling",
+            answer: `Name: ${answers.name.trim()} • Phone: ${answers.phone.trim()} • Email: ${answers.email.trim().toLowerCase()}`,
+            name: answers.name.trim(),
+            phone: answers.phone.trim(),
+            email: answers.email.trim().toLowerCase(),
+          },
+        ];
+
+        const summaryText = `${selectedEducation} • ${selectedStream.split(" - ")[0]} (${answers.percentage === "85_plus" ? "85%+" : answers.percentage}) • Preferred: ${selectedCourse} • ${selectedWorkingStatus.split(" (")[0]} • ${selectedBudget.split(" (")[0]}`;
+
         await submitCounsellingData({
-          name: answers.name,
-          phone: answers.phone,
-          email: answers.email,
+          name: answers.name.trim(),
+          phone: answers.phone.trim(),
+          email: answers.email.trim().toLowerCase(),
+          preferredCourse: selectedCourse,
+          source: "Course Advisor Wizard",
+          education: selectedEducation,
+          stream: selectedStream,
+          percentage: selectedPercentage,
+          workingStatus: selectedWorkingStatus,
+          budget: selectedBudget,
           answersSummary: {
-            education: answers.education,
-            stream: answers.stream,
-            percentage: answers.percentage,
-            interests: answers.interests,
-            careerGoals: answers.careerGoals,
+            education: selectedEducation,
+            stream: selectedStream,
+            percentage: selectedPercentage,
+            interests: selectedInterests,
+            careerGoals: selectedCareerGoals,
+            preferredCourse: selectedCourse,
             preferredCourseId: answers.preferredCourseId,
-            region: answers.region,
-            budget: answers.budget
-          }
+            workingStatus: selectedWorkingStatus,
+            budget: selectedBudget,
+            region: answers.region || "all",
+            summaryText,
+            stepDetails,
+            allAnswers: {
+              ...answers,
+              workingStatus: answers.workingStatus || "student",
+            },
+          },
         });
       } catch (err) {
         console.error("Failed to submit counselling data", err);

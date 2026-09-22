@@ -10,7 +10,6 @@ import {
   LogOut,
   Menu,
   X,
-  Bell,
   Search,
   Globe,
 } from "lucide-react";
@@ -139,12 +138,6 @@ export default function AdminLayout({ children }) {
                 className="bg-transparent border-none outline-none text-sm w-full placeholder:text-slate-400 text-navy"
               />
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button className="p-2.5 text-slate-500 hover:bg-slate-100 rounded-full transition-colors relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-crimson rounded-full border-2 border-white"></span>
-            </button>
           </div>
         </header>
 

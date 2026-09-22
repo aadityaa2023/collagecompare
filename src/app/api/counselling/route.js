@@ -16,7 +16,22 @@ export async function POST(request) {
   try {
     await dbConnect();
     const body = await request.json();
-    const { name, phone, email, state, city, preferredCourse, course, source, answersSummary } = body;
+    const {
+      name,
+      phone,
+      email,
+      state,
+      city,
+      preferredCourse,
+      course,
+      source,
+      education,
+      stream,
+      percentage,
+      workingStatus,
+      budget,
+      answersSummary,
+    } = body;
 
     if (!name || !phone) {
       return NextResponse.json(
@@ -25,6 +40,7 @@ export async function POST(request) {
       );
     }
 
+    const resolvedAnswersSummary = answersSummary || {};
     const lead = new Lead({
       name: name.trim(),
       phone: phone.trim(),
@@ -33,7 +49,12 @@ export async function POST(request) {
       state: state || "Not specified",
       preferredCourse: preferredCourse || course || "General Counselling",
       source: source || "Website Lead Form",
-      answersSummary: answersSummary || {},
+      education: (education || resolvedAnswersSummary.education || "").trim(),
+      stream: (stream || resolvedAnswersSummary.stream || "").trim(),
+      percentage: (percentage || resolvedAnswersSummary.percentage || "").trim(),
+      workingStatus: (workingStatus || resolvedAnswersSummary.workingStatus || "").trim(),
+      budget: (budget || resolvedAnswersSummary.budget || "").trim(),
+      answersSummary: resolvedAnswersSummary,
     });
 
     await lead.save();

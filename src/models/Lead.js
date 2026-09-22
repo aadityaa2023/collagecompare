@@ -34,6 +34,26 @@ const leadSchema = new mongoose.Schema(
       type: String,
       default: 'Website Popup',
     },
+    education: {
+      type: String,
+      default: '',
+    },
+    stream: {
+      type: String,
+      default: '',
+    },
+    percentage: {
+      type: String,
+      default: '',
+    },
+    workingStatus: {
+      type: String,
+      default: '',
+    },
+    budget: {
+      type: String,
+      default: '',
+    },
     answersSummary: {
       type: mongoose.Schema.Types.Mixed,
       default: {},

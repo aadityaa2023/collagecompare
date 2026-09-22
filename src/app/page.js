@@ -8,6 +8,7 @@ import {
   HowItWorksSection,
   TestimonialsSection,
   ContactSection,
+  DegreeComparisonSection,
 } from "@/components/home";
 import dbConnect from "@/lib/mongodb";
 import Course from "@/models/Course";
@@ -33,6 +34,7 @@ export default async function HomePage() {
         <TrustedUniversitiesSection />
         <FeaturesSection />
         <ExploreCoursesSection courseList={courses} />
+        <DegreeComparisonSection />
         <HowItWorksSection />
         <TestimonialsSection />
         <ContactSection />

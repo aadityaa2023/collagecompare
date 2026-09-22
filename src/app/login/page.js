@@ -33,7 +33,7 @@ export default function LoginPage() {
           </div>
 
           <h1 className="text-2xl font-bold text-navy">
-            Welcome to Course Finder!
+            Welcome to Course Advisor!
           </h1>
 
           <p className="text-sm text-slate-500 leading-relaxed">
@@ -45,7 +45,7 @@ export default function LoginPage() {
             className="w-full h-11 bg-crimson hover:bg-crimson-dark text-white font-bold rounded-xl shadow-md shadow-crimson/20"
           >
             <Link href="/course-finder">
-              <span>Go to Course Finder</span>
+              <span>Go to Course Advisor</span>
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
           </Button>

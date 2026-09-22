@@ -56,7 +56,7 @@ export default function AboutPage() {
             <div className="grid sm:grid-cols-3 gap-8 mt-10 text-left">
               {[
                 "Comprehensive database of 100+ approved online universities.",
-                "AI-powered Course Finder to match your exact career goals.",
+                "AI-powered Course Advisor to match your exact career goals.",
                 "Zero hidden fees. Our counselling and platform are completely free.",
               ].map((text, i) => (
                 <div key={i} className="flex gap-3">

@@ -17,7 +17,7 @@ const footerLinks = {
   ],
   resources: [
     { label: "Free Counselling", href: "/contact" },
-    { label: "Course Finder", href: "/course-finder" },
+    { label: "Course Advisor", href: "/course-finder" },
     { label: "College Predictor", href: "/course-finder" },
     { label: "Admission Guidance", href: "/contact" },
   ],
