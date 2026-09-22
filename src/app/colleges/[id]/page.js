@@ -25,13 +25,12 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { colleges, getCollegeById, formatFees, formatPackage } from "@/data/colleges";
+import { formatFees, formatPackage } from "@/lib/formatters";
 
 export default function CollegeDetailPage({ params }) {
   const { id } = use(params);
-  const initialCollege = getCollegeById(id);
-  const [college, setCollege] = useState(initialCollege);
-  const [loading, setLoading] = useState(!initialCollege);
+  const [college, setCollege] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -42,18 +41,18 @@ export default function CollegeDetailPage({ params }) {
         if (res.ok) {
           const data = await res.json();
           if (isMounted) setCollege(data);
-        } else if (!initialCollege) {
+        } else {
           if (isMounted) setError(true);
         }
       } catch (err) {
-        if (!initialCollege && isMounted) setError(true);
+        if (isMounted) setError(true);
       } finally {
         if (isMounted) setLoading(false);
       }
     };
     fetchCollege();
     return () => { isMounted = false; };
-  }, [id, initialCollege]);
+  }, [id]);
 
   if (loading) {
     return (

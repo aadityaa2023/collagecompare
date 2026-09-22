@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CollegeCard from "@/components/shared/CollegeCard";
-import { getCollegeById } from "@/data/colleges";
+// Removed static getCollegeById import
 
 export default function CourseDetailPage({ params }) {
   const { id } = use(params);
@@ -78,7 +78,7 @@ export default function CourseDetailPage({ params }) {
       const fromDb = allColleges.find(
         (c) => c.id === cid || c.id?.toLowerCase() === cid?.toLowerCase() || c._id === cid
       );
-      return fromDb || getCollegeById(cid);
+      return fromDb;
     })
     .filter(Boolean);
 

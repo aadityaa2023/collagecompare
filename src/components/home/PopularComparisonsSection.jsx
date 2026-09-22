@@ -6,29 +6,29 @@ import { motion } from "framer-motion";
 import { School, ChevronRight, ArrowRight, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/shared/SectionWrapper";
-import { colleges } from "@/data/colleges";
-
-const defaultComparisons = [
-  {
-    tag: "Top Online Battle",
-    college1: colleges[0],
-    college2: colleges[1],
-  },
-  {
-    tag: "Premier Private",
-    college1: colleges[2],
-    college2: colleges[3],
-  },
-  {
-    tag: "Trending Universities",
-    college1: colleges[4],
-    college2: colleges[5],
-  },
-];
+import { useState, useEffect } from "react";
 
 export default function PopularComparisonsSection({
-  comparisons = defaultComparisons,
+  comparisons: initialComparisons = [],
 }) {
+  const [comparisons, setComparisons] = useState(initialComparisons);
+
+  useEffect(() => {
+    if (initialComparisons.length > 0) return;
+    fetch("/api/colleges")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length >= 6) {
+          setComparisons([
+            { tag: "Top Online Battle", college1: data[0], college2: data[1] },
+            { tag: "Premier Private", college1: data[2], college2: data[3] },
+            { tag: "Trending Universities", college1: data[4], college2: data[5] },
+          ]);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch comparisons", err));
+  }, [initialComparisons]);
+
   return (
     <SectionWrapper className="section-padding bg-slate-50/60 relative">
       <div className="container-main">

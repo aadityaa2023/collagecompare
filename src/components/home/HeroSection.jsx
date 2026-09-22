@@ -22,7 +22,7 @@ const fadeUp = {
 export default function HeroSection() {
 
   return (
-    <section className="relative overflow-hidden bg-white radial-glow-hero border-b border-slate-100">
+    <section className="relative overflow-visible bg-white radial-glow-hero border-b border-slate-100 z-10">
       {/* Subtle Dot Pattern Overlay */}
       <div className="absolute inset-0 bg-dot-pattern opacity-60 pointer-events-none [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,#000_60%,transparent_100%)]" />
 

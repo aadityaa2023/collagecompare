@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/shared/SectionWrapper";
-import { colleges as trustedUniversities } from "@/data/colleges";
 
 export default function TrustedUniversitiesSection() {
   const [showAll, setShowAll] = useState(false);
-  const [univList, setUnivList] = useState(trustedUniversities);
+  const [univList, setUnivList] = useState([]);
+
 
   useEffect(() => {
     fetch("/api/colleges", { cache: "no-store" })

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Course from '@/models/Course';
-import { courses as localCourses } from '@/data/courses';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -35,19 +34,6 @@ export async function GET(request, { params }) {
       }).lean();
     } catch (dbError) {
       console.error('Database query error in /api/courses/[slug]:', dbError);
-    }
-
-    // Fallback to local courses if not found in database
-    if (!course) {
-      const fallback = localCourses.find(
-        (c) => c.id?.toLowerCase() === slug.toLowerCase()
-      );
-      if (fallback) {
-        course = {
-          ...fallback,
-          slug: fallback.id,
-        };
-      }
     }
 
     if (!course) {

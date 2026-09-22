@@ -13,16 +13,20 @@ export default function CourseFinderPage() {
   const [recommendations, setRecommendations] = useState(null);
   const [userAnswers, setUserAnswers] = useState(null);
   const [dbCourses, setDbCourses] = useState([]);
+  const [dbColleges, setDbColleges] = useState([]);
 
   useEffect(() => {
     fetch("/api/courses", { cache: "no-store" }).then(res => res.json()).then(data => {
       if (Array.isArray(data)) setDbCourses(data);
     }).catch(console.error);
+    fetch("/api/colleges", { cache: "no-store" }).then(res => res.json()).then(data => {
+      if (Array.isArray(data)) setDbColleges(data);
+    }).catch(console.error);
   }, []);
 
   const handleWizardComplete = (answers) => {
     setUserAnswers(answers);
-    const results = getPersonalizedRecommendations(answers, dbCourses.length ? dbCourses : undefined);
+    const results = getPersonalizedRecommendations(answers, dbCourses, dbColleges);
     setRecommendations(results);
     // Smooth scroll up to top of results
     if (typeof window !== "undefined") {

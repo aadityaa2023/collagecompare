@@ -13,6 +13,7 @@ const navLinks = [
   { label: "Colleges", href: "/colleges" },
   { label: "Courses", href: "/courses" },
   { label: "Compare", href: "/compare" },
+  { label: "Rewards", href: "/rewards" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
 ];

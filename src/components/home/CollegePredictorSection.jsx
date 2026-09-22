@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "@/components/shared/SectionWrapper";
-import { colleges, formatFees, formatPackage } from "@/data/colleges";
+import { formatFees, formatPackage } from "@/lib/formatters";
 
 const DEGREES = ["MBA", "B.Tech", "MCA", "BBA", "B.Sc", "M.Tech"];
 
@@ -48,9 +48,24 @@ export default function CollegePredictorSection() {
   const [selectedMode, setSelectedMode] = useState("online");
   const [selectedPriority, setSelectedPriority] = useState("placement");
 
+  const [dbColleges, setDbColleges] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/colleges", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDbColleges(data);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch colleges", err));
+  }, []);
+
   // Dynamic matching algorithm based on user selection
   const matchedColleges = useMemo(() => {
-    let pool = colleges.filter((c) => {
+    if (dbColleges.length === 0) return [];
+    
+    let pool = dbColleges.filter((c) => {
       // Check degree offering
       if (selectedDegree) {
         const offers = c.coursesOffered?.some(
@@ -65,7 +80,7 @@ export default function CollegePredictorSection() {
           c.name.toLowerCase().includes("online") ||
           c.location?.city?.toLowerCase() === "online" ||
           c.id.includes("online");
-        if (!isOnline && colleges.some((col) => col.id.includes("online"))) {
+        if (!isOnline && dbColleges.some((col) => col.id?.includes("online"))) {
           // Keep pool inclusive
         }
       }
@@ -90,12 +105,12 @@ export default function CollegePredictorSection() {
 
     // Fallback if strict filter yields too few results
     if (pool.length === 0) {
-      pool = colleges.filter((c) =>
+      pool = dbColleges.filter((c) =>
         c.coursesOffered?.includes(selectedDegree)
       );
     }
     if (pool.length === 0) {
-      pool = colleges.slice(0, 5);
+      pool = dbColleges.slice(0, 5);
     }
 
     // Sort according to selected priority
@@ -116,7 +131,7 @@ export default function CollegePredictorSection() {
         return 0;
       })
       .slice(0, 3);
-  }, [selectedDegree, selectedBudget, selectedMode, selectedPriority]);
+  }, [selectedDegree, selectedBudget, selectedMode, selectedPriority, dbColleges]);
 
   return (
     <SectionWrapper className="relative w-full overflow-hidden bg-gradient-to-br from-navy-dark via-navy to-slate-900 text-white py-14 sm:py-20 lg:py-24 border-b border-slate-800">

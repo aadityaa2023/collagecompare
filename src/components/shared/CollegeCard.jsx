@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin, TrendingUp, Trophy, Star, GraduationCap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { formatFees, formatPackage } from "@/data/colleges";
+import { formatFees, formatPackage } from "@/lib/formatters";
 
 const typeColors = {
   IIT: "bg-amber-50 text-amber-700 border-amber-200",

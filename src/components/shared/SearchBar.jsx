@@ -2,7 +2,6 @@
 
 import { Search, ArrowRight, Building2, BookOpen, Command, X } from "lucide-react";
 import { useState, useMemo, useRef, useEffect } from "react";
-import { searchColleges } from "@/data/colleges";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -50,7 +49,7 @@ export default function SearchBar({ className = "", variant = "hero" }) {
           c.location?.state?.toLowerCase().includes(q)
         ).slice(0, 5);
       }
-      return searchColleges(query).slice(0, 5);
+      return [];
     }
     
     // Search courses locally

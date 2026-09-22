@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { formatFees, formatPackage } from "@/data/colleges";
+import { formatFees, formatPackage } from "@/lib/formatters";
 
 const typeBadgeStyles = {
   IIT: "bg-amber-50 text-amber-800 border-amber-200",

@@ -31,14 +31,14 @@ import {
 } from "@/components/ui/dialog";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { colleges, getCollegeById, formatFees, formatPackage } from "@/data/colleges";
+import { formatFees, formatPackage } from "@/lib/formatters";
 
-function CollegeSelector({ selectedId, onSelect, excludeIds = [], collegeList = colleges, findCollege }) {
+function CollegeSelector({ selectedId, onSelect, excludeIds = [], collegeList = [], findCollege }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
 
   const filtered = useMemo(() => {
-    let result = (collegeList || colleges).filter((c) => !excludeIds.includes(c.id));
+    let result = (collegeList || []).filter((c) => !excludeIds.includes(c.id));
     if (query.trim()) {
       const q = query.toLowerCase();
       result = result.filter(
@@ -52,7 +52,7 @@ function CollegeSelector({ selectedId, onSelect, excludeIds = [], collegeList = 
     return result.slice(0, 8);
   }, [query, excludeIds, collegeList]);
 
-  const selected = selectedId ? (findCollege ? findCollege(selectedId) : getCollegeById(selectedId)) : null;
+  const selected = selectedId && findCollege ? findCollege(selectedId) : null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -218,7 +218,7 @@ function CompareContent() {
     initialC2,
     "",
   ]);
-  const [collegeList, setCollegeList] = useState(colleges);
+  const [collegeList, setCollegeList] = useState([]);
 
   useEffect(() => {
     fetch("/api/colleges", { cache: "no-store" })
@@ -233,7 +233,7 @@ function CompareContent() {
 
   const findCollege = useCallback((id) => {
     if (!id) return null;
-    return collegeList.find(c => c.id === id || c.id?.toLowerCase() === id?.toLowerCase() || c._id === id) || getCollegeById(id);
+    return collegeList.find(c => c.id === id || c.id?.toLowerCase() === id?.toLowerCase() || c._id === id);
   }, [collegeList]);
 
   const setCollegeAt = useCallback((index, id) => {

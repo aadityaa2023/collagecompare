@@ -15,7 +15,7 @@ import {
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CollegeCard from "@/components/shared/CollegeCard";
-import { colleges as fallbackColleges } from "@/data/colleges";
+const fallbackColleges = [];
 
 const ALL_COURSES = [
   "B.Com",

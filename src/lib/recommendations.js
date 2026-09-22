@@ -1,11 +1,10 @@
-import { colleges } from "@/data/colleges";
-import { courses } from "@/data/courses";
+// No static imports needed, receiving from caller
 
 /**
  * Intelligent recommendation engine that analyzes student answers from the
  * Course Finder questionnaire and scores courses and colleges.
  */
-export function getPersonalizedRecommendations(answers = {}, dbCourses = courses, dbColleges = colleges) {
+export function getPersonalizedRecommendations(answers = {}, dbCourses = [], dbColleges = []) {
   const {
     education = "12th", // "10th", "12th", "graduate", "diploma"
     stream = "pcm", // "pcm", "pcb", "commerce", "arts", "vocational"
@@ -124,7 +123,7 @@ export function getPersonalizedRecommendations(answers = {}, dbCourses = courses
   const topCourseIds = new Set(recommendedCourses.map((c) => c.id));
 
   // 3. Score Colleges
-  const scoredColleges = colleges.map((college) => {
+  const scoredColleges = dbColleges.map((college) => {
     let score = 50;
     const reasons = [];
 
