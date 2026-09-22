@@ -20,36 +20,28 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-visible bg-white radial-glow-hero border-b border-slate-100 z-10">
-      {/* Majestic University Building Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none -z-10">
+      {/* Hero Central Image */}
+      <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none -z-10 overflow-hidden">
         <Image
-          src="/hero-campus-dome.jpg"
-          alt="University Architecture Background"
+          src="/heroimg.jpeg"
+          alt="Student and University Background"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[center_35%] lg:object-[center_28%] opacity-100 transition-opacity"
+          className="object-cover lg:object-contain object-bottom lg:object-center opacity-100"
         />
-
-        {/* Soft atmospheric radial & directional gradient overlays for pristine readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/60 to-transparent lg:from-white/95 lg:via-white/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/40 to-transparent" />
       </div>
-
-      {/* Subtle Dot Pattern Overlay */}
-      <div className="absolute inset-0 bg-dot-pattern opacity-40 pointer-events-none [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,#000_60%,transparent_100%)]" />
 
       <div className="container-main relative pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-14">
         <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-8 items-center">
-          {/* Left: Copy (7 cols on lg) */}
+          {/* Left: Copy (6 cols on lg) */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={{
               visible: { transition: { staggerChildren: 0.08 } },
             }}
-            className="lg:col-span-7 flex flex-col justify-center min-w-0 w-full"
+            className="lg:col-span-6 flex flex-col justify-center min-w-0 w-full"
           >
             {/* Social Proof Pill with Real Avatars */}
             <motion.div variants={fadeUp} custom={0} className="mb-3 sm:mb-4">
@@ -91,9 +83,9 @@ export default function HeroSection() {
             <motion.p
               variants={fadeUp}
               custom={2}
-              className="text-sm sm:text-lg text-slate-600 leading-relaxed mb-5 sm:mb-6 max-w-xl"
+              className="text-sm sm:text-[17px] text-slate-700 font-medium leading-relaxed mb-5 sm:mb-6 max-w-[480px]"
             >
-              Unbiased side-by-side comparisons of <strong className="text-navy font-semibold">fees, verified placements, NIRF rankings, and ROI</strong> for top colleges across India. Stop guessing, start deciding.
+              Unbiased side-by-side comparisons of fees, verified placements, NIRF rankings, and ROI for top colleges across India. Stop guessing, start deciding.
             </motion.p>
 
             {/* Command-Bar Search */}
@@ -113,7 +105,7 @@ export default function HeroSection() {
               >
                 <Link href="/course-finder">
                   <Compass className="mr-2 h-4 w-4 shrink-0" />
-                  <span>Guide me for course and collage</span>
+                  <span>Guide me for course and college</span>
                 </Link>
               </Button>
               <Button
@@ -126,12 +118,12 @@ export default function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* Right: Interactive Live Comparison Widget (5 cols on lg) */}
+          {/* Right: Interactive Live Comparison Widget (4 cols on lg, leaving middle open) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: 0.12, ease: "easeOut" }}
-            className="lg:col-span-5 relative overflow-hidden w-full max-w-full rounded-2xl sm:rounded-[2rem] transform-gpu mt-2 lg:mt-0"
+            className="lg:col-span-4 lg:col-start-9 relative overflow-hidden w-full max-w-full rounded-2xl sm:rounded-[2rem] transform-gpu mt-2 lg:mt-0"
           >
             {/* Ambient Lighting Gradients behind widget */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-rose-200/30 rounded-full blur-2xl pointer-events-none -z-10 transform-gpu" />
