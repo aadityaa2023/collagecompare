@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/shared/SearchBar";
 import HeroBookingWidget from "./HeroBookingWidget";
 
-
-
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
   visible: (i = 0) => ({
@@ -18,15 +16,31 @@ const fadeUp = {
     transition: { duration: 0.35, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] },
   }),
 };
-
 export default function HeroSection() {
 
   return (
     <section className="relative overflow-visible bg-white radial-glow-hero border-b border-slate-100 z-10">
-      {/* Subtle Dot Pattern Overlay */}
-      <div className="absolute inset-0 bg-dot-pattern opacity-60 pointer-events-none [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,#000_60%,transparent_100%)]" />
+      {/* Majestic University Building Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none -z-10">
+        <Image
+          src="/hero-campus-dome.jpg"
+          alt="University Architecture Background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[center_35%] lg:object-[center_28%] opacity-100 transition-opacity"
+        />
 
-      <div className="container-main relative pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-24">
+        {/* Soft atmospheric radial & directional gradient overlays for pristine readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/60 to-transparent lg:from-white/95 lg:via-white/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/40 to-transparent" />
+      </div>
+
+      {/* Subtle Dot Pattern Overlay */}
+      <div className="absolute inset-0 bg-dot-pattern opacity-40 pointer-events-none [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,#000_60%,transparent_100%)]" />
+
+      <div className="container-main relative pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-14">
         <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-8 items-center">
           {/* Left: Copy (7 cols on lg) */}
           <motion.div
